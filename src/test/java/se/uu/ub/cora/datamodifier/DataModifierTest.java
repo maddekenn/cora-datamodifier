@@ -1,7 +1,6 @@
 package se.uu.ub.cora.datamodifier;
 
-import static org.testng.Assert.assertEquals;
-
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -26,7 +25,10 @@ public class DataModifierTest {
 
 		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
 		DataGroup modifiedDataGroup = recordStorageSpy.modifiedDataGroupsSentToUpdate.get(0);
-		DataGroup ref = modifiedDataGroup.getFirstGroupWithNameInData("ref");
-		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "metadata");
+		DataGroup childReferences = modifiedDataGroup
+				.getFirstGroupWithNameInData("childReferences");
+		DataGroup childReference = childReferences.getFirstGroupWithNameInData("childReference");
+		DataGroup ref = childReference.getFirstGroupWithNameInData("ref");
+		Assert.assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "metadata");
 	}
 }

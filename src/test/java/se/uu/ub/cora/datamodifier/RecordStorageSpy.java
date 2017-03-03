@@ -48,21 +48,42 @@ public class RecordStorageSpy implements RecordStorage {
 	public Collection<DataGroup> readList(String type) {
 		List<DataGroup> recordList = new ArrayList<>();
 		DataGroup bookGroup = createMetadataGroupWithIdAndDataDivider("bookGroup", "cora");
-
-		DataGroup childReference = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("0",
-				"metadataGroup", "recordInfoGroup", "group");
-		bookGroup.addChild(childReference);
-		DataGroup childReference2 = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("1",
-				"metadataTextVariable", "bookTitleTextVar", "textVariable");
-		bookGroup.addChild(childReference2);
-
+		DataGroup bookChildReferences = addChildReferencesForBook();
+		bookGroup.addChild(bookChildReferences);
 		recordList.add(bookGroup);
 
 		DataGroup personGroup = createMetadataGroupWithIdAndDataDivider("personGroup", "systemone");
+		DataGroup personChildReferences = addChildReferencesForPerson();
+		personGroup.addChild(personChildReferences);
 		recordList.add(personGroup);
 
 		// TODO Auto-generated method stub
 		return recordList;
+	}
+
+	private DataGroup addChildReferencesForPerson() {
+		DataGroup personChildReferences = DataGroup.withNameInData("childReferences");
+		DataGroup childReference3 = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("0",
+				"metadataGroup", "recordInfoGroup", "group");
+		personChildReferences.addChild(childReference3);
+		DataGroup childReference4 = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("1",
+				"metadataTextVariable", "lastNameTextVar", "textVariable");
+		personChildReferences.addChild(childReference4);
+		return personChildReferences;
+	}
+
+	private DataGroup addChildReferencesForBook() {
+		DataGroup bookChildReferences = DataGroup.withNameInData("childReferences");
+		DataGroup childReference = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("0",
+				"metadataGroup", "recordInfoGroup", "group");
+		bookChildReferences.addChild(childReference);
+		DataGroup childReference1 = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("1",
+				"metadataTextVariable", "bookTitleTextVar", "textVariable");
+		bookChildReferences.addChild(childReference1);
+		DataGroup childReference2 = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("1",
+				"metadataRecordLink", "bookCoverLink", "recordLink");
+		bookChildReferences.addChild(childReference2);
+		return bookChildReferences;
 	}
 
 	private DataGroup addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(String repeatId,
@@ -82,12 +103,12 @@ public class RecordStorageSpy implements RecordStorage {
 		DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
 		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
 		recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", "metadataGroup"));
-		metadataGroup.addChild(recordInfo);
 
 		DataGroup dataDivider = DataGroup.withNameInData("dataDivider");
 		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "system"));
 		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", dataDividerId));
-		metadataGroup.addChild(dataDivider);
+		recordInfo.addChild(dataDivider);
+		metadataGroup.addChild(recordInfo);
 		return metadataGroup;
 	}
 
