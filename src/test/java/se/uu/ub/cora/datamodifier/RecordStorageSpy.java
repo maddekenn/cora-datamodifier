@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
@@ -45,8 +46,49 @@ public class RecordStorageSpy implements RecordStorage {
 
 	@Override
 	public Collection<DataGroup> readList(String type) {
+		List<DataGroup> recordList = new ArrayList<>();
+		DataGroup bookGroup = createMetadataGroupWithIdAndDataDivider("bookGroup", "cora");
+
+		DataGroup childReference = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("0",
+				"metadataGroup", "recordInfoGroup", "group");
+		bookGroup.addChild(childReference);
+		DataGroup childReference2 = addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("1",
+				"metadataTextVariable", "bookTitleTextVar", "textVariable");
+		bookGroup.addChild(childReference2);
+
+		recordList.add(bookGroup);
+
+		DataGroup personGroup = createMetadataGroupWithIdAndDataDivider("personGroup", "systemone");
+		recordList.add(personGroup);
+
 		// TODO Auto-generated method stub
-		return null;
+		return recordList;
+	}
+
+	private DataGroup addChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(String repeatId,
+			String linkedRecordType, String linkedrecordId, String attributeType) {
+		DataGroup childReference = DataGroup.withNameInData("childReference");
+		childReference.setRepeatId(repeatId);
+		DataGroup ref = DataGroup.withNameInData("ref");
+		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", linkedRecordType));
+		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", linkedrecordId));
+		ref.addAttributeByIdWithValue("type", attributeType);
+		childReference.addChild(ref);
+		return childReference;
+	}
+
+	private DataGroup createMetadataGroupWithIdAndDataDivider(String id, String dataDividerId) {
+		DataGroup metadataGroup = DataGroup.withNameInData("metadata");
+		DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
+		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
+		recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", "metadataGroup"));
+		metadataGroup.addChild(recordInfo);
+
+		DataGroup dataDivider = DataGroup.withNameInData("dataDivider");
+		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "system"));
+		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", dataDividerId));
+		metadataGroup.addChild(dataDivider);
+		return metadataGroup;
 	}
 
 	@Override
