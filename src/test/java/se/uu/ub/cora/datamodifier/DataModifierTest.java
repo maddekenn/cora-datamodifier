@@ -11,11 +11,13 @@ public class DataModifierTest {
 
 	private DataModifier dataModifier;
 	private RecordStorage recordStorage;
+	private DataRecordLinkCollectorSpy linkCollector;
 
 	@BeforeMethod
 	public void testInit() {
+		linkCollector = new DataRecordLinkCollectorSpy();
 		recordStorage = new RecordStorageSpy();
-		dataModifier = new DataModifier(recordStorage);
+		dataModifier = new DataModifier(recordStorage, linkCollector);
 
 	}
 
@@ -30,5 +32,7 @@ public class DataModifierTest {
 		DataGroup childReference = childReferences.getFirstGroupWithNameInData("childReference");
 		DataGroup ref = childReference.getFirstGroupWithNameInData("ref");
 		Assert.assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "metadata");
+		Assert.assertEquals(ref.getAttributes().size(), 0);
+		Assert.assertTrue(linkCollector.collectLinksWasCalled);
 	}
 }
