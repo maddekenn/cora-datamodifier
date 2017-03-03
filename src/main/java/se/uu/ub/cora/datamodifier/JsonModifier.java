@@ -1,4 +1,4 @@
-package se.uu.ub.se.datamodifier;
+package se.uu.ub.cora.datamodifier;
 
 import java.io.BufferedReader;
 import java.io.IOException;
