@@ -1,6 +1,8 @@
 package se.uu.ub.cora.datamodifier;
 
-import org.testng.Assert;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -33,8 +35,9 @@ public class DataModifierForChildReferenceTest {
 				.getFirstGroupWithNameInData("childReferences");
 		DataGroup childReference = childReferences.getFirstGroupWithNameInData("childReference");
 		DataGroup ref = childReference.getFirstGroupWithNameInData("ref");
-		Assert.assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "metadata");
-		Assert.assertEquals(ref.getAttributes().size(), 0);
-		Assert.assertTrue(linkCollector.collectLinksWasCalled);
+
+		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "metadata");
+		assertEquals(ref.getAttributes().size(), 0);
+		assertTrue(linkCollector.collectLinksWasCalled);
 	}
 }

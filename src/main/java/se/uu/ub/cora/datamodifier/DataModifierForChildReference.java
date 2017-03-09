@@ -11,11 +11,9 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class DataModifierForChildReference implements DataModifier {
 
-	private RecordStorage recordStorage;
-
+	RecordStorage recordStorage;
+	DataRecordLinkCollector linkCollector;
 	private List<DataGroup> modifiedList = new ArrayList<>();
-
-	private DataRecordLinkCollector linkCollector;
 
 	public DataModifierForChildReference() {
 	}
