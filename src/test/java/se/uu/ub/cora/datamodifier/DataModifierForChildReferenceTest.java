@@ -7,9 +7,9 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class DataModifierTest {
+public class DataModifierForChildReferenceTest {
 
-	private DataModifier dataModifier;
+	private DataModifierForChildReference dataModifier;
 	private RecordStorage recordStorage;
 	private DataRecordLinkCollectorSpy linkCollector;
 
@@ -17,7 +17,9 @@ public class DataModifierTest {
 	public void testInit() {
 		linkCollector = new DataRecordLinkCollectorSpy();
 		recordStorage = new RecordStorageSpy();
-		dataModifier = new DataModifier(recordStorage, linkCollector);
+		dataModifier = new DataModifierForChildReference();
+		dataModifier.setLinkCollector(linkCollector);
+		dataModifier.setRecordStorage(recordStorage);
 
 	}
 

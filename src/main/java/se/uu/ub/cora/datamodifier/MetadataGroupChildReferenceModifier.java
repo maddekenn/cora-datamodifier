@@ -5,16 +5,30 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
 import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
+import se.uu.ub.cora.userpicker.UserPickerProvider;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 public class MetadataGroupChildReferenceModifier {
 
-	public static void main(String[] args) {
+	protected static DataModifier dataModifier;
 
+	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		String basePath = args[0];
+		String modifierClassName = args[1];
 		RecordStorage recordStorage = RecordStorageOnDisk
-				.createRecordStorageOnDiskWithBasePath("/home/madde/workspace/modify/");
+				.createRecordStorageOnDiskWithBasePath(basePath);
 		DataRecordLinkCollector linkCollector = new DataRecordLinkCollectorImp(
 				(MetadataStorage) recordStorage);
-		DataModifier dataModifier = new DataModifier(recordStorage, linkCollector);
+
+		Constructor<?> constructor = Class.forName(modifierClassName).getConstructor();
+		dataModifier = (DataModifier) constructor.newInstance();
+		dataModifier.setLinkCollector(linkCollector);
+		dataModifier.setRecordStorage(recordStorage);
+
+
 		dataModifier.modifyByRecordType("metadataGroup");
 		System.out.println("done");
 	}
