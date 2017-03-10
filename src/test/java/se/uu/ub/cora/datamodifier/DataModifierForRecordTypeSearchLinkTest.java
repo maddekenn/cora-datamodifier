@@ -1,5 +1,7 @@
 package se.uu.ub.cora.datamodifier;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.Test;
@@ -29,6 +31,8 @@ public class DataModifierForRecordTypeSearchLinkTest {
 	public void testModify() {
 		dataModifier.modifyByRecordType("recordType");
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
-		DataGroup childReferences = modifiedDataGroup.getFirstGroupWithNameInData("search");
+		assertFalse(modifiedDataGroup.containsChildWithNameInData("searcMetadataId"));
+//		DataGroup search = modifiedDataGroup.getFirstGroupWithNameInData("search");
+//		assertEquals(search.getFirstAtomicValueWithNameInData("linkedRecordType"), "search");
 	}
 }

@@ -46,18 +46,23 @@ public class RecordStorageSpy implements RecordStorage {
 
 	@Override
 	public Collection<DataGroup> readList(String type) {
+
 		List<DataGroup> recordList = new ArrayList<>();
-		DataGroup bookGroup = createMetadataGroupWithIdAndDataDivider("bookGroup", "cora");
-		DataGroup bookChildReferences = addChildReferencesForBook();
-		bookGroup.addChild(bookChildReferences);
-		recordList.add(bookGroup);
+		if("metadataGroup".equals(type)) {
+			DataGroup bookGroup = createMetadataGroupWithIdAndDataDivider("bookGroup", "cora");
+			DataGroup bookChildReferences = addChildReferencesForBook();
+			bookGroup.addChild(bookChildReferences);
+			recordList.add(bookGroup);
 
-		DataGroup personGroup = createMetadataGroupWithIdAndDataDivider("personGroup", "systemone");
-		DataGroup personChildReferences = addChildReferencesForPerson();
-		personGroup.addChild(personChildReferences);
-		recordList.add(personGroup);
+			DataGroup personGroup = createMetadataGroupWithIdAndDataDivider("personGroup", "systemone");
+			DataGroup personChildReferences = addChildReferencesForPerson();
+			personGroup.addChild(personChildReferences);
+			recordList.add(personGroup);
 
-		// TODO Auto-generated method stub
+		}
+		if("recordType".equals(type)){
+			//return recordTypes
+		}
 		return recordList;
 	}
 
