@@ -12,6 +12,8 @@ public class RecordStorageSpy implements RecordStorage {
 
 	public List<DataGroup> modifiedDataGroupsSentToUpdate = new ArrayList<>();
 
+	public List<DataGroup> createdData = new ArrayList<>();
+
 	@Override
 	public DataGroup read(String type, String id) {
 		// TODO Auto-generated method stub
@@ -21,7 +23,7 @@ public class RecordStorageSpy implements RecordStorage {
 	@Override
 	public void create(String type, String id, DataGroup record, DataGroup linkList,
 			String dataDivider) {
-		// TODO Auto-generated method stub
+		createdData.add(record);
 
 	}
 
@@ -48,20 +50,28 @@ public class RecordStorageSpy implements RecordStorage {
 	public Collection<DataGroup> readList(String type) {
 
 		List<DataGroup> recordList = new ArrayList<>();
-		if("metadataGroup".equals(type)) {
-			DataGroup bookGroup = createMetadataGroupWithIdAndDataDivider("bookGroup", "cora");
+		if ("metadataGroup".equals(type)) {
+			DataGroup bookGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"bookGroup", "metadata", "metadataGroup", "cora");
 			DataGroup bookChildReferences = addChildReferencesForBook();
 			bookGroup.addChild(bookChildReferences);
 			recordList.add(bookGroup);
 
-			DataGroup personGroup = createMetadataGroupWithIdAndDataDivider("personGroup", "systemone");
+			DataGroup personGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"personGroup", "metadata", "metadataGroup", "systemone");
 			DataGroup personChildReferences = addChildReferencesForPerson();
 			personGroup.addChild(personChildReferences);
 			recordList.add(personGroup);
 
 		}
-		if("recordType".equals(type)){
-			//return recordTypes
+		if ("recordType".equals(type)) {
+			DataGroup book = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("book",
+					"recordType", "recordType", "cora");
+			book.addChild(
+					DataAtomic.withNameInDataAndValue("searchMetadataId", "someunImportantId"));
+			book.addChild(DataAtomic.withNameInDataAndValue("searchPresentationFormId",
+					"someunImportantId"));
+			recordList.add(book);
 		}
 		return recordList;
 	}
@@ -103,11 +113,12 @@ public class RecordStorageSpy implements RecordStorage {
 		return childReference;
 	}
 
-	private DataGroup createMetadataGroupWithIdAndDataDivider(String id, String dataDividerId) {
-		DataGroup metadataGroup = DataGroup.withNameInData("metadata");
+	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
+			String nameInData, String type, String dataDividerId) {
+		DataGroup metadataGroup = DataGroup.withNameInData(nameInData);
 		DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
 		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
-		recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", "metadataGroup"));
+		recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", type));
 
 		DataGroup dataDivider = DataGroup.withNameInData("dataDivider");
 		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "system"));
