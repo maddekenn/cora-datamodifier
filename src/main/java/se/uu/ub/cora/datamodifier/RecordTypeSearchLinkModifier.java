@@ -9,7 +9,7 @@ import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
-public class MetadataGroupChildReferenceModifier {
+public class RecordTypeSearchLinkModifier {
 
 	protected static DataModifier dataModifier;
 
@@ -27,7 +27,7 @@ public class MetadataGroupChildReferenceModifier {
 		dataModifier.setLinkCollector(linkCollector);
 		dataModifier.setRecordStorage(recordStorage);
 
-		dataModifier.modifyByRecordType("metadataGroup");
+		dataModifier.modifyByRecordType("recordType");
 		System.out.println("done");
 	}
 }

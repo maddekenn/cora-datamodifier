@@ -72,6 +72,7 @@ public class DataModifierForRecordTypeSearchLink implements DataModifier {
 		createRecordTypeToSearchInPartOfSearch(currentRecordType, search);
 
 		DataGroup linkList = DataGroup.withNameInData("collectedDataLinks");
+		System.out.println(currentRecordType + " " + id);
 		recordStorage.create(currentRecordType, id, search, linkList, currentDataDivider);
 	}
 
@@ -148,8 +149,10 @@ public class DataModifierForRecordTypeSearchLink implements DataModifier {
 		String type = recordInfo.getFirstAtomicValueWithNameInData("type");
 		String dataDivider = extractDataDivider(recordInfo);
 
-		DataGroup collectedLinks = linkCollector.collectLinks("metadataGroupGroup", modified, type,
-				id);
+		// DataGroup collectedLinks =
+		// linkCollector.collectLinks("recordTypeGroup", modified, type,
+		// id);
+		DataGroup collectedLinks = DataGroup.withNameInData("collectedDataLinks");
 
 		recordStorage.update(type, id, modified, collectedLinks, dataDivider);
 	}

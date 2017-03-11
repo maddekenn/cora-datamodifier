@@ -6,16 +6,16 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.testng.annotations.Test;
 
-public class MetadataGroupChildReferenceModifierTest {
+public class RecordTypeSearchLinkModifierTest {
 
 	@Test
 	public void testMainMethod() throws ClassNotFoundException, NoSuchMethodException,
 			InvocationTargetException, InstantiationException, IllegalAccessException {
 		String args[] = new String[] { "/home/madde/workspace/modify/",
-				"se.uu.ub.cora.datamodifier.DataModifierForChildReferenceSpy" };
+				"se.uu.ub.cora.datamodifier.DataModifierForRecordTypeSearchLinkSpy" };
 
-		MetadataGroupChildReferenceModifier.main(args);
-		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) MetadataGroupChildReferenceModifier.dataModifier;
-		assertEquals(childRefModifier.recordType, "metadataGroup");
+		RecordTypeSearchLinkModifier.main(args);
+		DataModifierForRecordTypeSearchLinkSpy recordTypeModifier = (DataModifierForRecordTypeSearchLinkSpy) RecordTypeSearchLinkModifier.dataModifier;
+		assertEquals(recordTypeModifier.recordType, "recordType");
 	}
 }
