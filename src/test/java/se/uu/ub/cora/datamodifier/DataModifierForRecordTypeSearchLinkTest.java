@@ -36,26 +36,60 @@ public class DataModifierForRecordTypeSearchLinkTest {
 	public void testModify() {
 		dataModifier.modifyByRecordType("recordType");
 
+		assertCorrectCreatedSearch();
+
+		assertCorrectModifiedGroup();
+
+	}
+
+	private void assertCorrectCreatedSearch() {
 		DataGroup createdSearch = recordStorage.createdData.get(0);
+		assertCorrectRecordInfo(createdSearch);
+
+		assertCorrectMetadata(createdSearch);
+
+		assertCorrectPresentation(createdSearch);
+
+		assertCorrectRecordTypeToSearchIn(createdSearch);
+	}
+
+	private void assertCorrectRecordInfo(DataGroup createdSearch) {
 		DataGroup recordInfo = createdSearch.getFirstGroupWithNameInData("recordInfo");
 		assertEquals(recordInfo.getFirstAtomicValueWithNameInData("id"), "bookSearch");
 
 		DataGroup dataDivider = recordInfo.getFirstGroupWithNameInData("dataDivider");
 		assertEquals(dataDivider.getFirstAtomicValueWithNameInData("linkedRecordId"), "cora");
+	}
 
+	private void assertCorrectMetadata(DataGroup createdSearch) {
+		DataGroup metadata = createdSearch.getFirstGroupWithNameInData("metadataId");
+		assertEquals(metadata.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"metadataGroup");
+		assertEquals(metadata.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"autocompleteSearchGroup");
+	}
+
+	private void assertCorrectPresentation(DataGroup createdSearch) {
 		DataGroup presentation = createdSearch.getFirstGroupWithNameInData("presentationId");
 		assertEquals(presentation.getFirstAtomicValueWithNameInData("linkedRecordId"),
 				"autocompleteSearchPGroup");
+		assertEquals(presentation.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"presentationGroup");
+	}
 
-		// DataGroup
+	private void assertCorrectRecordTypeToSearchIn(DataGroup createdSearch) {
+		DataGroup recordTypeToSearchIn = createdSearch
+				.getFirstGroupWithNameInData("recordTypeToSearchIn");
+		assertEquals(recordTypeToSearchIn.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"book");
+	}
 
+	private void assertCorrectModifiedGroup() {
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
 		assertFalse(modifiedDataGroup.containsChildWithNameInData("searcMetadataId"));
 		assertFalse(modifiedDataGroup.containsChildWithNameInData("searchPresentationFormId"));
-		// DataGroup search =
-		// modifiedDataGroup.getFirstGroupWithNameInData("search");
-		// assertEquals(search.getFirstAtomicValueWithNameInData("linkedRecordType"),
-		// "search");
-
+		DataGroup search = modifiedDataGroup.getFirstGroupWithNameInData("search");
+		assertEquals(search.getFirstAtomicValueWithNameInData("linkedRecordType"), "search");
+		assertEquals(search.getFirstAtomicValueWithNameInData("linkedRecordId"), "bookSearch");
 	}
 }

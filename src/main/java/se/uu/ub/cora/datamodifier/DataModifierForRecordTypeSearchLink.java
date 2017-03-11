@@ -11,9 +11,11 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class DataModifierForRecordTypeSearchLink implements DataModifier {
 
+	private static final String SEARCH_STRING = "search";
 	private static final String LINKED_RECORD_ID = "linkedRecordId";
 	private static final String DATA_DIVIDER = "dataDivider";
 	private static final String RECORD_INFO = "recordInfo";
+	private static final String LINKED_RECORD_TYPE = "linkedRecordType";
 	RecordStorage recordStorage;
 	DataRecordLinkCollector linkCollector;
 	private List<DataGroup> modifiedList = new ArrayList<>();
@@ -29,53 +31,96 @@ public class DataModifierForRecordTypeSearchLink implements DataModifier {
 	}
 
 	private void modifyDataGroup(DataGroup dataGroup) {
-		// searchMetadataId ska tas bort
-		dataGroup.removeFirstChildWithNameInData("searchMetadataId");
-		// searchPresentationFormId ska tas bort
-		dataGroup.removeFirstChildWithNameInData("searchPresentationFormId");
-		// search för den här recordTypen ska skapas - searchen ska peka på
-		// metadatagruppen autocompleteSearchGroup
+		removeOldFields(dataGroup);
 		DataGroup recordinfo = dataGroup.getFirstGroupWithNameInData(RECORD_INFO);
 		String currentRecordType = recordinfo.getFirstAtomicValueWithNameInData("id");
 
-		DataGroup dataDivider = recordinfo.getFirstGroupWithNameInData(DATA_DIVIDER);
-		String dataDividerString = dataDivider.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
+		String dataDividerString = getDataDividerFromCurrentDataGroup(recordinfo);
 
 		createSearchForRecordType(currentRecordType, dataDividerString);
-		// och motsvarande presentationsgrupp autocompleteSearchPGroup
-		// länken till den skapade searchen ska läggas till som länk i
-		// recordType
+
+		DataGroup search = createSearchGroup(currentRecordType);
+		dataGroup.addChild(search);
+	}
+
+	private void removeOldFields(DataGroup dataGroup) {
+		dataGroup.removeFirstChildWithNameInData("searchMetadataId");
+		dataGroup.removeFirstChildWithNameInData("searchPresentationFormId");
+	}
+
+	private DataGroup createSearchGroup(String currentRecordType) {
+		DataGroup search = DataGroup.withNameInData(SEARCH_STRING);
+		search.addChild(DataAtomic.withNameInDataAndValue(LINKED_RECORD_TYPE, SEARCH_STRING));
+		search.addChild(
+				DataAtomic.withNameInDataAndValue(LINKED_RECORD_ID, currentRecordType + "Search"));
+		return search;
+	}
+
+	private String getDataDividerFromCurrentDataGroup(DataGroup recordinfo) {
+		DataGroup dataDivider = recordinfo.getFirstGroupWithNameInData(DATA_DIVIDER);
+		return dataDivider.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
 	}
 
 	private void createSearchForRecordType(String currentRecordType, String currentDataDivider) {
-		DataGroup search = DataGroup.withNameInData("search");
+		DataGroup search = DataGroup.withNameInData(SEARCH_STRING);
+		String id = createRecordInfoWithDataDivider(currentRecordType, currentDataDivider, search);
+
+		createMetadataPartOfSearch(search);
+
+		createPresentationPartOfSearch(search);
+
+		createRecordTypeToSearchInPartOfSearch(currentRecordType, search);
+
+		DataGroup linkList = DataGroup.withNameInData("collectedDataLinks");
+		recordStorage.create(currentRecordType, id, search, linkList, currentDataDivider);
+	}
+
+	private String createRecordInfoWithDataDivider(String currentRecordType,
+			String currentDataDivider, DataGroup search) {
 		DataGroup recordInfo = DataGroup.withNameInData(RECORD_INFO);
 		String id = currentRecordType + "Search";
 		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
 
+		createDataDividerUsingDataDividerStringAndAddToRecordInfo(currentDataDivider, recordInfo);
+		search.addChild(recordInfo);
+		return id;
+	}
+
+	private void createDataDividerUsingDataDividerStringAndAddToRecordInfo(
+			String currentDataDivider, DataGroup recordInfo) {
 		DataGroup dataDivider = DataGroup.withNameInData(DATA_DIVIDER);
-		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "system"));
+		dataDivider.addChild(DataAtomic.withNameInDataAndValue(LINKED_RECORD_TYPE, "system"));
 		dataDivider
 				.addChild(DataAtomic.withNameInDataAndValue(LINKED_RECORD_ID, currentDataDivider));
 		recordInfo.addChild(dataDivider);
-		search.addChild(recordInfo);
+	}
 
+	private void createMetadataPartOfSearch(DataGroup search) {
+		DataGroup metadataId = DataGroup.withNameInData("metadataId");
+		metadataId.addChild(DataAtomic.withNameInDataAndValue(LINKED_RECORD_TYPE, "metadataGroup"));
+		metadataId.addChild(
+				DataAtomic.withNameInDataAndValue("linkedRecordId", "autocompleteSearchGroup"));
+
+		search.addChild(metadataId);
+	}
+
+	private void createPresentationPartOfSearch(DataGroup search) {
 		DataGroup presentation = DataGroup.withNameInData("presentationId");
 		presentation.addChild(
-				DataAtomic.withNameInDataAndValue("linkedRecordType", "presentationGroup"));
+				DataAtomic.withNameInDataAndValue(LINKED_RECORD_TYPE, "presentationGroup"));
 		presentation.addChild(
 				DataAtomic.withNameInDataAndValue(LINKED_RECORD_ID, "autocompleteSearchPGroup"));
 		search.addChild(presentation);
-		// DataGroup metadataId = DataGroup.withNameInData("metadataId");
-		// metadataId.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType",
-		// "metadataGroup"));
-		// metadataId.addChild(
-		// DataAtomic.withNameInDataAndValue("linkedRecordId",
-		// "autocompleteSearchGroup"));
+	}
 
-		// search.addChild(metadataId);
-		DataGroup linkList = DataGroup.withNameInData("collectedDataLinks");
-		recordStorage.create(currentRecordType, id, search, linkList, currentDataDivider);
+	private void createRecordTypeToSearchInPartOfSearch(String currentRecordType,
+			DataGroup search) {
+		DataGroup recordTypeToSearchIn = DataGroup.withNameInData("recordTypeToSearchIn");
+		recordTypeToSearchIn
+				.addChild(DataAtomic.withNameInDataAndValue(LINKED_RECORD_TYPE, "recordType"));
+		recordTypeToSearchIn
+				.addChild(DataAtomic.withNameInDataAndValue(LINKED_RECORD_ID, currentRecordType));
+		search.addChild(recordTypeToSearchIn);
 	}
 
 	@Override
