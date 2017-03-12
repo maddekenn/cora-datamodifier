@@ -26,6 +26,7 @@ public class DataRecordLinkCollectorSpy implements DataRecordLinkCollector {
 
 	public boolean collectLinksWasCalled = false;
 	public String metadataId = null;
+	public int noOfTimesCalled = 0;
 
 	public DataGroup collectedDataLinks = DataGroup.withNameInData("collectedDataLinks");
 
@@ -34,6 +35,7 @@ public class DataRecordLinkCollectorSpy implements DataRecordLinkCollector {
 			String fromRecordId) {
 		this.metadataId = metadataId;
 		collectLinksWasCalled = true;
+		noOfTimesCalled++;
 		return collectedDataLinks;
 	}
 

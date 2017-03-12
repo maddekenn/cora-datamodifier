@@ -8,12 +8,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 
 public class DataModifierForRecordTypeSearchLinkTest {
 
 	private RecordStorageSpy recordStorage;
-	private DataRecordLinkCollector linkCollector;
+	private DataRecordLinkCollectorSpy linkCollector;
 	private DataModifierForRecordTypeSearchLink dataModifier;
 
 	@BeforeMethod
@@ -39,7 +38,7 @@ public class DataModifierForRecordTypeSearchLinkTest {
 		assertCorrectCreatedSearch();
 
 		assertCorrectModifiedGroup();
-
+		assertEquals(linkCollector.noOfTimesCalled, 2);
 	}
 
 	private void assertCorrectCreatedSearch() {
@@ -58,6 +57,8 @@ public class DataModifierForRecordTypeSearchLinkTest {
 	private void assertCorrectRecordInfo(DataGroup createdSearch) {
 		DataGroup recordInfo = createdSearch.getFirstGroupWithNameInData("recordInfo");
 		assertEquals(recordInfo.getFirstAtomicValueWithNameInData("id"), "bookSearch");
+		assertEquals(recordInfo.getFirstAtomicValueWithNameInData("type"), "search");
+		assertEquals(recordInfo.getFirstAtomicValueWithNameInData("createdBy"), "141414");
 
 		DataGroup dataDivider = recordInfo.getFirstGroupWithNameInData("dataDivider");
 		assertEquals(dataDivider.getFirstAtomicValueWithNameInData("linkedRecordId"), "cora");
