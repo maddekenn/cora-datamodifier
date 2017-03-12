@@ -13,6 +13,7 @@ public class RecordStorageSpy implements RecordStorage {
 	public List<DataGroup> modifiedDataGroupsSentToUpdate = new ArrayList<>();
 
 	public List<DataGroup> createdData = new ArrayList<>();
+	public List<String> createdType = new ArrayList<>();
 
 	@Override
 	public DataGroup read(String type, String id) {
@@ -24,6 +25,7 @@ public class RecordStorageSpy implements RecordStorage {
 	public void create(String type, String id, DataGroup record, DataGroup linkList,
 			String dataDivider) {
 		createdData.add(record);
+		createdType.add(type);
 
 	}
 

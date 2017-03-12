@@ -73,7 +73,7 @@ public class DataModifierForRecordTypeSearchLink implements DataModifier {
 
 		DataGroup linkList = DataGroup.withNameInData("collectedDataLinks");
 		System.out.println(currentRecordType + " " + id);
-		recordStorage.create(currentRecordType, id, search, linkList, currentDataDivider);
+		recordStorage.create("search", id, search, linkList, currentDataDivider);
 	}
 
 	private String createRecordInfoWithDataDivider(String currentRecordType,

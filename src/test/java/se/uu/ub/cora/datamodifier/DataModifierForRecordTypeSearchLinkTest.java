@@ -43,6 +43,8 @@ public class DataModifierForRecordTypeSearchLinkTest {
 	}
 
 	private void assertCorrectCreatedSearch() {
+		String createdRecordType = recordStorage.createdType.get(0);
+		assertEquals(createdRecordType, "search");
 		DataGroup createdSearch = recordStorage.createdData.get(0);
 		assertCorrectRecordInfo(createdSearch);
 
