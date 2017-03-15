@@ -13,6 +13,10 @@ public class RecordTypeSearchLinkModifier {
 
 	protected static DataModifier dataModifier;
 
+	private RecordTypeSearchLinkModifier(){
+
+	}
+
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException, InstantiationException {
 		String basePath = args[0];

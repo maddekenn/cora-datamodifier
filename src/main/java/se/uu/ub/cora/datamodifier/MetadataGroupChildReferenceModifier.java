@@ -11,6 +11,10 @@ import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
 public class MetadataGroupChildReferenceModifier {
 
+	private MetadataGroupChildReferenceModifier(){
+
+	}
+
 	protected static DataModifier dataModifier;
 
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException,

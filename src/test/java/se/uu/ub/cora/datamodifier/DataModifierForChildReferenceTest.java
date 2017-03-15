@@ -16,7 +16,7 @@ public class DataModifierForChildReferenceTest {
 	private DataRecordLinkCollectorSpy linkCollector;
 
 	@BeforeMethod
-	public void testInit() {
+	public void setUp() {
 		linkCollector = new DataRecordLinkCollectorSpy();
 		recordStorage = new RecordStorageSpy();
 		dataModifier = new DataModifierForChildReference();
