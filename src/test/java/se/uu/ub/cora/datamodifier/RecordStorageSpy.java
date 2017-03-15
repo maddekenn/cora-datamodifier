@@ -97,9 +97,15 @@ public class RecordStorageSpy implements RecordStorage {
 			DataGroup bookPGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"bookPGroup", "presentation", "presentationGroup", "cora");
 
-			DataGroup childReferences = addPresentationChildReferences();
+			DataGroup childReferences = addPresentationChildReferences(false);
 			bookPGroup.addChild(childReferences);
 			recordList.add(bookPGroup);
+
+			DataGroup personPGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"personPGroup", "presentation", "presentationGroup", "cora");
+
+			personPGroup.addChild(addPresentationChildReferences(true));
+			recordList.add(personPGroup);
 		}
 		return recordList;
 	}
@@ -162,23 +168,33 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 
-	private DataGroup addPresentationChildReferences() {
+	private DataGroup addPresentationChildReferences(boolean includeRefMinGroup) {
 		DataGroup childReferences = DataGroup.withNameInData("childReferences");
 		DataGroup childReference = DataGroup.withNameInData("childReference");
 		childReference.addChild(DataAtomic.withNameInDataAndValue("default", "ref"));
 
-		DataGroup refGroup = DataGroup.withNameInData("refGroup");
-		DataGroup ref = DataGroup.withNameInData("ref");
-		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "presentationGroup"));
-		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "permissionRulePartOrganisationOutputPGroup"));
-		ref.addAttributeByIdWithValue("type", "pGroup");
-		refGroup.addChild(ref);
-
+		DataGroup refGroup = createRefGroupWithNameRecordTypeIdAndType("refGroup", "presentationGroup",
+						"permissionRulePartOrganisationOutputPGroup", "pGroup");
 		childReference.addChild(refGroup);
-		childReferences.addChild(childReference);
 
+		if(includeRefMinGroup) {
+			DataGroup refMinGroup = createRefGroupWithNameRecordTypeIdAndType("refMinGroup",
+					"presentationRecordLink", "userRoleMinimizedOutputPLink", "pRecordLink");
+			childReference.addChild(refMinGroup);
+		}
+		childReferences.addChild(childReference);
 		return childReferences;
 
+	}
+
+	private DataGroup createRefGroupWithNameRecordTypeIdAndType(String nameInData, String recordType, String id, String type) {
+		DataGroup refGroup = DataGroup.withNameInData(nameInData);
+		DataGroup ref = DataGroup.withNameInData("ref");
+		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", recordType));
+		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", id));
+		ref.addAttributeByIdWithValue("type", type);
+		refGroup.addChild(ref);
+		return refGroup;
 	}
 
 	@Override

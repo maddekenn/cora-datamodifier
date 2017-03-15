@@ -48,6 +48,32 @@ public class DataModifierForPresentationChildReferenceTest {
 
         assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
         assertEquals(ref.getAttributes().size(), 0);
+
+        assertTrue(linkCollector.collectLinksWasCalled);
+    }
+
+    @Test
+    public void testModifyChildReferenceCheckRefMinGroup() {
+        dataModifier.modifyByRecordType("presentationGroup");
+
+        RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
+        DataGroup modifiedDataGroup = recordStorageSpy.modifiedDataGroupsSentToUpdate.get(1);
+        DataGroup childReferences = modifiedDataGroup
+                .getFirstGroupWithNameInData("childReferences");
+        DataGroup childReference = childReferences.getFirstGroupWithNameInData("childReference");
+
+        DataGroup refGroup = childReference.getFirstGroupWithNameInData("refGroup");
+
+        DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
+
+        assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
+        assertEquals(ref.getAttributes().size(), 0);
+
+        DataGroup refMinGroup = childReference.getFirstGroupWithNameInData("refMinGroup");
+        DataGroup refMin = refMinGroup.getFirstGroupWithNameInData("ref");
+        assertEquals(refMin.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
+        assertEquals(refMin.getAttributes().size(), 0);
+
         assertTrue(linkCollector.collectLinksWasCalled);
     }
 }

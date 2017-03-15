@@ -30,12 +30,15 @@ public class DataModifierForPresentationChildReference implements DataModifier {
         DataGroup childReferences = dataGroup.getFirstGroupWithNameInData("childReferences");
         for (DataGroup childReference : childReferences
                 .getAllGroupsWithNameInData("childReference")) {
-            modifyChildReference(childReference);
+            modifyChildReference(childReference.getFirstGroupWithNameInData("refGroup"));
+            if(childReference.containsChildWithNameInData("refMinGroup")){
+                modifyChildReference(childReference.getFirstGroupWithNameInData("refMinGroup"));
+
+            }
         }
     }
 
-    private void modifyChildReference(DataGroup childReference) {
-        DataGroup refGroup = childReference.getFirstGroupWithNameInData("refGroup");
+    private void modifyChildReference(DataGroup refGroup) {
         DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
         ref.removeFirstChildWithNameInData("linkedRecordType");
         ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "presentation"));
