@@ -38,52 +38,120 @@ public class DataModifierForPresentationChildReferenceTest {
 	public void testModifyChildReference() {
 		dataModifier.modifyByRecordType("presentationGroup");
 
+		assertEquals(linkCollector.metadataId, "presentationGroupGroup");
+
 		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
-		DataGroup modifiedDataGroup = recordStorageSpy.modifiedDataGroupsSentToUpdate.get(0);
-		DataGroup childReferences = modifiedDataGroup
-				.getFirstGroupWithNameInData("childReferences");
-		List<DataGroup> children = childReferences.getAllGroupsWithNameInData("childReference");
-		DataGroup childReference = children.get(0);
+		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 0);
 
-		DataGroup refGroup = childReference.getFirstGroupWithNameInData("refGroup");
-
-		DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
-
+		DataGroup ref = extractRefByIndexAndRefGroupName(children, 0, "refGroup");
 		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
-		assertEquals(ref.getAttributes().size(), 0);
+		assertEquals(ref.getAttributes().get("type"), "presentation");
 
-		DataGroup childReference2 = children.get(1);
-		DataGroup refGroup2 = childReference2.getFirstGroupWithNameInData("refGroup");
-
-		DataGroup ref2 = refGroup2.getFirstGroupWithNameInData("ref");
-
+		DataGroup ref2 = extractRefByIndexAndRefGroupName(children, 1, "refGroup");
 		assertEquals(ref2.getFirstAtomicValueWithNameInData("linkedRecordType"), "text");
-		assertEquals(ref2.getAttributes().size(), 0);
+		assertEquals(ref2.getAttributes().get("type"), "text");
 
 		assertTrue(linkCollector.collectLinksWasCalled);
+	}
+
+	private List<DataGroup> extractChildrenFromModifiedByIndex(RecordStorageSpy recordStorageSpy,
+			int index) {
+		DataGroup modifiedDataGroup = recordStorageSpy.modifiedDataGroupsSentToUpdate.get(index);
+		DataGroup childReferences = modifiedDataGroup
+				.getFirstGroupWithNameInData("childReferences");
+
+		List<DataGroup> children = childReferences.getAllGroupsWithNameInData("childReference");
+		return children;
+	}
+
+	private DataGroup extractRefByIndexAndRefGroupName(List<DataGroup> children, int index,
+			String refGroupName) {
+		DataGroup childReference = children.get(index);
+		DataGroup refGroup = childReference.getFirstGroupWithNameInData(refGroupName);
+		DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
+		return ref;
 	}
 
 	@Test
 	public void testModifyChildReferenceCheckRefMinGroup() {
 		dataModifier.modifyByRecordType("presentationGroup");
-
 		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
-		DataGroup modifiedDataGroup = recordStorageSpy.modifiedDataGroupsSentToUpdate.get(1);
-		DataGroup childReferences = modifiedDataGroup
-				.getFirstGroupWithNameInData("childReferences");
-		DataGroup childReference = childReferences.getFirstGroupWithNameInData("childReference");
 
-		DataGroup refGroup = childReference.getFirstGroupWithNameInData("refGroup");
+		assertEquals(linkCollector.metadataId, "presentationGroupGroup");
+		assertEquals(recordStorageSpy.readRecordTypes.get(0), "presentationGroup");
 
-		DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
+		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 1);
 
+		DataGroup ref = extractRefByIndexAndRefGroupName(children, 0, "refGroup");
 		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
-		assertEquals(ref.getAttributes().size(), 0);
+		assertEquals(ref.getAttributes().get("type"), "presentation");
 
-		DataGroup refMinGroup = childReference.getFirstGroupWithNameInData("refMinGroup");
-		DataGroup refMin = refMinGroup.getFirstGroupWithNameInData("ref");
+		DataGroup refMin = extractRefByIndexAndRefGroupName(children, 0, "refMinGroup");
 		assertEquals(refMin.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
-		assertEquals(refMin.getAttributes().size(), 0);
+		assertEquals(refMin.getAttributes().get("type"), "presentation");
+
+		assertTrue(linkCollector.collectLinksWasCalled);
+	}
+
+	@Test
+	public void testModifyChildReferenceSurroundingContainer() {
+		dataModifier.modifyByRecordType("presentationSurroundingContainer");
+		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
+
+		assertEquals(linkCollector.metadataId, "presentationSurroundingContainerGroup");
+		assertEquals(recordStorageSpy.readRecordTypes.get(0), "presentationSurroundingContainer");
+
+		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 0);
+
+		DataGroup ref = extractRefByIndexAndRefGroupName(children, 0, "refGroup");
+		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
+		assertEquals(ref.getAttributes().get("type"), "presentation");
+
+		DataGroup ref2 = extractRefByIndexAndRefGroupName(children, 1, "refGroup");
+		assertEquals(ref2.getFirstAtomicValueWithNameInData("linkedRecordType"), "text");
+		assertEquals(ref2.getAttributes().get("type"), "text");
+
+		assertTrue(linkCollector.collectLinksWasCalled);
+	}
+
+	@Test
+	public void testModifyChildReferenceRepeatingContainer() {
+		dataModifier.modifyByRecordType("presentationRepeatingContainer");
+		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
+
+		assertEquals(linkCollector.metadataId, "presentationRepeatingContainerGroup");
+		assertEquals(recordStorageSpy.readRecordTypes.get(0), "presentationRepeatingContainer");
+
+		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 0);
+
+		DataGroup ref = extractRefByIndexAndRefGroupName(children, 0, "refGroup");
+		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
+		assertEquals(ref.getAttributes().get("type"), "presentation");
+
+		DataGroup ref2 = extractRefByIndexAndRefGroupName(children, 1, "refGroup");
+		assertEquals(ref2.getFirstAtomicValueWithNameInData("linkedRecordType"), "text");
+		assertEquals(ref2.getAttributes().get("type"), "text");
+
+		assertTrue(linkCollector.collectLinksWasCalled);
+	}
+
+	@Test
+	public void testModifyChildReferenceResourceLink() {
+		dataModifier.modifyByRecordType("presentationResourceLink");
+		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
+
+		assertEquals(linkCollector.metadataId, "presentationResourceLinkGroup");
+		assertEquals(recordStorageSpy.readRecordTypes.get(0), "presentationResourceLink");
+
+		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 0);
+
+		DataGroup ref = extractRefByIndexAndRefGroupName(children, 0, "refGroup");
+		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
+		assertEquals(ref.getAttributes().get("type"), "presentation");
+
+		DataGroup ref2 = extractRefByIndexAndRefGroupName(children, 1, "refGroup");
+		assertEquals(ref2.getFirstAtomicValueWithNameInData("linkedRecordType"), "text");
+		assertEquals(ref2.getAttributes().get("type"), "text");
 
 		assertTrue(linkCollector.collectLinksWasCalled);
 	}
