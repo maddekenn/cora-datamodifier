@@ -32,9 +32,9 @@ public class PresentationChildReferenceModifier {
 		dataModifier.setRecordStorage(recordStorage);
 
 		dataModifier.modifyByRecordType("presentationGroup");
-		// dataModifier.modifyByRecordType("presentationSurroundingContainer");
-		// dataModifier.modifyByRecordType("presentationRepeatingContainer");
-		// dataModifier.modifyByRecordType("presentationResourceLink");
+		dataModifier.modifyByRecordType("presentationSurroundingContainer");
+		dataModifier.modifyByRecordType("presentationRepeatingContainer");
+		dataModifier.modifyByRecordType("presentationResourceLink");
 		System.out.println("done");
 	}
 }
