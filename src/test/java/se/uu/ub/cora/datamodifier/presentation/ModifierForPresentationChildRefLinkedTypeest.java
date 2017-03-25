@@ -14,14 +14,14 @@ import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
 import se.uu.ub.cora.datamodifier.RecordStorageSpy;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class DataModifierForPresentationChildReferenceTest {
+public class ModifierForPresentationChildRefLinkedTypeest {
 	private RecordStorage recordStorage;
 	private DataRecordLinkCollectorSpy linkCollector;
-	protected DataModifierForPresentationChildReference dataModifier;
+	protected ModifierForPresentationChildRefLinkedType dataModifier;
 
 	@BeforeMethod
 	public void setUp() {
-		dataModifier = new DataModifierForPresentationChildReference();
+		dataModifier = new ModifierForPresentationChildRefLinkedType();
 		linkCollector = new DataRecordLinkCollectorSpy();
 		recordStorage = new RecordStorageSpy();
 		dataModifier.setLinkCollector(linkCollector);

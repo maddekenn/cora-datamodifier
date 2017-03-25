@@ -10,7 +10,7 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.datamodifier.DataModifier;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class DataModifierForPresentationChildReference implements DataModifier {
+public class ModifierForPresentationChildRefLinkedType implements DataModifier {
 	private static final String PRESENTATION = "presentation";
 	private static final String LINKED_RECORD_TYPE = "linkedRecordType";
 	RecordStorage recordStorage;
