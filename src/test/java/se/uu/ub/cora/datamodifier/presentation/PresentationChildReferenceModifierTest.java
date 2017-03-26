@@ -25,10 +25,10 @@ public class PresentationChildReferenceModifierTest {
 	public void testMainMethod() throws ClassNotFoundException, NoSuchMethodException,
 			InvocationTargetException, InstantiationException, IllegalAccessException {
 		String args[] = new String[] { "/home/madde/workspace/modify/",
-				"se.uu.ub.cora.datamodifier.presentation.DataModifierForPresentationChildReferenceSpy" };
+				"se.uu.ub.cora.datamodifier.presentation.ModifierForPresentationChildRefLinkedTypeSpy" };
 
 		PresentationChildReferenceModifier.main(args);
-		DataModifierForPresentationChildReferenceSpy recordTypeModifier = (DataModifierForPresentationChildReferenceSpy) PresentationChildReferenceModifier.dataModifier;
+		ModifierForPresentationChildRefLinkedTypeSpy recordTypeModifier = (ModifierForPresentationChildRefLinkedTypeSpy) PresentationChildReferenceModifier.dataModifier;
 		assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
 		assertEquals(recordTypeModifier.recordTypes.get(1), "presentationSurroundingContainer");
 		assertEquals(recordTypeModifier.recordTypes.get(2), "presentationRepeatingContainer");

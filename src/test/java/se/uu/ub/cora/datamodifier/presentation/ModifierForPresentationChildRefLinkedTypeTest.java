@@ -14,7 +14,7 @@ import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
 import se.uu.ub.cora.datamodifier.RecordStorageSpy;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class ModifierForPresentationChildRefLinkedTypeest {
+public class ModifierForPresentationChildRefLinkedTypeTest {
 	private RecordStorage recordStorage;
 	private DataRecordLinkCollectorSpy linkCollector;
 	protected ModifierForPresentationChildRefLinkedType dataModifier;
