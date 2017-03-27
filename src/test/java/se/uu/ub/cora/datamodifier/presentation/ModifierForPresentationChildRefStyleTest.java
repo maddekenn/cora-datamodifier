@@ -3,6 +3,7 @@ package se.uu.ub.cora.datamodifier.presentation;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
@@ -36,22 +37,16 @@ public class ModifierForPresentationChildRefStyleTest {
 	@Test
 	public void testStyle() {
 		dataModifier.modifyByRecordType("presentationGroup");
+		assertEquals(linkCollector.metadataId, "presentationGroupGroup");
 
 		RecordStorageForStyleSpy recordStorageSpy = ((RecordStorageForStyleSpy) recordStorage);
+		// bookPGroup
 		assertCorrectChildrenInFirstModifiedDataGroup(recordStorageSpy);
+		assertTrue(linkCollector.collectLinksWasCalled);
 
 		// personPGroup
-		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 1);
-		DataGroup secondChildReference = children.get(0);
-		assertEquals(secondChildReference.getFirstAtomicValueWithNameInData("childStyle"),
-				"oneChildStyle");
-		assertEquals(secondChildReference.getFirstAtomicValueWithNameInData("textStyle"),
-				"oneTextStyle");
-
-		assertEquals(secondChildReference.getChildren().size(), 4);
-
-		// TODO: kolla andra childreference i person, ska bli det värdet som är
-		// i refMinGroup eftersom refGroup inte har style
+		assertCorrectChildrenInSecondModifiedDataGroup(recordStorageSpy);
+		assertTrue(linkCollector.collectLinksWasCalled);
 
 	}
 
@@ -87,14 +82,29 @@ public class ModifierForPresentationChildRefStyleTest {
 		return children;
 	}
 
-	// private DataGroup extractRefByIndexAndRefGroupName(List<DataGroup>
-	// children, int index,
-	// String refGroupName) {
-	// DataGroup childReference = children.get(index);
-	// DataGroup refGroup =
-	// childReference.getFirstGroupWithNameInData(refGroupName);
-	// DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
-	// return ref;
-	// }
+	private void assertCorrectChildrenInSecondModifiedDataGroup(
+			RecordStorageForStyleSpy recordStorageSpy) {
+		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 1);
+		DataGroup firstChildReference = children.get(0);
+		assertEquals(firstChildReference.getFirstAtomicValueWithNameInData("childStyle"),
+				"oneChildStyle");
+		assertEquals(firstChildReference.getFirstAtomicValueWithNameInData("textStyle"),
+				"oneTextStyle");
+
+		assertEquals(firstChildReference.getChildren().size(), 4);
+		DataGroup refGroup = firstChildReference.getFirstGroupWithNameInData("refGroup");
+		assertFalse(refGroup.containsChildWithNameInData("childStyle"));
+		assertFalse(refGroup.containsChildWithNameInData("textStyle"));
+
+		DataGroup secondChildreference = children.get(1);
+
+		assertEquals(secondChildreference.getFirstAtomicValueWithNameInData("childStyle"),
+				"zeroChildStyle");
+		assertEquals(secondChildreference.getFirstAtomicValueWithNameInData("textStyle"),
+				"zeroTextStyle");
+		DataGroup refMinGroup = secondChildreference.getFirstGroupWithNameInData("refMinGroup");
+		assertFalse(refMinGroup.containsChildWithNameInData("childStyle"));
+		assertFalse(refMinGroup.containsChildWithNameInData("textStyle"));
+	}
 
 }

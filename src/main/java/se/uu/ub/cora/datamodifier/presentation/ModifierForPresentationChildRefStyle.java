@@ -35,17 +35,28 @@ public class ModifierForPresentationChildRefStyle implements DataModifier {
 		DataGroup childReferences = dataGroup.getFirstGroupWithNameInData("childReferences");
 		for (DataGroup childReference : childReferences
 				.getAllGroupsWithNameInData("childReference")) {
-			DataGroup refGroup = childReference.getFirstGroupWithNameInData("refGroup");
-			moveStyleIfExist(childReference, refGroup, CHILD_STYLE);
-			moveStyleIfExist(childReference, refGroup, "textStyle");
-
-			if (childReference.containsChildWithNameInData("refMinGroup")) {
-				DataGroup refMinGroup = childReference.getFirstGroupWithNameInData("refMinGroup");
-				moveStyleIfExist(childReference, refMinGroup, CHILD_STYLE);
-				moveStyleIfExist(childReference, refMinGroup, "textStyle");
-			}
+			modifyChildReference(childReference);
 		}
 
+	}
+
+	private void modifyChildReference(DataGroup childReference) {
+		possiblyModifyRefGroupInChildReferenceByNameInData(childReference, "refGroup");
+		possiblyModifyRefGroupInChildReferenceByNameInData(childReference, "refMinGroup");
+	}
+
+	private void possiblyModifyRefGroupInChildReferenceByNameInData(DataGroup childReference,
+			String nameInData) {
+		if (childReference.containsChildWithNameInData(nameInData)) {
+			modifyRefGrouopInChildReferenceByNameInData(childReference, nameInData);
+		}
+	}
+
+	private void modifyRefGrouopInChildReferenceByNameInData(DataGroup childReference,
+			String nameInData) {
+		DataGroup refGroup = childReference.getFirstGroupWithNameInData(nameInData);
+		moveStyleIfExist(childReference, refGroup, CHILD_STYLE);
+		moveStyleIfExist(childReference, refGroup, "textStyle");
 	}
 
 	private void moveStyleIfExist(DataGroup childReference, DataGroup refGroup, String style) {
@@ -69,12 +80,16 @@ public class ModifierForPresentationChildRefStyle implements DataModifier {
 
 		String id = recordInfo.getFirstAtomicValueWithNameInData("id");
 		String type = recordInfo.getFirstAtomicValueWithNameInData("type");
-		// String metadataId = getMetadataId();
-		// DataGroup collectedLinks = linkCollector.collectLinks(metadataId,
-		// modified, type, id);
-		DataGroup collectedLinks = DataGroup.withNameInData("collectedlinks");
+		String metadataId = getMetadataId();
+		DataGroup collectedLinks = linkCollector.collectLinks(metadataId, modified, type, id);
 		String dataDivider = extractDataDivider(recordInfo);
 		recordStorage.update(type, id, modified, collectedLinks, dataDivider);
+	}
+
+	private String getMetadataId() {
+		DataGroup recordTypeDataGroup = recordStorage.read("recordType", recordType);
+		DataGroup metadataIdGroup = recordTypeDataGroup.getFirstGroupWithNameInData("metadataId");
+		return metadataIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId");
 	}
 
 	private String extractDataDivider(DataGroup recordInfo) {

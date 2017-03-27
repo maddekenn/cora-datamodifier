@@ -40,23 +40,6 @@ public class RecordStorageForStyleSpy implements RecordStorage {
 			readRecordTypes.add(id);
 			return createRecordTypeWithMetadataId("presentationGroup", "presentationGroupGroup");
 		}
-		// if ("presentationSurroundingContainer".equals(id)) {
-		// readRecordTypes.add(id);
-		// return
-		// createRecordTypeWithMetadataId("presentationSurroundingContainer",
-		// "presentationSurroundingContainerGroup");
-		// }
-		// if ("presentationRepeatingContainer".equals(id)) {
-		// readRecordTypes.add(id);
-		// return
-		// createRecordTypeWithMetadataId("presentationRepeatingContainer",
-		// "presentationRepeatingContainerGroup");
-		// }
-		// if ("presentationResourceLink".equals(id)) {
-		// readRecordTypes.add(id);
-		// return createRecordTypeWithMetadataId("presentationResourceLink",
-		// "presentationResourceLinkGroup");
-		// }
 		return null;
 	}
 
@@ -114,8 +97,6 @@ public class RecordStorageForStyleSpy implements RecordStorage {
 			childReferences.addChild(secondReference);
 			bookPGroup.addChild(childReferences);
 
-			// DataGroup childReferences =
-			// addPresentationChildReferences(false);
 			bookPGroup.addChild(childReferences);
 			recordList.add(bookPGroup);
 
@@ -133,7 +114,6 @@ public class RecordStorageForStyleSpy implements RecordStorage {
 			recordList.add(personPGroup);
 		}
 		return recordList;
-		// personPGroup.addChild(addPresentationChildReferences(true));
 	}
 
 	private DataGroup createChildRefWithRefGroupWithStyleAndRefMinGroupWithStyle() {
@@ -186,43 +166,6 @@ public class RecordStorageForStyleSpy implements RecordStorage {
 		childReference.addChild(refGroup);
 	}
 
-	private DataGroup addChildReferencesForPerson() {
-		DataGroup personChildReferences = DataGroup.withNameInData("childReferences");
-		DataGroup childReference3 = createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(
-				"0", "metadataGroup", "recordInfoGroup", "group");
-		personChildReferences.addChild(childReference3);
-		DataGroup childReference4 = createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(
-				"1", "metadataTextVariable", "lastNameTextVar", "textVariable");
-		personChildReferences.addChild(childReference4);
-		return personChildReferences;
-	}
-
-	private DataGroup addChildReferencesForBook() {
-		DataGroup bookChildReferences = DataGroup.withNameInData("childReferences");
-		DataGroup childReference = createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("0",
-				"metadataGroup", "recordInfoGroup", "group");
-		bookChildReferences.addChild(childReference);
-		DataGroup childReference1 = createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(
-				"1", "metadataTextVariable", "bookTitleTextVar", "textVariable");
-		bookChildReferences.addChild(childReference1);
-		DataGroup childReference2 = createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(
-				"1", "metadataRecordLink", "bookCoverLink", "recordLink");
-		bookChildReferences.addChild(childReference2);
-		return bookChildReferences;
-	}
-
-	private DataGroup createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(String repeatId,
-			String linkedRecordType, String linkedRecordId, String attributeType) {
-		DataGroup childReference = DataGroup.withNameInData("childReference");
-		childReference.setRepeatId(repeatId);
-		DataGroup ref = DataGroup.withNameInData("ref");
-		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", linkedRecordType));
-		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", linkedRecordId));
-		ref.addAttributeByIdWithValue("type", attributeType);
-		childReference.addChild(ref);
-		return childReference;
-	}
-
 	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
 			String nameInData, String type, String dataDividerId) {
 		DataGroup metadataGroup = DataGroup.withNameInData(nameInData);
@@ -241,54 +184,6 @@ public class RecordStorageForStyleSpy implements RecordStorage {
 		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", dataDividerId));
 		return dataDivider;
 	}
-
-	// private DataGroup addPresentationChildReferences(boolean
-	// includeRefMinGroup) {
-	// DataGroup childReferences = DataGroup.withNameInData("childReferences");
-	//
-	// createChildWithRefGroupWithStyle();
-	//
-	// if (includeRefMinGroup) {
-	// DataGroup refMinGroup =
-	// createRefGroupWithNameRecordTypeIdAndType("refMinGroup",
-	// "presentationRecordLink", "userRoleMinimizedOutputPLink", "pRecordLink");
-	// refMinGroup.setRepeatId("3");
-	// refMinGroup.addChild(DataAtomic.withNameInDataAndValue("childStyle",
-	// "zeroChildStyle"));
-	// refMinGroup.addChild(DataAtomic.withNameInDataAndValue("textStyle",
-	// "zeroTextStyle"));
-	// childReference.addChild(refMinGroup);
-	// }
-	// childReferences.addChild(childReference);
-	//
-	// DataGroup childReference2 = createChildWithRefGroupWithoutStyle();
-	// childReferences.addChild(childReference2);
-	//
-	// DataGroup childReference3 = DataGroup.withNameInData("childReference");
-	// childReference3.addChild(DataAtomic.withNameInDataAndValue("default",
-	// "ref"));
-	//
-	// DataGroup refGroup3 =
-	// createRefGroupWithNameRecordTypeIdAndType("refGroup",
-	// "presentationGroup", "anotherOutputPGroup", "pGroup");
-	// refGroup.setRepeatId("1");
-	// childReference3.addChild(refGroup3);
-	//
-	// if (includeRefMinGroup) {
-	// DataGroup refMinGroup =
-	// createRefGroupWithNameRecordTypeIdAndType("refMinGroup",
-	// "presentationGroup", "anotherMinimizedOutputPGroup", "pGroup");
-	// refMinGroup.setRepeatId("3");
-	// refMinGroup.addChild(DataAtomic.withNameInDataAndValue("childStyle",
-	// "zeroChildStyle"));
-	// refMinGroup.addChild(DataAtomic.withNameInDataAndValue("textStyle",
-	// "zeroTextStyle"));
-	// childReference3.addChild(refMinGroup);
-	// }
-	// childReferences.addChild(childReference3);
-	// return childReferences;
-	//
-	// }
 
 	private DataGroup createRefGroupWithNameRecordTypeIdAndType(String nameInData,
 			String recordType, String id, String type) {
