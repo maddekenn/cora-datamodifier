@@ -5,6 +5,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Map;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -50,7 +51,7 @@ public class DataModifierForPresentationChildReferenceTest {
 		DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
 
 		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
-		assertEquals(ref.getAttributes().size(), 0);
+		assertEquals(ref.getAttributes().get("type"), "presentation");
 
 		DataGroup childReference2 = children.get(1);
 		DataGroup refGroup2 = childReference2.getFirstGroupWithNameInData("refGroup");
@@ -58,7 +59,7 @@ public class DataModifierForPresentationChildReferenceTest {
 		DataGroup ref2 = refGroup2.getFirstGroupWithNameInData("ref");
 
 		assertEquals(ref2.getFirstAtomicValueWithNameInData("linkedRecordType"), "text");
-		assertEquals(ref2.getAttributes().size(), 0);
+		assertEquals(ref2.getAttributes().get("type"), "text");
 
 		assertTrue(linkCollector.collectLinksWasCalled);
 	}
@@ -78,12 +79,13 @@ public class DataModifierForPresentationChildReferenceTest {
 		DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
 
 		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
-		assertEquals(ref.getAttributes().size(), 0);
+        Map<String, String> attributes = ref.getAttributes();
+        assertEquals(attributes.get("type"), "presentation");
 
 		DataGroup refMinGroup = childReference.getFirstGroupWithNameInData("refMinGroup");
 		DataGroup refMin = refMinGroup.getFirstGroupWithNameInData("ref");
 		assertEquals(refMin.getFirstAtomicValueWithNameInData("linkedRecordType"), "presentation");
-		assertEquals(refMin.getAttributes().size(), 0);
+		assertEquals(refMin.getAttributes().get("type"), "presentation");
 
 		assertTrue(linkCollector.collectLinksWasCalled);
 	}

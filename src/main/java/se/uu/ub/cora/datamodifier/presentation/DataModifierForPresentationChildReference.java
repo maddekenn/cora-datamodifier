@@ -43,8 +43,9 @@ public class DataModifierForPresentationChildReference implements DataModifier {
 		if (linkedRecordType.startsWith("presentation")) {
 			ref.removeFirstChildWithNameInData("linkedRecordType");
 			ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "presentation"));
+		    ref.getAttributes().remove("type");
+            ref.addAttributeByIdWithValue("type", "presentation");
 		}
-		ref.getAttributes().remove("type");
 	}
 
 	private void updateRecords() {
