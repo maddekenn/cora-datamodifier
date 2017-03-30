@@ -24,9 +24,10 @@ import java.util.List;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.spider.data.SpiderDataAtomic;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class RecordStorageForStyleSpy implements RecordStorage {
+public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordStorage {
 
 	public List<DataGroup> modifiedDataGroupsSentToUpdate = new ArrayList<>();
 	public List<String> readRecordTypes = new ArrayList<>();
@@ -118,6 +119,7 @@ public class RecordStorageForStyleSpy implements RecordStorage {
 
 	private DataGroup createChildRefWithRefGroupWithStyleAndRefMinGroupWithStyle() {
 		DataGroup firstReference2 = DataGroup.withNameInData("childReference");
+		firstReference2.addChild(DataAtomic.withNameInDataAndValue("default", "ref"));
 		createAndAddRefGroupWithStyle(firstReference2);
 		DataGroup refMinGroup = createRefGroupWithNameRecordTypeIdAndType("refMinGroup",
 				"presentationRecordLink", "userRoleMinimizedOutputPLink", "pRecordLink");
@@ -130,6 +132,8 @@ public class RecordStorageForStyleSpy implements RecordStorage {
 
 	private DataGroup createChildRefWithRefGroupWithoutStyleAndRefMinGroupWithStyle() {
 		DataGroup firstReference2 = createChildWithRefGroupWithoutStyle();
+		firstReference2.removeFirstChildWithNameInData("default");
+		firstReference2.addChild(DataAtomic.withNameInDataAndValue("default", "refMin"));
 		DataGroup refMinGroup = createRefGroupWithNameRecordTypeIdAndType("refMinGroup",
 				"presentationRecordLink", "userRoleMinimizedOutputPLink", "pRecordLink");
 		refMinGroup.setRepeatId("3");

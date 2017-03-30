@@ -23,7 +23,7 @@ public class ModifierForPresentationChildRefStyleTest {
 	public void setUp() {
 		dataModifier = new ModifierForPresentationChildRefStyle();
 		linkCollector = new DataRecordLinkCollectorSpy();
-		recordStorage = new RecordStorageForStyleSpy();
+		recordStorage = new RecordStorageForStyleAndDefaultPresentationSpy();
 		dataModifier.setLinkCollector(linkCollector);
 		dataModifier.setRecordStorage(recordStorage);
 	}
@@ -39,7 +39,7 @@ public class ModifierForPresentationChildRefStyleTest {
 		dataModifier.modifyByRecordType("presentationGroup");
 		assertEquals(linkCollector.metadataId, "presentationGroupGroup");
 
-		RecordStorageForStyleSpy recordStorageSpy = ((RecordStorageForStyleSpy) recordStorage);
+		RecordStorageForStyleAndDefaultPresentationSpy recordStorageSpy = ((RecordStorageForStyleAndDefaultPresentationSpy) recordStorage);
 		// bookPGroup
 		assertCorrectChildrenInFirstModifiedDataGroup(recordStorageSpy);
 		assertTrue(linkCollector.collectLinksWasCalled);
@@ -51,7 +51,7 @@ public class ModifierForPresentationChildRefStyleTest {
 	}
 
 	private void assertCorrectChildrenInFirstModifiedDataGroup(
-			RecordStorageForStyleSpy recordStorageSpy) {
+			RecordStorageForStyleAndDefaultPresentationSpy recordStorageSpy) {
 		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 0);
 		DataGroup firstChildReference = children.get(0);
 		assertEquals(firstChildReference.getFirstAtomicValueWithNameInData("childStyle"),
@@ -73,7 +73,7 @@ public class ModifierForPresentationChildRefStyleTest {
 	}
 
 	private List<DataGroup> extractChildrenFromModifiedByIndex(
-			RecordStorageForStyleSpy recordStorageSpy, int index) {
+			RecordStorageForStyleAndDefaultPresentationSpy recordStorageSpy, int index) {
 		DataGroup modifiedDataGroup = recordStorageSpy.modifiedDataGroupsSentToUpdate.get(index);
 		DataGroup childReferences = modifiedDataGroup
 				.getFirstGroupWithNameInData("childReferences");
@@ -83,7 +83,7 @@ public class ModifierForPresentationChildRefStyleTest {
 	}
 
 	private void assertCorrectChildrenInSecondModifiedDataGroup(
-			RecordStorageForStyleSpy recordStorageSpy) {
+			RecordStorageForStyleAndDefaultPresentationSpy recordStorageSpy) {
 		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 1);
 		DataGroup firstChildReference = children.get(0);
 		assertEquals(firstChildReference.getFirstAtomicValueWithNameInData("childStyle"),
@@ -91,18 +91,18 @@ public class ModifierForPresentationChildRefStyleTest {
 		assertEquals(firstChildReference.getFirstAtomicValueWithNameInData("textStyle"),
 				"oneTextStyle");
 
-		assertEquals(firstChildReference.getChildren().size(), 4);
+		assertEquals(firstChildReference.getChildren().size(), 5);
 		DataGroup refGroup = firstChildReference.getFirstGroupWithNameInData("refGroup");
 		assertFalse(refGroup.containsChildWithNameInData("childStyle"));
 		assertFalse(refGroup.containsChildWithNameInData("textStyle"));
 
-		DataGroup secondChildreference = children.get(1);
+		DataGroup secondChildReference = children.get(1);
 
-		assertEquals(secondChildreference.getFirstAtomicValueWithNameInData("childStyle"),
+		assertEquals(secondChildReference.getFirstAtomicValueWithNameInData("childStyle"),
 				"zeroChildStyle");
-		assertEquals(secondChildreference.getFirstAtomicValueWithNameInData("textStyle"),
+		assertEquals(secondChildReference.getFirstAtomicValueWithNameInData("textStyle"),
 				"zeroTextStyle");
-		DataGroup refMinGroup = secondChildreference.getFirstGroupWithNameInData("refMinGroup");
+		DataGroup refMinGroup = secondChildReference.getFirstGroupWithNameInData("refMinGroup");
 		assertFalse(refMinGroup.containsChildWithNameInData("childStyle"));
 		assertFalse(refMinGroup.containsChildWithNameInData("textStyle"));
 	}
