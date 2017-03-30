@@ -236,18 +236,23 @@ public class RecordStorageSpy implements RecordStorage {
 
 	private DataGroup addPresentationChildReferences(boolean includeRefMinGroup) {
 		DataGroup childReferences = DataGroup.withNameInData("childReferences");
+
 		DataGroup childReference = DataGroup.withNameInData("childReference");
 		childReference.addChild(DataAtomic.withNameInDataAndValue("default", "ref"));
 
 		DataGroup refGroup = createRefGroupWithNameRecordTypeIdAndType("refGroup",
 				"presentationGroup", "permissionRulePartOrganisationOutputPGroup", "pGroup");
 		refGroup.setRepeatId("1");
+		refGroup.addChild(DataAtomic.withNameInDataAndValue("childStyle", "oneChildStyle"));
+		refGroup.addChild(DataAtomic.withNameInDataAndValue("textStyle", "oneTextStyle"));
 		childReference.addChild(refGroup);
 
 		if (includeRefMinGroup) {
 			DataGroup refMinGroup = createRefGroupWithNameRecordTypeIdAndType("refMinGroup",
 					"presentationRecordLink", "userRoleMinimizedOutputPLink", "pRecordLink");
 			refMinGroup.setRepeatId("3");
+			refMinGroup.addChild(DataAtomic.withNameInDataAndValue("childStyle", "zeroChildStyle"));
+			refMinGroup.addChild(DataAtomic.withNameInDataAndValue("textStyle", "zeroTextStyle"));
 			childReference.addChild(refMinGroup);
 		}
 		childReferences.addChild(childReference);
@@ -259,6 +264,24 @@ public class RecordStorageSpy implements RecordStorage {
 		refGroup2.setRepeatId("2");
 		childReference2.addChild(refGroup2);
 		childReferences.addChild(childReference2);
+
+		DataGroup childReference3 = DataGroup.withNameInData("childReference");
+		childReference3.addChild(DataAtomic.withNameInDataAndValue("default", "ref"));
+
+		DataGroup refGroup3 = createRefGroupWithNameRecordTypeIdAndType("refGroup",
+				"presentationGroup", "anotherOutputPGroup", "pGroup");
+		refGroup.setRepeatId("1");
+		childReference3.addChild(refGroup3);
+
+		if (includeRefMinGroup) {
+			DataGroup refMinGroup = createRefGroupWithNameRecordTypeIdAndType("refMinGroup",
+					"presentationGroup", "anotherMinimizedOutputPGroup", "pGroup");
+			refMinGroup.setRepeatId("3");
+			refMinGroup.addChild(DataAtomic.withNameInDataAndValue("childStyle", "zeroChildStyle"));
+			refMinGroup.addChild(DataAtomic.withNameInDataAndValue("textStyle", "zeroTextStyle"));
+			childReference3.addChild(refMinGroup);
+		}
+		childReferences.addChild(childReference3);
 		return childReferences;
 
 	}

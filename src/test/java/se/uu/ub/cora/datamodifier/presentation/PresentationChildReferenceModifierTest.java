@@ -22,16 +22,32 @@ public class PresentationChildReferenceModifierTest {
 	}
 
 	@Test
-	public void testMainMethod() throws ClassNotFoundException, NoSuchMethodException,
-			InvocationTargetException, InstantiationException, IllegalAccessException {
+	public void testMainMethodWithLinkedTypeModifier()
+			throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+			InstantiationException, IllegalAccessException {
 		String args[] = new String[] { "/home/madde/workspace/modify/",
-				"se.uu.ub.cora.datamodifier.presentation.DataModifierForPresentationChildReferenceSpy" };
+				"se.uu.ub.cora.datamodifier.presentation.ModifierForPresentationChildRefLinkedTypeSpy",
+				"true" };
 
 		PresentationChildReferenceModifier.main(args);
-		DataModifierForPresentationChildReferenceSpy recordTypeModifier = (DataModifierForPresentationChildReferenceSpy) PresentationChildReferenceModifier.dataModifier;
+		ModifierForPresentationChildRefLinkedTypeSpy recordTypeModifier = (ModifierForPresentationChildRefLinkedTypeSpy) PresentationChildReferenceModifier.dataModifier;
 		assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
 		assertEquals(recordTypeModifier.recordTypes.get(1), "presentationSurroundingContainer");
 		assertEquals(recordTypeModifier.recordTypes.get(2), "presentationRepeatingContainer");
 		assertEquals(recordTypeModifier.recordTypes.get(3), "presentationResourceLink");
+	}
+
+	@Test
+	public void testMainMethodWithStyleModifier()
+			throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+			InstantiationException, IllegalAccessException {
+		String args[] = new String[] { "/home/madde/workspace/modify/",
+				"se.uu.ub.cora.datamodifier.presentation.ModifierForPresentationChildRefStyleSpy",
+				"false" };
+
+		PresentationChildReferenceModifier.main(args);
+		ModifierForPresentationChildRefStyleSpy recordTypeModifier = (ModifierForPresentationChildRefStyleSpy) PresentationChildReferenceModifier.dataModifier;
+		assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
+		assertEquals(recordTypeModifier.recordTypes.size(), 1);
 	}
 }

@@ -7,7 +7,7 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.datamodifier.DataModifier;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class DataModifierForPresentationChildReferenceSpy implements DataModifier {
+public class ModifierForPresentationChildRefStyleSpy implements DataModifier {
 	public List<String> recordTypes = new ArrayList<>();
 
 	@Override

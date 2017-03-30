@@ -21,6 +21,7 @@ public class PresentationChildReferenceModifier {
 			IllegalAccessException, InvocationTargetException, InstantiationException {
 		String basePath = args[0];
 		String modifierClassName = args[1];
+		String includeAllGroupsWithChildRef = args[2];
 		RecordStorage recordStorage = RecordStorageOnDisk
 				.createRecordStorageOnDiskWithBasePath(basePath);
 		DataRecordLinkCollector linkCollector = new DataRecordLinkCollectorImp(
@@ -32,9 +33,11 @@ public class PresentationChildReferenceModifier {
 		dataModifier.setRecordStorage(recordStorage);
 
 		dataModifier.modifyByRecordType("presentationGroup");
-		dataModifier.modifyByRecordType("presentationSurroundingContainer");
-		dataModifier.modifyByRecordType("presentationRepeatingContainer");
-		dataModifier.modifyByRecordType("presentationResourceLink");
+		if ("true".equals(includeAllGroupsWithChildRef)) {
+			dataModifier.modifyByRecordType("presentationSurroundingContainer");
+			dataModifier.modifyByRecordType("presentationRepeatingContainer");
+			dataModifier.modifyByRecordType("presentationResourceLink");
+		}
 		System.out.println("done");
 	}
 }

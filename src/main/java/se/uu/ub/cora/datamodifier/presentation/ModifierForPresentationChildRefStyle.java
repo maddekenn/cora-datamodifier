@@ -10,13 +10,13 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.datamodifier.DataModifier;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class DataModifierForPresentationChildReference implements DataModifier {
-	private static final String PRESENTATION = "presentation";
-	private static final String LINKED_RECORD_TYPE = "linkedRecordType";
+public class ModifierForPresentationChildRefStyle implements DataModifier {
+
+	private static final String CHILD_STYLE = "childStyle";
 	RecordStorage recordStorage;
 	DataRecordLinkCollector linkCollector;
-	private List<DataGroup> modifiedList = new ArrayList<>();
 	private String recordType;
+	private List<DataGroup> modifiedList = new ArrayList<>();
 
 	@Override
 	public void modifyByRecordType(String recordType) {
@@ -28,52 +28,45 @@ public class DataModifierForPresentationChildReference implements DataModifier {
 			modifiedList.add(dataGroup);
 		}
 		updateRecords();
+
 	}
 
 	private void modifyDataGroup(DataGroup dataGroup) {
-		if (dataGroup.containsChildWithNameInData("childReferences")) {
-			modifyChildReferences(dataGroup);
-		}
-	}
-
-	private void modifyChildReferences(DataGroup dataGroup) {
 		DataGroup childReferences = dataGroup.getFirstGroupWithNameInData("childReferences");
 		for (DataGroup childReference : childReferences
 				.getAllGroupsWithNameInData("childReference")) {
-			modifyRefGroupsInChildReference(childReference);
+			modifyChildReference(childReference);
+		}
+
+	}
+
+	private void modifyChildReference(DataGroup childReference) {
+		possiblyModifyRefGroupInChildReferenceByNameInData(childReference, "refGroup");
+		possiblyModifyRefGroupInChildReferenceByNameInData(childReference, "refMinGroup");
+	}
+
+	private void possiblyModifyRefGroupInChildReferenceByNameInData(DataGroup childReference,
+			String nameInData) {
+		if (childReference.containsChildWithNameInData(nameInData)) {
+			modifyRefGrouopInChildReferenceByNameInData(childReference, nameInData);
 		}
 	}
 
-	private void modifyRefGroupsInChildReference(DataGroup childReference) {
-		modifyPresentationChildReference(childReference.getFirstGroupWithNameInData("refGroup"));
-		if (childReference.containsChildWithNameInData("refMinGroup")) {
-			modifyPresentationChildReference(
-					childReference.getFirstGroupWithNameInData("refMinGroup"));
+	private void modifyRefGrouopInChildReferenceByNameInData(DataGroup childReference,
+			String nameInData) {
+		DataGroup refGroup = childReference.getFirstGroupWithNameInData(nameInData);
+		moveStyleIfExist(childReference, refGroup, CHILD_STYLE);
+		moveStyleIfExist(childReference, refGroup, "textStyle");
+	}
 
+	private void moveStyleIfExist(DataGroup childReference, DataGroup refGroup, String style) {
+		if (refGroup.containsChildWithNameInData(style)) {
+			String childStyleValue = refGroup.getFirstAtomicValueWithNameInData(style);
+			refGroup.removeFirstChildWithNameInData(style);
+			if (!childReference.containsChildWithNameInData(style)) {
+				childReference.addChild(DataAtomic.withNameInDataAndValue(style, childStyleValue));
+			}
 		}
-	}
-
-	private void modifyPresentationChildReference(DataGroup refGroup) {
-		DataGroup ref = refGroup.getFirstGroupWithNameInData("ref");
-		String linkedRecordType = ref.getFirstAtomicValueWithNameInData(LINKED_RECORD_TYPE);
-		if (linkedRecordType.startsWith(PRESENTATION)) {
-			modifyChildReference(ref);
-		}
-	}
-
-	private void modifyChildReference(DataGroup ref) {
-		removeAndAddLinkedRecordType(ref);
-		removeAndAddAttribute(ref);
-	}
-
-	private void removeAndAddLinkedRecordType(DataGroup ref) {
-		ref.removeFirstChildWithNameInData(LINKED_RECORD_TYPE);
-		ref.addChild(DataAtomic.withNameInDataAndValue(LINKED_RECORD_TYPE, PRESENTATION));
-	}
-
-	private void removeAndAddAttribute(DataGroup ref) {
-		ref.getAttributes().remove("type");
-		ref.addAttributeByIdWithValue("type", PRESENTATION);
 	}
 
 	private void updateRecords() {
@@ -89,7 +82,6 @@ public class DataModifierForPresentationChildReference implements DataModifier {
 		String type = recordInfo.getFirstAtomicValueWithNameInData("type");
 		String metadataId = getMetadataId();
 		DataGroup collectedLinks = linkCollector.collectLinks(metadataId, modified, type, id);
-
 		String dataDivider = extractDataDivider(recordInfo);
 		recordStorage.update(type, id, modified, collectedLinks, dataDivider);
 	}
@@ -108,10 +100,13 @@ public class DataModifierForPresentationChildReference implements DataModifier {
 	@Override
 	public void setRecordStorage(RecordStorage recordStorage) {
 		this.recordStorage = recordStorage;
+
 	}
 
 	@Override
 	public void setLinkCollector(DataRecordLinkCollector linkCollector) {
 		this.linkCollector = linkCollector;
+
 	}
+
 }
