@@ -29,14 +29,44 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 public class RecordStorageSpy implements RecordStorage {
 
 	public List<DataGroup> modifiedDataGroupsSentToUpdate = new ArrayList<>();
+	public List<String> readRecordTypes = new ArrayList<>();
 
 	public List<DataGroup> createdData = new ArrayList<>();
 	public List<String> createdType = new ArrayList<>();
 
 	@Override
 	public DataGroup read(String type, String id) {
-		// TODO Auto-generated method stub
+		if ("presentationGroup".equals(id)) {
+			readRecordTypes.add(id);
+			return createRecordTypeWithMetadataId("presentationGroup", "presentationGroupGroup");
+		}
+		if ("presentationSurroundingContainer".equals(id)) {
+			readRecordTypes.add(id);
+			return createRecordTypeWithMetadataId("presentationSurroundingContainer",
+					"presentationSurroundingContainerGroup");
+		}
+		if ("presentationRepeatingContainer".equals(id)) {
+			readRecordTypes.add(id);
+			return createRecordTypeWithMetadataId("presentationRepeatingContainer",
+					"presentationRepeatingContainerGroup");
+		}
+		if ("presentationResourceLink".equals(id)) {
+			readRecordTypes.add(id);
+			return createRecordTypeWithMetadataId("presentationResourceLink",
+					"presentationResourceLinkGroup");
+		}
 		return null;
+	}
+
+	private DataGroup createRecordTypeWithMetadataId(String recordId, String metadataId) {
+		DataGroup surrounding = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+				recordId, "recordType", "recordType", "cora");
+		DataGroup metadataIdGroup = DataGroup.withNameInData("metadataId");
+		metadataIdGroup
+				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+		metadataIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", metadataId));
+		surrounding.addChild(metadataIdGroup);
+		return surrounding;
 	}
 
 	@Override
@@ -106,6 +136,44 @@ public class RecordStorageSpy implements RecordStorage {
 
 			personPGroup.addChild(addPresentationChildReferences(true));
 			recordList.add(personPGroup);
+		}
+
+		if ("presentationSurroundingContainer".equals(type)) {
+			DataGroup textPart = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"textPartEnOutputSContainer", "presentation",
+					"presentationSurroundingContainer", "cora");
+			textPart.addAttributeByIdWithValue("repeat", "children");
+			textPart.addAttributeByIdWithValue("type", "container");
+
+			DataGroup childReferences = addPresentationChildReferences(false);
+			textPart.addChild(childReferences);
+			recordList.add(textPart);
+		}
+		if ("presentationRepeatingContainer".equals(type)) {
+			DataGroup textPart = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"textPartEnOutputRContainer", "presentation", "presentationRepeatingContainer",
+					"cora");
+			textPart.addAttributeByIdWithValue("repeat", "this");
+			textPart.addAttributeByIdWithValue("type", "container");
+
+			DataGroup childReferences = addPresentationChildReferences(false);
+			textPart.addChild(childReferences);
+			recordList.add(textPart);
+		}
+		if ("presentationResourceLink".equals(type)) {
+			DataGroup textPart = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"masterInfoPResLink", "presentation", "presentationResourceLink", "cora");
+			textPart.addAttributeByIdWithValue("type", "pResourceLink");
+
+			DataGroup childReferences = addPresentationChildReferences(false);
+			textPart.addChild(childReferences);
+			recordList.add(textPart);
+
+			DataGroup textPartWithNoChildren = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"masterInfoPResLinkNoChildren", "presentation", "presentationResourceLink",
+					"cora");
+			textPart.addAttributeByIdWithValue("type", "pResourceLink");
+			recordList.add(textPartWithNoChildren);
 		}
 		return recordList;
 	}

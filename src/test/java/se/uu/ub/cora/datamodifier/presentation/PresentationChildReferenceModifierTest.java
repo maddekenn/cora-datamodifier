@@ -1,21 +1,21 @@
 package se.uu.ub.cora.datamodifier.presentation;
 
-import org.testng.annotations.Test;
-import se.uu.ub.cora.datamodifier.DataModifierForRecordTypeSearchLinkSpy;
-import se.uu.ub.cora.datamodifier.RecordTypeSearchLinkModifier;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import org.testng.annotations.Test;
 
 public class PresentationChildReferenceModifierTest {
 
 	@Test
-	public void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		Constructor<PresentationChildReferenceModifier> constructor =  PresentationChildReferenceModifier.class.getDeclaredConstructor();
+	public void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException,
+			InvocationTargetException, InstantiationException {
+		Constructor<PresentationChildReferenceModifier> constructor = PresentationChildReferenceModifier.class
+				.getDeclaredConstructor();
 		assertTrue(Modifier.isPrivate(constructor.getModifiers()));
 		constructor.setAccessible(true);
 		constructor.newInstance();
@@ -28,8 +28,10 @@ public class PresentationChildReferenceModifierTest {
 				"se.uu.ub.cora.datamodifier.presentation.DataModifierForPresentationChildReferenceSpy" };
 
 		PresentationChildReferenceModifier.main(args);
-		DataModifierForPresentationChildReferenceSpy recordTypeModifier =
-				(DataModifierForPresentationChildReferenceSpy) PresentationChildReferenceModifier.dataModifier;
-		assertEquals(recordTypeModifier.recordType, "presentationGroup");
+		DataModifierForPresentationChildReferenceSpy recordTypeModifier = (DataModifierForPresentationChildReferenceSpy) PresentationChildReferenceModifier.dataModifier;
+		assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
+		assertEquals(recordTypeModifier.recordTypes.get(1), "presentationSurroundingContainer");
+		assertEquals(recordTypeModifier.recordTypes.get(2), "presentationRepeatingContainer");
+		assertEquals(recordTypeModifier.recordTypes.get(3), "presentationResourceLink");
 	}
 }
