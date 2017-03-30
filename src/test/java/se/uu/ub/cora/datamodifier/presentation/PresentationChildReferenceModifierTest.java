@@ -50,4 +50,20 @@ public class PresentationChildReferenceModifierTest {
 		assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
 		assertEquals(recordTypeModifier.recordTypes.size(), 1);
 	}
+
+	@Test
+	public void testMainMethodWithDefaultPresentationModifier()
+			throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+			InstantiationException, IllegalAccessException {
+		String args[] = new String[] { "/home/madde/workspace/modify/",
+				"se.uu.ub.cora.datamodifier.presentation.ModifierForChildRefDefaultPresentationSpy",
+				"true" };
+
+		PresentationChildReferenceModifier.main(args);
+		ModifierForChildRefDefaultPresentationSpy recordTypeModifier = (ModifierForChildRefDefaultPresentationSpy) PresentationChildReferenceModifier.dataModifier;
+		assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
+		assertEquals(recordTypeModifier.recordTypes.get(1), "presentationSurroundingContainer");
+		assertEquals(recordTypeModifier.recordTypes.get(2), "presentationRepeatingContainer");
+		assertEquals(recordTypeModifier.recordTypes.get(3), "presentationResourceLink");
+	}
 }

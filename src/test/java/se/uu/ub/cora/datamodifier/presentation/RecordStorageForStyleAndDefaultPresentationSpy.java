@@ -24,7 +24,6 @@ import java.util.List;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordStorage {
@@ -133,7 +132,7 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 	private DataGroup createChildRefWithRefGroupWithoutStyleAndRefMinGroupWithStyle() {
 		DataGroup firstReference2 = createChildWithRefGroupWithoutStyle();
 		firstReference2.removeFirstChildWithNameInData("default");
-		firstReference2.addChild(DataAtomic.withNameInDataAndValue("default", "refMin"));
+		firstReference2.addChild(DataAtomic.withNameInDataAndValue("default", "refMinimized"));
 		DataGroup refMinGroup = createRefGroupWithNameRecordTypeIdAndType("refMinGroup",
 				"presentationRecordLink", "userRoleMinimizedOutputPLink", "pRecordLink");
 		refMinGroup.setRepeatId("3");
