@@ -27,8 +27,8 @@ public class DataModifierForRecordTypeSearchLinkTest {
 
 	@Test
 	public void testInit() {
-		assertNotNull(dataModifier.linkCollector);
-		assertNotNull(dataModifier.recordStorage);
+		assertNotNull(dataModifier.getLinkCollector());
+		assertNotNull(dataModifier.getRecordStorage());
 	}
 
 	@Test

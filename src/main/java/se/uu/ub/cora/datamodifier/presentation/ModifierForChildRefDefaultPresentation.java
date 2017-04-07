@@ -5,7 +5,7 @@ import java.util.List;
 import se.uu.ub.cora.bookkeeper.data.DataElement;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 
-public class ModifierForChildRefDefaultPresentation extends DataModifierImp {
+public class ModifierForChildRefDefaultPresentation extends DataModifierForPresentations {
 
 	private static final String REF_GROUP = "refGroup";
 	private static final String REF_MIN_GROUP = "refMinGroup";

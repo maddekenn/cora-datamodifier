@@ -8,11 +8,11 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class DataModifierImp implements DataModifier {
+public abstract class DataModifierForPresentations implements DataModifier {
     private String recordType;
     private ArrayList<DataGroup> modifiedList;
-    RecordStorage recordStorage;
-    DataRecordLinkCollector linkCollector;
+    protected RecordStorage recordStorage;
+    protected DataRecordLinkCollector linkCollector;
 
     @Override
     public void modifyByRecordType(String recordType) {

@@ -1,16 +1,9 @@
 package se.uu.ub.cora.datamodifier.presentation;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
-import se.uu.ub.cora.datamodifier.DataModifier;
-import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class ModifierForPresentationChildRefLinkedType extends DataModifierImp {
+public class ModifierForPresentationChildRefLinkedType extends DataModifierForPresentations {
 	private static final String PRESENTATION = "presentation";
 	private static final String LINKED_RECORD_TYPE = "linkedRecordType";
 

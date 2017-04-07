@@ -1,14 +1,9 @@
 package se.uu.ub.cora.datamodifier.presentation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
-import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class ModifierForPresentationChildRefStyle extends DataModifierImp {
+public class ModifierForPresentationChildRefStyle extends DataModifierForPresentations {
 
 	private static final String CHILD_STYLE = "childStyle";
 
