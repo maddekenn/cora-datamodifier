@@ -11,16 +11,16 @@ import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
 public class MetadataGroupChildReferenceModifier {
 
-	private MetadataGroupChildReferenceModifier(){
-
-	}
-
 	protected static DataModifier dataModifier;
+
+	private MetadataGroupChildReferenceModifier() {
+	}
 
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException, InstantiationException {
 		String basePath = args[0];
 		String modifierClassName = args[1];
+		String recordType = args[2];
 		RecordStorage recordStorage = RecordStorageOnDisk
 				.createRecordStorageOnDiskWithBasePath(basePath);
 		DataRecordLinkCollector linkCollector = new DataRecordLinkCollectorImp(
@@ -31,7 +31,7 @@ public class MetadataGroupChildReferenceModifier {
 		dataModifier.setLinkCollector(linkCollector);
 		dataModifier.setRecordStorage(recordStorage);
 
-		dataModifier.modifyByRecordType("metadataGroup");
+		dataModifier.modifyByRecordType(recordType);
 		System.out.println("done");
 	}
 }
