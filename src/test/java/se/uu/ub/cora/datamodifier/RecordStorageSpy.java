@@ -55,6 +55,11 @@ public class RecordStorageSpy implements RecordStorage {
 			return createRecordTypeWithMetadataId("presentationResourceLink",
 					"presentationResourceLinkGroup");
 		}
+		if ("recordType".equals(id)) {
+			readRecordTypes.add(id);
+			return createRecordTypeWithMetadataId("recordType",
+					"recordTypeGroup");
+		}
 		return null;
 	}
 

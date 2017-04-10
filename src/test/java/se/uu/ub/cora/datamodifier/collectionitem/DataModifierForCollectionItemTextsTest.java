@@ -34,7 +34,7 @@ public class DataModifierForCollectionItemTextsTest {
 
     @Test
     public void testModify() {
-        dataModifier.modifyByRecordType("collectionItem");
+        dataModifier.modifyByRecordType("metadataCollectionItem");
 
         assertCorrectModifiedGroup();
         assertEquals(linkCollector.noOfTimesCalled, 1);

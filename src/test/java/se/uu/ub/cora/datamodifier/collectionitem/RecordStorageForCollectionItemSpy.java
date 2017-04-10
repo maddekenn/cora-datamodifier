@@ -18,8 +18,23 @@ public class RecordStorageForCollectionItemSpy implements RecordStorage{
     public List<String> createdType = new ArrayList<>();
 
     @Override
-    public DataGroup read(String s, String s1) {
+    public DataGroup read(String type, String id) {
+        if ("metadataCollectionItem".equals(id)) {
+            readRecordTypes.add(id);
+            return createRecordTypeWithMetadataId("metadataCollectionItem", "metadataCollectionItemGroup");
+        }
         return null;
+    }
+
+    private DataGroup createRecordTypeWithMetadataId(String recordId, String metadataId) {
+        DataGroup collectionItem = DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+                recordId, "recordType", "recordType", "cora");
+        DataGroup metadataIdGroup = DataGroup.withNameInData("metadataId");
+        metadataIdGroup
+                .addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+        metadataIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", metadataId));
+        collectionItem.addChild(metadataIdGroup);
+        return collectionItem;
     }
 
     @Override
@@ -46,7 +61,7 @@ public class RecordStorageForCollectionItemSpy implements RecordStorage{
     @Override
     public Collection<DataGroup> readList(String type) {
         List<DataGroup> recordList = new ArrayList<>();
-        if ("collectionItem".equals(type)) {
+        if ("metadataCollectionItem".equals(type)) {
             DataGroup collectionItem = DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem", "metadata", "collectionItem", "testSystem");
             collectionItem.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
             collectionItem.addChild(DataAtomic.withNameInDataAndValue("textId", "someText"));
