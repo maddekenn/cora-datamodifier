@@ -1,10 +1,11 @@
-package se.uu.ub.cora.datamodifier.collectionitem;
+package se.uu.ub.cora.datamodifier.metadata;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataModifierForMetadata;
+import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 
-public class DataModifierForCollectionItemTexts extends DataModifierForMetadata {
+public class DataModifierForAtomicTextsToLinkTexts extends DataModifierForMetadata {
 
 	@Override
 	protected void modifyDataGroup(DataGroup dataGroup) {
@@ -23,7 +24,7 @@ public class DataModifierForCollectionItemTexts extends DataModifierForMetadata 
 
 	private DataGroup createTextAsLink(String textType, String textId) {
 		DataGroup textIdGroup = DataGroup.withNameInData(textType);
-		textIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "coraText"));
+		textIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "text"));
 		textIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", textId));
 		return textIdGroup;
 	}

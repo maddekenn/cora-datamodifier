@@ -23,4 +23,15 @@ public class DataCreator {
         dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", dataDividerId));
         return dataDivider;
     }
+
+    public static DataGroup createRecordTypeWithMetadataId(String recordId, String metadataId) {
+        DataGroup collectionItem = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+                recordId, "recordType", "recordType", "cora");
+        DataGroup metadataIdGroup = DataGroup.withNameInData("metadataId");
+        metadataIdGroup
+                .addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+        metadataIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", metadataId));
+        collectionItem.addChild(metadataIdGroup);
+        return collectionItem;
+    }
 }

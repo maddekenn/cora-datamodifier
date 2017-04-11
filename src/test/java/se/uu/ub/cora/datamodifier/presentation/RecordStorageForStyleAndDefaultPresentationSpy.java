@@ -24,6 +24,7 @@ import java.util.List;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.datamodifier.DataCreator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordStorage {
@@ -38,20 +39,9 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 	public DataGroup read(String type, String id) {
 		if ("presentationGroup".equals(id)) {
 			readRecordTypes.add(id);
-			return createRecordTypeWithMetadataId("presentationGroup", "presentationGroupGroup");
+			return DataCreator.createRecordTypeWithMetadataId("presentationGroup", "presentationGroupGroup");
 		}
 		return null;
-	}
-
-	private DataGroup createRecordTypeWithMetadataId(String recordId, String metadataId) {
-		DataGroup surrounding = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-				recordId, "recordType", "recordType", "cora");
-		DataGroup metadataIdGroup = DataGroup.withNameInData("metadataId");
-		metadataIdGroup
-				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-		metadataIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", metadataId));
-		surrounding.addChild(metadataIdGroup);
-		return surrounding;
 	}
 
 	@Override
@@ -86,7 +76,7 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("presentationGroup".equals(type)) {
-			DataGroup bookPGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+			DataGroup bookPGroup = DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"bookPGroup", "presentation", "presentationGroup", "cora");
 			DataGroup childReferences = DataGroup.withNameInData("childReferences");
 
@@ -100,7 +90,7 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 			bookPGroup.addChild(childReferences);
 			recordList.add(bookPGroup);
 
-			DataGroup personPGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+			DataGroup personPGroup = DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"personPGroup", "presentation", "presentationGroup", "cora");
 			DataGroup childReferences2 = DataGroup.withNameInData("childReferences");
 
@@ -167,18 +157,6 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 		refGroup.addChild(DataAtomic.withNameInDataAndValue("childStyle", "oneChildStyle"));
 		refGroup.addChild(DataAtomic.withNameInDataAndValue("textStyle", "oneTextStyle"));
 		childReference.addChild(refGroup);
-	}
-
-	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
-			String nameInData, String type, String dataDividerId) {
-		DataGroup metadataGroup = DataGroup.withNameInData(nameInData);
-		DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
-		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
-		recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", type));
-
-		recordInfo.addChild(createDataDivider(dataDividerId));
-		metadataGroup.addChild(recordInfo);
-		return metadataGroup;
 	}
 
 	private DataGroup createDataDivider(String dataDividerId) {

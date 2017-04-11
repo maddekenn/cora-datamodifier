@@ -38,40 +38,29 @@ public class RecordStorageSpy implements RecordStorage {
 	public DataGroup read(String type, String id) {
 		if ("presentationGroup".equals(id)) {
 			readRecordTypes.add(id);
-			return createRecordTypeWithMetadataId("presentationGroup", "presentationGroupGroup");
+			return DataCreator.createRecordTypeWithMetadataId("presentationGroup", "presentationGroupGroup");
 		}
 		if ("presentationSurroundingContainer".equals(id)) {
 			readRecordTypes.add(id);
-			return createRecordTypeWithMetadataId("presentationSurroundingContainer",
+			return DataCreator.createRecordTypeWithMetadataId("presentationSurroundingContainer",
 					"presentationSurroundingContainerGroup");
 		}
 		if ("presentationRepeatingContainer".equals(id)) {
 			readRecordTypes.add(id);
-			return createRecordTypeWithMetadataId("presentationRepeatingContainer",
+			return DataCreator.createRecordTypeWithMetadataId("presentationRepeatingContainer",
 					"presentationRepeatingContainerGroup");
 		}
 		if ("presentationResourceLink".equals(id)) {
 			readRecordTypes.add(id);
-			return createRecordTypeWithMetadataId("presentationResourceLink",
+			return DataCreator.createRecordTypeWithMetadataId("presentationResourceLink",
 					"presentationResourceLinkGroup");
 		}
 		if ("recordType".equals(id)) {
 			readRecordTypes.add(id);
-			return createRecordTypeWithMetadataId("recordType",
+			return DataCreator.createRecordTypeWithMetadataId("recordType",
 					"recordTypeGroup");
 		}
 		return null;
-	}
-
-	private DataGroup createRecordTypeWithMetadataId(String recordId, String metadataId) {
-		DataGroup surrounding = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-				recordId, "recordType", "recordType", "cora");
-		DataGroup metadataIdGroup = DataGroup.withNameInData("metadataId");
-		metadataIdGroup
-				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-		metadataIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", metadataId));
-		surrounding.addChild(metadataIdGroup);
-		return surrounding;
 	}
 
 	@Override

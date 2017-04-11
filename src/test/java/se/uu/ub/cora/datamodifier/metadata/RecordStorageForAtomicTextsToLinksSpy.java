@@ -1,4 +1,4 @@
-package se.uu.ub.cora.datamodifier.collectionitem;
+package se.uu.ub.cora.datamodifier.metadata;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class RecordStorageForCollectionItemSpy implements RecordStorage{
+public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage{
 
     public List<DataGroup> modifiedDataGroupsSentToUpdate = new ArrayList<>();
     public List<String> readRecordTypes = new ArrayList<>();
@@ -21,21 +21,16 @@ public class RecordStorageForCollectionItemSpy implements RecordStorage{
     public DataGroup read(String type, String id) {
         if ("metadataCollectionItem".equals(id)) {
             readRecordTypes.add(id);
-            return createRecordTypeWithMetadataId("metadataCollectionItem", "metadataCollectionItemGroup");
+            return DataCreator.createRecordTypeWithMetadataId("metadataCollectionItem", "metadataCollectionItemGroup");
+        }
+        if ("metadataGroup".equals(id)) {
+            readRecordTypes.add(id);
+            return DataCreator.createRecordTypeWithMetadataId("metadataGroup", "metadataGroupGroup");
         }
         return null;
     }
 
-    private DataGroup createRecordTypeWithMetadataId(String recordId, String metadataId) {
-        DataGroup collectionItem = DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-                recordId, "recordType", "recordType", "cora");
-        DataGroup metadataIdGroup = DataGroup.withNameInData("metadataId");
-        metadataIdGroup
-                .addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-        metadataIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", metadataId));
-        collectionItem.addChild(metadataIdGroup);
-        return collectionItem;
-    }
+
 
     @Override
     public void create(String s, String s1, DataGroup dataGroup, DataGroup dataGroup1, String s2) {
@@ -67,6 +62,14 @@ public class RecordStorageForCollectionItemSpy implements RecordStorage{
             collectionItem.addChild(DataAtomic.withNameInDataAndValue("textId", "someText"));
             collectionItem.addChild(DataAtomic.withNameInDataAndValue("defTextId", "someDefText"));
             recordList.add(collectionItem);
+
+        }
+        if ("metadataGroup".equals(type)) {
+            DataGroup metadataGroup = DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("someTestGroup", "metadata", "metadataGroup", "testSystem");
+            metadataGroup.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
+            metadataGroup.addChild(DataAtomic.withNameInDataAndValue("textId", "someTestGroupText"));
+            metadataGroup.addChild(DataAtomic.withNameInDataAndValue("defTextId", "someTestGroupDefText"));
+            recordList.add(metadataGroup);
 
         }
         return recordList;
