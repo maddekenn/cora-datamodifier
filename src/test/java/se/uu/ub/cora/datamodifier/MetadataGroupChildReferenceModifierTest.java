@@ -44,4 +44,16 @@ public class MetadataGroupChildReferenceModifierTest {
 		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) MetadataGroupChildReferenceModifier.dataModifier;
 		assertEquals(childRefModifier.recordType, "metadataCollectionItem");
 	}
+
+	@Test
+	public void testMainMethodForMetadataGroup()
+			throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+			InstantiationException, IllegalAccessException {
+		String args[] = new String[] { "/home/madde/workspace/modify/",
+				"se.uu.ub.cora.datamodifier.DataModifierForChildReferenceSpy", "metadataGroup" };
+
+		MetadataGroupChildReferenceModifier.main(args);
+		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) MetadataGroupChildReferenceModifier.dataModifier;
+		assertEquals(childRefModifier.recordType, "metadataGroup");
+	}
 }
