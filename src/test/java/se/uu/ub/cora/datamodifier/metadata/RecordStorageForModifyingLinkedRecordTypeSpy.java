@@ -67,7 +67,7 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 		if ("metadataCollectionItem".equals(type)) {
 			DataGroup collectionItem = DataCreator
 					.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem",
-							"metadata", "collectionItem", "testSystem");
+							"metadata", "metadataCollectionItem", "testSystem");
 			collectionItem.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
 
 			DataGroup textId = createTextGroupWithNameInDataLinkedRecordTypeAndLInkedRecordId(

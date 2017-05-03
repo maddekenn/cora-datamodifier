@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import se.uu.ub.cora.bookkeeper.data.DataAtomic;
+import se.uu.ub.cora.bookkeeper.data.DataElement;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
@@ -37,12 +39,25 @@ public abstract class DataModifierForMetadata implements DataModifier {
 		DataGroup recordInfo = modified.getFirstGroupWithNameInData("recordInfo");
 
 		String id = recordInfo.getFirstAtomicValueWithNameInData("id");
-		String type = recordInfo.getFirstAtomicValueWithNameInData("type");
+
+		DataElement typeChild = recordInfo.getFirstChildWithNameInData("type");
+		String type = extractType(recordInfo, typeChild);
 		String dataDivider = extractDataDivider(recordInfo);
 		String metadataId = getMetadataId();
 		DataGroup collectedLinks = linkCollector.collectLinks(metadataId, modified, type, id);
 
 		recordStorage.update(type, id, modified, collectedLinks, dataDivider);
+	}
+
+	private String extractType(DataGroup recordInfo, DataElement typeChild) {
+		String type;
+		if (typeChild instanceof DataAtomic) {
+			type = recordInfo.getFirstAtomicValueWithNameInData("type");
+		} else {
+			DataGroup typeGroup = (DataGroup) typeChild;
+			type = typeGroup.getFirstAtomicValueWithNameInData("linkedRecordId");
+		}
+		return type;
 	}
 
 	protected String getMetadataId() {
