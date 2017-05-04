@@ -24,9 +24,10 @@ import java.util.List;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class RecordStorageSpy implements RecordStorage {
+public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 
 	public List<DataGroup> modifiedDataGroupsSentToUpdate = new ArrayList<>();
 	public List<String> readRecordTypes = new ArrayList<>();
@@ -111,11 +112,28 @@ public class RecordStorageSpy implements RecordStorage {
 		if ("recordType".equals(type)) {
 			DataGroup book = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("book",
 					"recordType", "recordType", "cora");
+			book.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
 			book.addChild(
 					DataAtomic.withNameInDataAndValue("searchMetadataId", "someUnimportantId"));
 			book.addChild(DataAtomic.withNameInDataAndValue("searchPresentationFormId",
 					"someUnimportantId"));
 			recordList.add(book);
+			DataGroup place = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("place",
+					"recordType", "recordType", "cora");
+			place.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
+			place.addChild(
+					DataAtomic.withNameInDataAndValue("searchMetadataId", "somePlaceUnimportantId"));
+			place.addChild(DataAtomic.withNameInDataAndValue("searchPresentationFormId",
+					"somePlaceUnimportantId"));
+			recordList.add(place);
+			DataGroup authority = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("authority",
+					"recordType", "recordType", "cora");
+			authority.addChild(DataAtomic.withNameInDataAndValue("abstract", "true"));
+			authority.addChild(
+					DataAtomic.withNameInDataAndValue("searchMetadataId", "somePlaceUnimportantId"));
+			authority.addChild(DataAtomic.withNameInDataAndValue("searchPresentationFormId",
+					"somePlaceUnimportantId"));
+			recordList.add(authority);
 		}
 		if ("presentationGroup".equals(type)) {
 			DataGroup bookPGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
@@ -315,4 +333,23 @@ public class RecordStorageSpy implements RecordStorage {
 		return false;
 	}
 
+	@Override
+	public Collection<DataGroup> getMetadataElements() {
+		return null;
+	}
+
+	@Override
+	public Collection<DataGroup> getPresentationElements() {
+		return null;
+	}
+
+	@Override
+	public Collection<DataGroup> getTexts() {
+		return null;
+	}
+
+	@Override
+	public Collection<DataGroup> getRecordTypes() {
+		return null;
+	}
 }

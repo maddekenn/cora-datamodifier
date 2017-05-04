@@ -19,6 +19,7 @@ public abstract class DataModifierForMetadata implements DataModifier {
 	@Override
 	public void modifyByRecordType(String recordType) {
 		this.recordType = recordType;
+		//TODO: hantera om det inte finns några records (RecordNotFoundException)
 		Collection<DataGroup> recordList = recordStorage.readList(recordType);
 		for (DataGroup dataGroup : recordList) {
 			modifyDataGroup(dataGroup);

@@ -26,52 +26,15 @@ public class TypeAsLinkInRecordInfoModifierTest {
 			throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
 			InstantiationException, IllegalAccessException {
 		String args[] = new String[] { "/home/madde/workspace/modify/",
-				"se.uu.ub.cora.datamodifier.metadata.ModifierForLinkedTypeInRecordInfoSpy" };
+				"se.uu.ub.cora.datamodifier.metadata.ModifierForLinkedTypeInRecordInfoSpy",
+				"se.uu.ub.cora.datamodifier.RecordStorageProviderSpy"};
 
 		TypeAsLinkInRecordInfoModifier.main(args);
+
 		ModifierForLinkedTypeInRecordInfoSpy recordTypeModifier = (ModifierForLinkedTypeInRecordInfoSpy) TypeAsLinkInRecordInfoModifier.dataModifier;
-		assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
-		assertEquals(recordTypeModifier.recordTypes.get(1), "presentationSurroundingContainer");
-		assertEquals(recordTypeModifier.recordTypes.get(2), "presentationRepeatingContainer");
-		assertEquals(recordTypeModifier.recordTypes.get(3), "presentationResourceLink");
+		assertEquals(recordTypeModifier.recordTypes.get(0), "book");
+		assertEquals(recordTypeModifier.recordTypes.get(1), "place");
+		assertEquals(recordTypeModifier.recordTypes.size(), 2);
 	}
 
-	// @Test
-	// public void testMainMethodWithStyleModifier()
-	// throws ClassNotFoundException, NoSuchMethodException,
-	// InvocationTargetException,
-	// InstantiationException, IllegalAccessException {
-	// String args[] = new String[] { "/home/madde/workspace/modify/",
-	// "se.uu.ub.cora.datamodifier.presentation.ModifierForPresentationChildRefStyleSpy",
-	// "false" };
-	//
-	// PresentationChildReferenceModifier.main(args);
-	// ModifierForPresentationChildRefStyleSpy recordTypeModifier =
-	// (ModifierForPresentationChildRefStyleSpy)
-	// PresentationChildReferenceModifier.dataModifier;
-	// assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
-	// assertEquals(recordTypeModifier.recordTypes.size(), 1);
-	// }
-	//
-	// @Test
-	// public void testMainMethodWithDefaultPresentationModifier()
-	// throws ClassNotFoundException, NoSuchMethodException,
-	// InvocationTargetException,
-	// InstantiationException, IllegalAccessException {
-	// String args[] = new String[] { "/home/madde/workspace/modify/",
-	// "se.uu.ub.cora.datamodifier.presentation.ModifierForChildRefDefaultPresentationSpy",
-	// "true" };
-	//
-	// PresentationChildReferenceModifier.main(args);
-	// ModifierForChildRefDefaultPresentationSpy recordTypeModifier =
-	// (ModifierForChildRefDefaultPresentationSpy)
-	// PresentationChildReferenceModifier.dataModifier;
-	// assertEquals(recordTypeModifier.recordTypes.get(0), "presentationGroup");
-	// assertEquals(recordTypeModifier.recordTypes.get(1),
-	// "presentationSurroundingContainer");
-	// assertEquals(recordTypeModifier.recordTypes.get(2),
-	// "presentationRepeatingContainer");
-	// assertEquals(recordTypeModifier.recordTypes.get(3),
-	// "presentationResourceLink");
-	// }
 }
