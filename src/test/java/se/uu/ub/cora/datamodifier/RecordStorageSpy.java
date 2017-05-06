@@ -39,7 +39,8 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 	public DataGroup read(String type, String id) {
 		if ("presentationGroup".equals(id)) {
 			readRecordTypes.add(id);
-			return DataCreator.createRecordTypeWithMetadataId("presentationGroup", "presentationGroupGroup");
+			return DataCreator.createRecordTypeWithMetadataId("presentationGroup",
+					"presentationGroupGroup");
 		}
 		if ("presentationSurroundingContainer".equals(id)) {
 			readRecordTypes.add(id);
@@ -58,8 +59,7 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 		}
 		if ("recordType".equals(id)) {
 			readRecordTypes.add(id);
-			return DataCreator.createRecordTypeWithMetadataId("recordType",
-					"recordTypeGroup");
+			return DataCreator.createRecordTypeWithMetadataId("recordType", "recordTypeGroup");
 		}
 		return null;
 	}
@@ -121,16 +121,16 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 			DataGroup place = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("place",
 					"recordType", "recordType", "cora");
 			place.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
-			place.addChild(
-					DataAtomic.withNameInDataAndValue("searchMetadataId", "somePlaceUnimportantId"));
+			place.addChild(DataAtomic.withNameInDataAndValue("searchMetadataId",
+					"somePlaceUnimportantId"));
 			place.addChild(DataAtomic.withNameInDataAndValue("searchPresentationFormId",
 					"somePlaceUnimportantId"));
 			recordList.add(place);
-			DataGroup authority = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("authority",
-					"recordType", "recordType", "cora");
+			DataGroup authority = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"authority", "recordType", "recordType", "cora");
 			authority.addChild(DataAtomic.withNameInDataAndValue("abstract", "true"));
-			authority.addChild(
-					DataAtomic.withNameInDataAndValue("searchMetadataId", "somePlaceUnimportantId"));
+			authority.addChild(DataAtomic.withNameInDataAndValue("searchMetadataId",
+					"somePlaceUnimportantId"));
 			authority.addChild(DataAtomic.withNameInDataAndValue("searchPresentationFormId",
 					"somePlaceUnimportantId"));
 			recordList.add(authority);
@@ -229,15 +229,18 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 
 	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
 			String nameInData, String type, String dataDividerId) {
-		return DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(id, nameInData, type, dataDividerId);
+		return DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(id,
+				nameInData, type, dataDividerId);
 	}
-
-	private DataGroup createDataDivider(String dataDividerId) {
-		DataGroup dataDivider = DataGroup.withNameInData("dataDivider");
-		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "system"));
-		dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", dataDividerId));
-		return dataDivider;
-	}
+	//
+	// private DataGroup createDataDivider(String dataDividerId) {
+	// DataGroup dataDivider = DataGroup.withNameInData("dataDivider");
+	// dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType",
+	// "system"));
+	// dataDivider.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId",
+	// dataDividerId));
+	// return dataDivider;
+	// }
 
 	private DataGroup addPresentationChildReferences(boolean includeRefMinGroup) {
 		DataGroup childReferences = DataGroup.withNameInData("childReferences");

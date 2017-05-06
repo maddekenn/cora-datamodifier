@@ -1,13 +1,7 @@
 package se.uu.ub.cora.datamodifier;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
-import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class DataModifierForRecordTypeSearchLink extends DataModifierForMetadata {
 
@@ -17,6 +11,7 @@ public class DataModifierForRecordTypeSearchLink extends DataModifierForMetadata
 	private static final String RECORD_INFO = "recordInfo";
 	private static final String LINKED_RECORD_TYPE = "linkedRecordType";
 
+	@Override
 	protected void modifyDataGroup(DataGroup dataGroup) {
 		removeOldFields(dataGroup);
 		DataGroup recordInfo = dataGroup.getFirstGroupWithNameInData(RECORD_INFO);
@@ -58,7 +53,7 @@ public class DataModifierForRecordTypeSearchLink extends DataModifierForMetadata
 
 		createRecordTypeToSearchInPartOfSearch(currentRecordType, search);
 
-		DataGroup linkList = linkCollector.collectLinks("searchGroup", search, "search", id);
+		DataGroup linkList = linkCollector.collectLinks("searchGroup", search, SEARCH_STRING, id);
 		recordStorage.create("search", id, search, linkList, currentDataDivider);
 	}
 
@@ -67,7 +62,7 @@ public class DataModifierForRecordTypeSearchLink extends DataModifierForMetadata
 		DataGroup recordInfo = DataGroup.withNameInData(RECORD_INFO);
 		String id = currentRecordType + "Search";
 		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
-		recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", "search"));
+		recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", SEARCH_STRING));
 		recordInfo.addChild(DataAtomic.withNameInDataAndValue("createdBy", "141414"));
 
 		createDataDividerUsingDataDividerStringAndAddToRecordInfo(currentDataDivider, recordInfo);

@@ -8,6 +8,7 @@ import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataElement;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
+import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public abstract class DataModifierForMetadata implements DataModifier {
@@ -19,11 +20,15 @@ public abstract class DataModifierForMetadata implements DataModifier {
 	@Override
 	public void modifyByRecordType(String recordType) {
 		this.recordType = recordType;
-		//TODO: hantera om det inte finns några records (RecordNotFoundException)
-		Collection<DataGroup> recordList = recordStorage.readList(recordType);
-		for (DataGroup dataGroup : recordList) {
-			modifyDataGroup(dataGroup);
-			modifiedList.add(dataGroup);
+		try {
+			Collection<DataGroup> recordList = recordStorage.readList(recordType);
+			for (DataGroup dataGroup : recordList) {
+				modifyDataGroup(dataGroup);
+				modifiedList.add(dataGroup);
+			}
+		} catch (RecordNotFoundException e) {
+			// do nothing
+			// will end up here if the recordType has no records
 		}
 		updateRecords();
 	}

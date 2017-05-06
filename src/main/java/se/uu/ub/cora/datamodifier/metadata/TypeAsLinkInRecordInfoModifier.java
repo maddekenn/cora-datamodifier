@@ -11,7 +11,6 @@ import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.datamodifier.DataModifier;
 import se.uu.ub.cora.datamodifier.RecordStorageProvider;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
-import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
 public class TypeAsLinkInRecordInfoModifier {
 	protected static DataModifier dataModifier;
@@ -36,13 +35,21 @@ public class TypeAsLinkInRecordInfoModifier {
 		System.out.println("done");
 	}
 
-	private static RecordStorage getRecordStorage(String basePath, String recordStorageProviderClassName) throws NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		Constructor<?> storageProviderConstructor = Class.forName(recordStorageProviderClassName).getConstructor();
-		RecordStorageProvider recordStorageProvider = (RecordStorageProvider)storageProviderConstructor.newInstance();
+	private static RecordStorage getRecordStorage(String basePath,
+			String recordStorageProviderClassName)
+			throws NoSuchMethodException, ClassNotFoundException, InstantiationException,
+			IllegalAccessException, InvocationTargetException {
+		Constructor<?> storageProviderConstructor = Class.forName(recordStorageProviderClassName)
+				.getConstructor();
+		RecordStorageProvider recordStorageProvider = (RecordStorageProvider) storageProviderConstructor
+				.newInstance();
 		return recordStorageProvider.getRecordStorageWithBasePath(basePath);
 	}
 
-	private static void createModifier(String modifierClassName, RecordStorage recordStorage, DataRecordLinkCollector linkCollector) throws NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
+	private static void createModifier(String modifierClassName, RecordStorage recordStorage,
+			DataRecordLinkCollector linkCollector)
+			throws NoSuchMethodException, ClassNotFoundException, InstantiationException,
+			IllegalAccessException, InvocationTargetException {
 		Constructor<?> constructor = Class.forName(modifierClassName).getConstructor();
 		dataModifier = (DataModifier) constructor.newInstance();
 		dataModifier.setLinkCollector(linkCollector);
@@ -51,13 +58,13 @@ public class TypeAsLinkInRecordInfoModifier {
 
 	private static void modifyAllRecordTypes(RecordStorage recordStorage) {
 		Collection<DataGroup> recordTypes = recordStorage.readList("recordType");
-		for(DataGroup recordType : recordTypes){
-			if(recordTypeIsNotAbstract(recordType)) {
+		for (DataGroup recordType : recordTypes) {
+			if (recordTypeIsNotAbstract(recordType)) {
 				DataGroup recordInfo = recordType.getFirstGroupWithNameInData("recordInfo");
 				String id = recordInfo.getFirstAtomicValueWithNameInData("id");
-				System.out.println("starting recordType "+id);
+				System.out.println("starting recordType " + id);
 				dataModifier.modifyByRecordType(id);
-				System.out.println("finished recordType "+id);
+				System.out.println("finished recordType " + id);
 			}
 		}
 	}

@@ -31,7 +31,7 @@ public class ModifierForLinkedTypeInRecordInfoTest {
 	}
 
 	@Test
-	public void modifyDataGroup() {
+	public void testModifyDataGroup() {
 		dataModifier.modifyByRecordType("metadataCollectionItem");
 		assertCorrectModifiedGroupWithLinkedTypeInRecordInfo("metadataCollectionItem");
 		assertEquals(linkCollector.noOfTimesCalled, 1);
@@ -45,5 +45,13 @@ public class ModifierForLinkedTypeInRecordInfoTest {
 		assertEquals(type.getFirstAtomicValueWithNameInData("linkedRecordType"), "recordType");
 		assertEquals(type.getFirstAtomicValueWithNameInData("linkedRecordId"), linkedType);
 
+	}
+
+	// TODO: test fwith recordtype with no reords (RecordNotFoundException)
+
+	@Test
+	public void testModifingRecordTypeWithNoRecords() {
+		dataModifier.modifyByRecordType("place");
+		assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 0);
 	}
 }
