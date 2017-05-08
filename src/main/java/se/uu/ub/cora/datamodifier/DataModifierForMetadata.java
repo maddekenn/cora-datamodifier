@@ -20,6 +20,7 @@ public abstract class DataModifierForMetadata implements DataModifier {
 	@Override
 	public void modifyByRecordType(String recordType) {
 		this.recordType = recordType;
+		modifiedList = new ArrayList<>();
 		try {
 			Collection<DataGroup> recordList = recordStorage.readList(recordType);
 			for (DataGroup dataGroup : recordList) {
