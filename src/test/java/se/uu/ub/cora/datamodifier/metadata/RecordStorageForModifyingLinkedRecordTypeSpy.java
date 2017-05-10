@@ -7,6 +7,7 @@ import java.util.List;
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataCreator;
+import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStorage {
@@ -67,7 +68,7 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 		if ("metadataCollectionItem".equals(type)) {
 			DataGroup collectionItem = DataCreator
 					.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem",
-							"metadata", "collectionItem", "testSystem");
+							"metadata", "metadataCollectionItem", "testSystem");
 			collectionItem.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
 
 			DataGroup textId = createTextGroupWithNameInDataLinkedRecordTypeAndLInkedRecordId(
@@ -159,6 +160,10 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 			recordList.add(search2);
 
 		}
+		if ("place".equals(type)) {
+			throw new RecordNotFoundException("No records exists with recordType place");
+		}
+
 		return recordList;
 	}
 

@@ -38,7 +38,7 @@ public class DataModifierForRecordTypeSearchLinkTest {
 		assertCorrectCreatedSearch();
 
 		assertCorrectModifiedGroup();
-		assertEquals(linkCollector.noOfTimesCalled, 2);
+		assertEquals(linkCollector.noOfTimesCalled, 6);
 	}
 
 	private void assertCorrectCreatedSearch() {
