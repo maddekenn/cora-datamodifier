@@ -4,7 +4,7 @@ import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataModifierForMetadata;
 
-public class ModifierForLinkedRecordType extends DataModifierForMetadata {
+public class ModifierForLinkedRecordTypeInTexts extends DataModifierForMetadata {
 	@Override
 	protected void modifyDataGroup(DataGroup dataGroup) {
 		changeLinkedRecordTypeForTextWithNameInData(dataGroup, "textId");
