@@ -69,6 +69,11 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 			DataGroup collectionItem = DataCreator
 					.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem",
 							"metadata", "metadataCollectionItem", "testSystem");
+			//type should be atomic here since this is used for the code that tests changing atomic data to link
+			DataGroup recordInfo = collectionItem.getFirstGroupWithNameInData("recordInfo");
+			recordInfo.removeFirstChildWithNameInData("type");
+			recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", "metadataCollectionItem"));
+
 			collectionItem.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
 
 			DataGroup textId = createTextGroupWithNameInDataLinkedRecordTypeAndLInkedRecordId(
