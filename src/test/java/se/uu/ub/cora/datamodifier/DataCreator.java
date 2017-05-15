@@ -9,7 +9,10 @@ public class DataCreator {
         DataGroup metadataGroup = DataGroup.withNameInData(nameInData);
         DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
         recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
-        recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", type));
+        DataGroup typeGroup = DataGroup.withNameInData("type");
+        typeGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
+        typeGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", type));
+        recordInfo.addChild(typeGroup);
 
         recordInfo.addChild(createDataDivider(dataDividerId));
         metadataGroup.addChild(recordInfo);

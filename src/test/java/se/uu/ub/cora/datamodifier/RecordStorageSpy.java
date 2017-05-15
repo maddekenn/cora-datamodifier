@@ -61,6 +61,10 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("recordType", "recordTypeGroup");
 		}
+		if ("metadataRecordLink".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("metadataRecordLink", "metadataRecordLinkGroup");
+		}
 		return null;
 	}
 
@@ -186,6 +190,13 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 					"cora");
 			textPart.addAttributeByIdWithValue("type", "pResourceLink");
 			recordList.add(textPartWithNoChildren);
+		}
+		if ("metadataRecordLink".equals(type)) {
+			DataGroup someLink = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"someLink", "metadata", "metadataRecordLink", "cora");
+			someLink.addAttributeByIdWithValue("type", "recordLink");
+			someLink.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "book"));
+			recordList.add(someLink);
 		}
 		return recordList;
 	}

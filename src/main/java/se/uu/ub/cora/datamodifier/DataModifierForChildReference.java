@@ -53,7 +53,8 @@ public class DataModifierForChildReference implements DataModifier {
 		DataGroup recordInfo = modified.getFirstGroupWithNameInData("recordInfo");
 
 		String id = recordInfo.getFirstAtomicValueWithNameInData("id");
-		String type = recordInfo.getFirstAtomicValueWithNameInData("type");
+		DataGroup typeGroup = recordInfo.getFirstGroupWithNameInData("type");
+		String type = typeGroup.getFirstAtomicValueWithNameInData("linkedRecordId");
 		String dataDivider = extractDataDivider(recordInfo);
 
 		DataGroup collectedLinks = linkCollector.collectLinks("metadataGroupGroup", modified, type,

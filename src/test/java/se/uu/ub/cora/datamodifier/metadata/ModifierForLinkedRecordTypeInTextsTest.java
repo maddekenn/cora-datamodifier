@@ -9,17 +9,17 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
 
-public class ModifierForLinkedRecordTypeTest {
+public class ModifierForLinkedRecordTypeInTextsTest {
 	private RecordStorageForModifyingLinkedRecordTypeSpy recordStorage;
 	private DataRecordLinkCollectorSpy linkCollector;
-	private ModifierForLinkedRecordType dataModifier;
+	private ModifierForLinkedRecordTypeInTexts dataModifier;
 
 	@BeforeMethod
 	public void setUp() {
 		linkCollector = new DataRecordLinkCollectorSpy();
 		recordStorage = new RecordStorageForModifyingLinkedRecordTypeSpy();
 
-		dataModifier = new ModifierForLinkedRecordType();
+		dataModifier = new ModifierForLinkedRecordTypeInTexts();
 		dataModifier.setLinkCollector(linkCollector);
 		dataModifier.setRecordStorage(recordStorage);
 	}
