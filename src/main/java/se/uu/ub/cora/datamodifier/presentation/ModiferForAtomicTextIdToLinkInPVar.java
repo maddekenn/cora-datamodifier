@@ -15,21 +15,21 @@ public class ModiferForAtomicTextIdToLinkInPVar extends DataModifierForMetadata 
 		}
 	}
 
+	private boolean pVarHasEmptyTextid(DataGroup dataGroup) {
+		return dataGroup.containsChildWithNameInData(EMPTY_TEXT_ID);
+	}
+
 	private void modifyPVar(DataGroup dataGroup) {
 		String textId = dataGroup.getFirstAtomicValueWithNameInData(EMPTY_TEXT_ID);
 		dataGroup.removeFirstChildWithNameInData(EMPTY_TEXT_ID);
-		createAndAddEmtyTextIdGroup(dataGroup, textId);
+		createAndAddEmptyTextIdGroup(dataGroup, textId);
 	}
 
-	private void createAndAddEmtyTextIdGroup(DataGroup dataGroup, String textId) {
+	private void createAndAddEmptyTextIdGroup(DataGroup dataGroup, String textId) {
 		DataGroup emptyTextIdGroup = DataGroup.withNameInData(EMPTY_TEXT_ID);
 		emptyTextIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "text"));
 		emptyTextIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", textId));
 		dataGroup.addChild(emptyTextIdGroup);
-	}
-
-	private boolean pVarHasEmptyTextid(DataGroup dataGroup) {
-		return dataGroup.containsChildWithNameInData(EMPTY_TEXT_ID);
 	}
 
 }
