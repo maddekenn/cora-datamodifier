@@ -229,7 +229,7 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 
 	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
 			String nameInData, String type, String dataDividerId) {
-		return DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(id,
+		return DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(id,
 				nameInData, type, dataDividerId);
 	}
 	//

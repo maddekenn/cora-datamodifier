@@ -4,7 +4,7 @@ import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 
 public class DataCreator {
-    public static DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
+    public static DataGroup createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
                                                                                   String nameInData, String type, String dataDividerId) {
         DataGroup metadataGroup = DataGroup.withNameInData(nameInData);
         DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
@@ -25,7 +25,7 @@ public class DataCreator {
     }
 
     public static DataGroup createRecordTypeWithMetadataId(String recordId, String metadataId) {
-        DataGroup collectionItem = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+        DataGroup collectionItem = createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
                 recordId, "recordType", "recordType", "cora");
         DataGroup metadataIdGroup = DataGroup.withNameInData("metadataId");
         metadataIdGroup

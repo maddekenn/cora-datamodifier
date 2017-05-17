@@ -67,7 +67,7 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("metadataCollectionItem".equals(type)) {
 			DataGroup collectionItem = DataCreator
-					.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem",
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem",
 							"metadata", "metadataCollectionItem", "testSystem");
 			collectionItem.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
 
@@ -82,7 +82,7 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 		}
 		if ("metadataItemCollection".equals(type)) {
 			DataGroup itemCollection = DataCreator
-					.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("modeCollection",
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("modeCollection",
 							"metadata", "metadataItemCollection", "testSystem");
 			itemCollection.addChild(DataAtomic.withNameInDataAndValue("nameInData", "mode"));
 
@@ -106,7 +106,7 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 
 		if ("recordType".equals(type)) {
 			DataGroup recordType = DataCreator
-					.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("book",
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("book",
 							"recordType", "recordType", "testSystem");
 			recordType.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
 
@@ -127,7 +127,7 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 		}
 		if ("search".equals(type)) {
 			DataGroup search = DataCreator
-					.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("bookSearch",
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("bookSearch",
 							"search", "search", "testSystem");
 			search.addChild(DataAtomic.withNameInDataAndValue("searchGroup", "someGroup"));
 
@@ -147,7 +147,7 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 			recordList.add(search);
 
 			DataGroup search2 = DataCreator
-					.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider("placeSearch",
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("placeSearch",
 							"search", "search", "testSystem");
 			search2.addChild(DataAtomic.withNameInDataAndValue("searchGroup", "someGroup"));
 

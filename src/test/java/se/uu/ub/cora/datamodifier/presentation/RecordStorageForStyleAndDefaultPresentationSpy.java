@@ -76,7 +76,7 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("presentationGroup".equals(type)) {
-			DataGroup bookPGroup = DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+			DataGroup bookPGroup = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"bookPGroup", "presentation", "presentationGroup", "cora");
 			DataGroup childReferences = DataGroup.withNameInData("childReferences");
 
@@ -90,7 +90,7 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 			bookPGroup.addChild(childReferences);
 			recordList.add(bookPGroup);
 
-			DataGroup personPGroup = DataCreator.createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+			DataGroup personPGroup = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"personPGroup", "presentation", "presentationGroup", "cora");
 			DataGroup childReferences2 = DataGroup.withNameInData("childReferences");
 
