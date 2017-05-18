@@ -34,6 +34,11 @@ public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage {
 			return DataCreator.createRecordTypeWithMetadataId("presentationVar",
 					"presentationVarGroup");
 		}
+		if ("presentationCollectionVar".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("presentationCollectionVar",
+					"presentationCollectionVarGroup");
+		}
 		return null;
 	}
 
@@ -86,7 +91,7 @@ public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage {
 		if ("presentationVar".equals(type)) {
 			DataGroup pVar = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"presentationRefPVar", "presentation", "presentationVar", "testSystem");
-			pVar.addChild(DataAtomic.withNameInDataAndValue("emptyTextId", "someTextVar"));
+			pVar.addChild(DataAtomic.withNameInDataAndValue("emptyTextId", "someText"));
 			pVar.addAttributeByIdWithValue("type", "pVar");
 			recordList.add(pVar);
 
@@ -97,6 +102,22 @@ public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage {
 			pVarWithNoEmptyTextId.addAttributeByIdWithValue("type", "pVar");
 			recordList.add(pVarWithNoEmptyTextId);
 		}
+		if ("presentationCollectionVar".equals(type)) {
+			DataGroup pCollVar = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"inputTypeCollectionVarPCollVar", "presentation", "presentationCollectionVar", "testSystem");
+			pCollVar.addChild(DataAtomic.withNameInDataAndValue("emptyTextId", "initialEmptyValueText"));
+			pCollVar.addAttributeByIdWithValue("type", "pCollVar");
+			recordList.add(pCollVar);
+
+			DataGroup pCollVarWithNoEmptyTextId = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+							"anotherPresentationPCollVar", "presentation", "presentationCollectionVar",
+							"testSystem");
+			pCollVarWithNoEmptyTextId.addAttributeByIdWithValue("type", "pCollVar");
+			recordList.add(pCollVarWithNoEmptyTextId);
+		}
+
+
 		return recordList;
 	}
 

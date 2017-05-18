@@ -33,7 +33,7 @@ public class ModifierForAtomicTextIdToLinkInPresentationTest {
 	}
 
 	@Test
-	public void testModifyWithEmptyTextId() {
+	public void testModifyPVarWithEmptyTextId() {
 
 		dataModifier.modifyByRecordType("presentationVar");
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
@@ -41,13 +41,33 @@ public class ModifierForAtomicTextIdToLinkInPresentationTest {
 		assertEquals(emptyTextIdGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
 				"text");
 		assertEquals(emptyTextIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
-				"someTextVar");
+				"someText");
 	}
 
 	@Test
-	public void testModifyWithNoEmptyTextId() {
+	public void testModifyPVarWithNoEmptyTextId() {
 
 		dataModifier.modifyByRecordType("presentationVar");
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(1);
+		assertFalse(modifiedDataGroup.containsChildWithNameInData("emptyTextId"));
+	}
+
+	@Test
+	public void testModifyPCollVarWithEmptyTextId() {
+
+		dataModifier.modifyByRecordType("presentationCollectionVar");
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		DataGroup emptyTextIdGroup = modifiedDataGroup.getFirstGroupWithNameInData("emptyTextId");
+		assertEquals(emptyTextIdGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"text");
+		assertEquals(emptyTextIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"initialEmptyValueText");
+	}
+
+	@Test
+	public void testModifyPCollVarWithNoEmptyTextId() {
+
+		dataModifier.modifyByRecordType("presentationCollectionVar");
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(1);
 		assertFalse(modifiedDataGroup.containsChildWithNameInData("emptyTextId"));
 	}
