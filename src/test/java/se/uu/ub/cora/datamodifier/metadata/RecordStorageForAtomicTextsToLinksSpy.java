@@ -86,7 +86,7 @@ public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage {
 		if ("presentationVar".equals(type)) {
 			DataGroup pVar = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"presentationRefPVar", "presentation", "presentationVar", "testSystem");
-			pVar.addChild(DataAtomic.withNameInDataAndValue("emptyTextId", "sometextVar"));
+			pVar.addChild(DataAtomic.withNameInDataAndValue("emptyTextId", "someTextVar"));
 			pVar.addAttributeByIdWithValue("type", "pVar");
 			recordList.add(pVar);
 

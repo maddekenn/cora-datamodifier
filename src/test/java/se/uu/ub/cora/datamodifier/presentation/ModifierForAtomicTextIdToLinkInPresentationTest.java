@@ -11,17 +11,17 @@ import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
 import se.uu.ub.cora.datamodifier.metadata.RecordStorageForAtomicTextsToLinksSpy;
 
-public class ModiferForAtomicTextIdToLinkInPVarTest {
+public class ModifierForAtomicTextIdToLinkInPresentationTest {
 	private RecordStorageForAtomicTextsToLinksSpy recordStorage;
 	private DataRecordLinkCollectorSpy linkCollector;
-	private ModiferForAtomicTextIdToLinkInPVar dataModifier;
+	private ModifierForAtomicTextIdToLinkInPresentation dataModifier;
 
 	@BeforeMethod
 	public void setUp() {
 		linkCollector = new DataRecordLinkCollectorSpy();
 		recordStorage = new RecordStorageForAtomicTextsToLinksSpy();
 
-		dataModifier = new ModiferForAtomicTextIdToLinkInPVar();
+		dataModifier = new ModifierForAtomicTextIdToLinkInPresentation();
 		dataModifier.setLinkCollector(linkCollector);
 		dataModifier.setRecordStorage(recordStorage);
 	}
@@ -41,7 +41,7 @@ public class ModiferForAtomicTextIdToLinkInPVarTest {
 		assertEquals(emptyTextIdGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
 				"text");
 		assertEquals(emptyTextIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
-				"sometextVar");
+				"someTextVar");
 	}
 
 	@Test
