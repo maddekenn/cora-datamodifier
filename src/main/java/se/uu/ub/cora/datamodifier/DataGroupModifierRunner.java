@@ -9,11 +9,11 @@ import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
-public class MetadataGroupChildReferenceModifier {
+public class DataGroupModifierRunner {
 
 	protected static DataModifier dataModifier;
 
-	private MetadataGroupChildReferenceModifier() {
+	private DataGroupModifierRunner() {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException,

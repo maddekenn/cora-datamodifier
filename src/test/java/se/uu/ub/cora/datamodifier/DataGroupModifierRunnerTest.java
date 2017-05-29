@@ -9,12 +9,12 @@ import java.lang.reflect.Modifier;
 
 import org.testng.annotations.Test;
 
-public class MetadataGroupChildReferenceModifierTest {
+public class DataGroupModifierRunnerTest {
 
 	@Test
 	public void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException,
 			InvocationTargetException, InstantiationException {
-		Constructor<MetadataGroupChildReferenceModifier> constructor = MetadataGroupChildReferenceModifier.class
+		Constructor<DataGroupModifierRunner> constructor = DataGroupModifierRunner.class
 				.getDeclaredConstructor();
 		assertTrue(Modifier.isPrivate(constructor.getModifiers()));
 		constructor.setAccessible(true);
@@ -27,8 +27,8 @@ public class MetadataGroupChildReferenceModifierTest {
 		String args[] = new String[] { "/home/madde/workspace/modify/",
 				"se.uu.ub.cora.datamodifier.DataModifierForChildReferenceSpy", "metadataGroup" };
 
-		MetadataGroupChildReferenceModifier.main(args);
-		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) MetadataGroupChildReferenceModifier.dataModifier;
+		DataGroupModifierRunner.main(args);
+		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) DataGroupModifierRunner.dataModifier;
 		assertEquals(childRefModifier.recordType, "metadataGroup");
 	}
 
@@ -40,8 +40,8 @@ public class MetadataGroupChildReferenceModifierTest {
 				"se.uu.ub.cora.datamodifier.DataModifierForChildReferenceSpy",
 				"metadataCollectionItem" };
 
-		MetadataGroupChildReferenceModifier.main(args);
-		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) MetadataGroupChildReferenceModifier.dataModifier;
+		DataGroupModifierRunner.main(args);
+		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) DataGroupModifierRunner.dataModifier;
 		assertEquals(childRefModifier.recordType, "metadataCollectionItem");
 	}
 
@@ -52,8 +52,8 @@ public class MetadataGroupChildReferenceModifierTest {
 		String args[] = new String[] { "/home/madde/workspace/modify/",
 				"se.uu.ub.cora.datamodifier.DataModifierForChildReferenceSpy", "metadataGroup" };
 
-		MetadataGroupChildReferenceModifier.main(args);
-		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) MetadataGroupChildReferenceModifier.dataModifier;
+		DataGroupModifierRunner.main(args);
+		DataModifierForChildReferenceSpy childRefModifier = (DataModifierForChildReferenceSpy) DataGroupModifierRunner.dataModifier;
 		assertEquals(childRefModifier.recordType, "metadataGroup");
 	}
 }
