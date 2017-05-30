@@ -3,7 +3,7 @@ package se.uu.ub.cora.datamodifier;
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 
-public class DataModifierForRecordTypeSearchLink extends DataModifierForMetadata {
+public class DataModifierForRecordTypeSearchLink extends DataModifierForRecordType {
 
 	private static final String SEARCH_STRING = "search";
 	private static final String LINKED_RECORD_ID = "linkedRecordId";

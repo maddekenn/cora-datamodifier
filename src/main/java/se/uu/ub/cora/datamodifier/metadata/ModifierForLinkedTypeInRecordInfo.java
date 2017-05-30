@@ -2,9 +2,9 @@ package se.uu.ub.cora.datamodifier.metadata;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.datamodifier.DataModifierForMetadata;
+import se.uu.ub.cora.datamodifier.DataModifierForRecordType;
 
-public class ModifierForLinkedTypeInRecordInfo extends DataModifierForMetadata {
+public class ModifierForLinkedTypeInRecordInfo extends DataModifierForRecordType {
 
 	@Override
 	protected void modifyDataGroup(DataGroup dataGroup) {

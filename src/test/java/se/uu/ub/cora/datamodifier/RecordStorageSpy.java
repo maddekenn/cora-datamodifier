@@ -366,4 +366,9 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 	public Collection<DataGroup> getRecordTypes() {
 		return null;
 	}
+
+	@Override
+	public Collection<DataGroup> getSearchTerms() {
+		return null;
+	}
 }

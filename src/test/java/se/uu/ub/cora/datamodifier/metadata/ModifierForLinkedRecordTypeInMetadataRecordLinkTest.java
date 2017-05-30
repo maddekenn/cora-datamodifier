@@ -12,14 +12,14 @@ import static org.testng.Assert.assertNotNull;
 public class ModifierForLinkedRecordTypeInMetadataRecordLinkTest {
 	private RecordStorageSpy recordStorage;
 	private DataRecordLinkCollectorSpy linkCollector;
-	private ModifierForLinkedRecordTypeInMetadataRecordLink dataModifier;
+	private ModifierForLinkedRecordTypeInRecordTypeRecordLink dataModifier;
 
 	@BeforeMethod
 	public void setUp() {
 		linkCollector = new DataRecordLinkCollectorSpy();
 		recordStorage = new RecordStorageSpy();
 
-		dataModifier = new ModifierForLinkedRecordTypeInMetadataRecordLink();
+		dataModifier = new ModifierForLinkedRecordTypeInRecordTypeRecordLink();
 		dataModifier.setLinkCollector(linkCollector);
 		dataModifier.setRecordStorage(recordStorage);
 	}

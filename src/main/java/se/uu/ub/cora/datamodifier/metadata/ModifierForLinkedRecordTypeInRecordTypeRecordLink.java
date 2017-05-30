@@ -2,9 +2,9 @@ package se.uu.ub.cora.datamodifier.metadata;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.datamodifier.DataModifierForMetadata;
+import se.uu.ub.cora.datamodifier.DataModifierForRecordType;
 
-public class ModifierForLinkedRecordTypeInMetadataRecordLink extends DataModifierForMetadata {
+public class ModifierForLinkedRecordTypeInRecordTypeRecordLink extends DataModifierForRecordType {
 
     private static final String LINKED_RECORD_TYPE = "linkedRecordType";
 

@@ -11,7 +11,7 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public abstract class DataModifierForMetadata implements DataModifier {
+public abstract class DataModifierForRecordType implements DataModifier {
 	protected String recordType;
 	protected RecordStorage recordStorage;
 	private List<DataGroup> modifiedList = new ArrayList<>();
