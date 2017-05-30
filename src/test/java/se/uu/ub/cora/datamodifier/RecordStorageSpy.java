@@ -229,8 +229,8 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 
 	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
 			String nameInData, String type, String dataDividerId) {
-		return DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(id,
-				nameInData, type, dataDividerId);
+		return DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(id, nameInData,
+				type, dataDividerId);
 	}
 	//
 	// private DataGroup createDataDivider(String dataDividerId) {
@@ -353,6 +353,12 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 
 	@Override
 	public Collection<DataGroup> getRecordTypes() {
+		return null;
+	}
+
+	@Override
+	public Collection<DataGroup> getSearchTerms() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
