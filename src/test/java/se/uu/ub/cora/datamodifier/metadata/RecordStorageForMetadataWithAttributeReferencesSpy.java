@@ -87,15 +87,49 @@ public class RecordStorageForMetadataWithAttributeReferencesSpy implements Recor
 			group.addAttributeByIdWithValue("type", "group");
 
 			DataGroup attributeReferences = DataGroup.withNameInData("attributeReferences");
-			DataAtomic ref = DataAtomic.withNameInDataAndValue("ref",
-					"namePartGivenNameTypeCollectionVar");
-			ref.setRepeatId("0");
-			attributeReferences.addChild(ref);
+			createAndAddRefWithLinkedIdAndRepeatId(attributeReferences, "namePartGivenNameTypeCollectionVar", "0");
+			createAndAddRefWithLinkedIdAndRepeatId(attributeReferences, "someOtherTypeCollectionVar", "1");
 			group.addChild(attributeReferences);
 			recordList.add(group);
+
+			DataGroup withNoAttributeReferences = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"withoutAttributeReferencesGroup", "metadata", "metadataGroup", "testSystem");
+			group.addAttributeByIdWithValue("type", "group");
+			createAndAddChildReferences(withNoAttributeReferences);
+			recordList.add(withNoAttributeReferences);
 		}
 
 		return recordList;
+	}
+
+	private void createAndAddChildReferences(DataGroup withNoAttributeReferences) {
+		DataGroup childReferences = DataGroup.withNameInData("childReferences");
+		DataGroup childReference = DataGroup.withNameInData("childReference");
+		createAndAddRefGroup(childReference);
+		childReferences.addChild(childReference);
+		withNoAttributeReferences.addChild(childReferences);
+	}
+
+	private void createAndAddRefGroup(DataGroup childReference) {
+		DataGroup refGroup = DataGroup.withNameInData("refGroup");
+		refGroup.setRepeatId("0");
+		createAndAddRef(refGroup);
+		childReference.addChild(refGroup);
+	}
+
+	private void createAndAddRef(DataGroup refGroup) {
+		DataGroup ref = DataGroup.withNameInData("ref");
+		ref.addAttributeByIdWithValue("type", "text");
+		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "text"));
+		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "firstNameTextVarText"));
+		refGroup.addChild(ref);
+	}
+
+	private void createAndAddRefWithLinkedIdAndRepeatId(DataGroup attributeReferences, String linkedRecordId, String repeatId) {
+		DataAtomic ref = DataAtomic.withNameInDataAndValue("ref",
+                linkedRecordId);
+		ref.setRepeatId(repeatId);
+		attributeReferences.addChild(ref);
 	}
 
 	@Override

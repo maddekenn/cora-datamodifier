@@ -9,6 +9,8 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
 
+import java.util.List;
+
 public class ModifierForAtomicAttributeReferencesToLinkTest {
 	private RecordStorageForMetadataWithAttributeReferencesSpy recordStorage;
 	private DataRecordLinkCollectorSpy linkCollector;
@@ -34,23 +36,24 @@ public class ModifierForAtomicAttributeReferencesToLinkTest {
 	public void testModifyDataGroup() {
 		dataModifier.modifyByRecordType("metadataGroup");
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		assertCorrectlyModifiedAttributeReferences(modifiedDataGroup);
+		assertEquals(linkCollector.noOfTimesCalled, 2);
+	}
+
+	private void assertCorrectlyModifiedAttributeReferences(DataGroup modifiedDataGroup) {
 		DataGroup attributeReferences = modifiedDataGroup
 				.getFirstGroupWithNameInData("attributeReferences");
-		DataGroup ref = attributeReferences.getFirstGroupWithNameInData("ref");
+
+		List<DataGroup> refs = attributeReferences.getAllGroupsWithNameInData("ref");
+		assertCorrectlyCreatedRefWithLinkedIdAndRepeatId(refs.get(0), "namePartGivenNameTypeCollectionVar", "0");
+		assertCorrectlyCreatedRefWithLinkedIdAndRepeatId(refs.get(1), "someOtherTypeCollectionVar", "1");
+	}
+
+	private void assertCorrectlyCreatedRefWithLinkedIdAndRepeatId(DataGroup ref, String linkedRecordId, String repeatId) {
 		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordType"),
 				"metadataCollectionVariable");
 		assertEquals(ref.getFirstAtomicValueWithNameInData("linkedRecordId"),
-				"namePartGivenNameTypeCollectionVar");
-		assertEquals(ref.getRepeatId(), "0");
-		assertEquals(linkCollector.noOfTimesCalled, 1);
+				linkedRecordId);
+		assertEquals(ref.getRepeatId(), repeatId);
 	}
-
-	@Test
-	public void testModifyDataGroupWithNoAttributes() {
-		dataModifier.modifyByRecordType("metadataGroup");
-		// assertCorrectModifiedGroupWithLinkedRecordTypeAsLink("book");
-		// TODO, lägg till en grupp utan attribute
-		assertEquals(linkCollector.noOfTimesCalled, 1);
-	}
-
 }
