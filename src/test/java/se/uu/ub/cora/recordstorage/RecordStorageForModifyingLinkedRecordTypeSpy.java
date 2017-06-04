@@ -1,4 +1,4 @@
-package se.uu.ub.cora.datamodifier.metadata;
+package se.uu.ub.cora.recordstorage;
 
 import java.util.ArrayList;
 import java.util.Collection;

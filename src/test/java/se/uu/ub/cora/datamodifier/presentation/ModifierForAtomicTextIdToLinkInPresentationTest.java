@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
-import se.uu.ub.cora.datamodifier.metadata.RecordStorageForAtomicTextsToLinksSpy;
+import se.uu.ub.cora.recordstorage.RecordStorageForAtomicTextsToLinksSpy;
 
 public class ModifierForAtomicTextIdToLinkInPresentationTest {
 	private RecordStorageForAtomicTextsToLinksSpy recordStorage;

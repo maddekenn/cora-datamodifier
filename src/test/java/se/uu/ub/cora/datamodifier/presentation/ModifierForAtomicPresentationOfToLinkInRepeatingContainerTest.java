@@ -2,9 +2,10 @@ package se.uu.ub.cora.datamodifier.presentation;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
-import se.uu.ub.cora.datamodifier.metadata.RecordStorageForAtomicTextsToLinksSpy;
+import se.uu.ub.cora.recordstorage.RecordStorageForAtomicTextsToLinksSpy;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
