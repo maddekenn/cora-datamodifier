@@ -29,6 +29,16 @@ public class RecordStorageForParentIdToLinksSpy implements RecordStorage {
 			return DataCreator.createRecordTypeWithMetadataId("metadataTextVariable",
 					"metadataTextVariableGroup");
 		}
+		if ("metadataRecordLink".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("metadataRecordLink",
+					"metadataRecordLinkGroup");
+		}
+		if ("metadataCollectionVariable".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("metadataCollectionVariable",
+					"metadataCollectionVariableGroup");
+		}
 		return null;
 	}
 
@@ -63,19 +73,49 @@ public class RecordStorageForParentIdToLinksSpy implements RecordStorage {
 			metadataGroup.addAttributeByIdWithValue("type", "group");
 			metadataGroup.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
 			metadataGroup
-					.addChild(DataAtomic.withNameInDataAndValue("parentId", "someParentGroup"));
+					.addChild(DataAtomic.withNameInDataAndValue("refParentId", "someParentGroup"));
 			recordList.add(metadataGroup);
 
+			DataGroup metadataGroupWithoutParentId = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someOtherTestGroup",
+							"metadata", "metadataGroup", "testSystem");
+			metadataGroupWithoutParentId.addAttributeByIdWithValue("type", "group");
+			metadataGroupWithoutParentId
+					.addChild(DataAtomic.withNameInDataAndValue("nameInData", "someOther"));
+			recordList.add(metadataGroupWithoutParentId);
 		}
 		if ("metadataTextVariable".equals(type)) {
-			DataGroup metadataGroup = DataCreator
+			DataGroup metadataTextVariable = DataCreator
 					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someTestTextVar",
 							"metadata", "metadataTextVariable", "testSystem");
-			metadataGroup.addAttributeByIdWithValue("type", "textVariable");
-			metadataGroup.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
-			metadataGroup
-					.addChild(DataAtomic.withNameInDataAndValue("parentId", "someParentTextVar"));
-			recordList.add(metadataGroup);
+			metadataTextVariable.addAttributeByIdWithValue("type", "textVariable");
+			metadataTextVariable.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
+			metadataTextVariable.addChild(
+					DataAtomic.withNameInDataAndValue("refParentId", "someParentTextVar"));
+			recordList.add(metadataTextVariable);
+
+		}
+		if ("metadataRecordLink".equals(type)) {
+			DataGroup metadataRecordLink = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someTestLink",
+							"metadata", "metadataRecordLink", "testSystem");
+			metadataRecordLink.addAttributeByIdWithValue("type", "recordLink");
+			metadataRecordLink.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
+			metadataRecordLink
+					.addChild(DataAtomic.withNameInDataAndValue("refParentId", "someParentLink"));
+			recordList.add(metadataRecordLink);
+
+		}
+		if ("metadataCollectionVariable".equals(type)) {
+			DataGroup metadataRecordLink = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+							"someTestCollectionVar", "metadata", "metadataCollectionVariable",
+							"testSystem");
+			metadataRecordLink.addAttributeByIdWithValue("type", "collectionVariable");
+			metadataRecordLink.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
+			metadataRecordLink.addChild(
+					DataAtomic.withNameInDataAndValue("refParentId", "someParentCollectionVar"));
+			recordList.add(metadataRecordLink);
 
 		}
 		return recordList;

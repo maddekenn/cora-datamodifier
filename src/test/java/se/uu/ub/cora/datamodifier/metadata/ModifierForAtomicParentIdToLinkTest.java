@@ -36,31 +36,57 @@ public class ModifierForAtomicParentIdToLinkTest {
 	public void testModifyAtomicValueRemoved() {
 		dataModifier.modifyByRecordType("metadataGroup");
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
-		modifiedDataGroup.getFirstAtomicValueWithNameInData("parentId");
+		modifiedDataGroup.getFirstAtomicValueWithNameInData("refParentId");
 	}
 
 	@Test
 	public void testModifyMetadataGroup() {
 		dataModifier.modifyByRecordType("metadataGroup");
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
-		DataGroup parentIdGroup = modifiedDataGroup.getFirstGroupWithNameInData("parentId");
+		DataGroup parentIdGroup = modifiedDataGroup.getFirstGroupWithNameInData("refParentId");
 		assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
 				"metadataGroup");
 		assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
 				"someParentGroup");
 
-		assertEquals(linkCollector.noOfTimesCalled, 1);
+		assertEquals(linkCollector.noOfTimesCalled, 2);
 	}
 
 	@Test
 	public void testModifyMetadataTextVariable() {
 		dataModifier.modifyByRecordType("metadataTextVariable");
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
-		DataGroup parentIdGroup = modifiedDataGroup.getFirstGroupWithNameInData("parentId");
+		DataGroup parentIdGroup = modifiedDataGroup.getFirstGroupWithNameInData("refParentId");
 		assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
 				"metadataTextVariable");
 		assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
 				"someParentTextVar");
+
+		assertEquals(linkCollector.noOfTimesCalled, 1);
+	}
+
+	@Test
+	public void testModifyMetadataTRecordLink() {
+		dataModifier.modifyByRecordType("metadataRecordLink");
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		DataGroup parentIdGroup = modifiedDataGroup.getFirstGroupWithNameInData("refParentId");
+		assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"metadataRecordLink");
+		assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"someParentLink");
+
+		assertEquals(linkCollector.noOfTimesCalled, 1);
+	}
+
+	@Test
+	public void testModifyMetadataTCollectionVariabel() {
+		dataModifier.modifyByRecordType("metadataCollectionVariable");
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		DataGroup parentIdGroup = modifiedDataGroup.getFirstGroupWithNameInData("refParentId");
+		assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"metadataCollectionVariable");
+		assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"someParentCollectionVar");
 
 		assertEquals(linkCollector.noOfTimesCalled, 1);
 	}

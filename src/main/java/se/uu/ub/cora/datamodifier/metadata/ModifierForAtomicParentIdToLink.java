@@ -6,21 +6,38 @@ import se.uu.ub.cora.datamodifier.DataModifierForRecordType;
 
 public class ModifierForAtomicParentIdToLink extends DataModifierForRecordType {
 
-	private static final String PARENT_ID = "parentId";
+	private static final String REF_PARENT_ID = "refParentId";
 
 	@Override
 	protected void modifyDataGroup(DataGroup dataGroup) {
-		String parentIdValue = dataGroup.getFirstAtomicValueWithNameInData(PARENT_ID);
-		dataGroup.removeFirstChildWithNameInData(PARENT_ID);
+		if (dataGroup.containsChildWithNameInData(REF_PARENT_ID)) {
+			replaceAtomicParentIdWithLink(dataGroup);
+		}
+	}
+
+	private void replaceAtomicParentIdWithLink(DataGroup dataGroup) {
+		String parentIdValue = dataGroup.getFirstAtomicValueWithNameInData(REF_PARENT_ID);
+		dataGroup.removeFirstChildWithNameInData(REF_PARENT_ID);
+		DataGroup parentIdGroup = createParentGroup(dataGroup, parentIdValue);
+		dataGroup.addChild(parentIdGroup);
+	}
+
+	private DataGroup createParentGroup(DataGroup dataGroup, String parentIdValue) {
+		DataGroup parentIdGroup = DataGroup.withNameInData(REF_PARENT_ID);
+		addLinkedRecordType(dataGroup, parentIdGroup);
+		parentIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", parentIdValue));
+		return parentIdGroup;
+	}
+
+	private void addLinkedRecordType(DataGroup dataGroup, DataGroup parentIdGroup) {
+		String type = extractType(dataGroup);
+		parentIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", type));
+	}
+
+	private String extractType(DataGroup dataGroup) {
 		DataGroup recordInfo = dataGroup.getFirstGroupWithNameInData("recordInfo");
 		DataGroup typeGroup = recordInfo.getFirstGroupWithNameInData("type");
-		String type = typeGroup.getFirstAtomicValueWithNameInData("linkedRecordId");
-
-		DataGroup parentIdGroup = DataGroup.withNameInData(PARENT_ID);
-		parentIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", type));
-		parentIdGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", parentIdValue));
-		dataGroup.addChild(parentIdGroup);
-
+		return typeGroup.getFirstAtomicValueWithNameInData("linkedRecordId");
 	}
 
 }
