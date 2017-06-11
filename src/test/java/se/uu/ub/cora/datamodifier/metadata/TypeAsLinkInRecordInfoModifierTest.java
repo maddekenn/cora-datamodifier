@@ -14,7 +14,7 @@ public class TypeAsLinkInRecordInfoModifierTest {
 	@Test
 	public void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException,
 			InvocationTargetException, InstantiationException {
-		Constructor<TypeAsLinkInRecordInfoModifier> constructor = TypeAsLinkInRecordInfoModifier.class
+		Constructor<AllRecordTypesModifier> constructor = AllRecordTypesModifier.class
 				.getDeclaredConstructor();
 		assertTrue(Modifier.isPrivate(constructor.getModifiers()));
 		constructor.setAccessible(true);
@@ -29,9 +29,9 @@ public class TypeAsLinkInRecordInfoModifierTest {
 				"se.uu.ub.cora.datamodifier.metadata.ModifierForLinkedTypeInRecordInfoSpy",
 				"se.uu.ub.cora.datamodifier.RecordStorageProviderSpy"};
 
-		TypeAsLinkInRecordInfoModifier.main(args);
+		AllRecordTypesModifier.main(args);
 
-		ModifierForLinkedTypeInRecordInfoSpy recordTypeModifier = (ModifierForLinkedTypeInRecordInfoSpy) TypeAsLinkInRecordInfoModifier.dataModifier;
+		ModifierForLinkedTypeInRecordInfoSpy recordTypeModifier = (ModifierForLinkedTypeInRecordInfoSpy) AllRecordTypesModifier.dataModifier;
 		assertEquals(recordTypeModifier.recordTypes.get(0), "book");
 		assertEquals(recordTypeModifier.recordTypes.get(1), "place");
 		assertEquals(recordTypeModifier.recordTypes.size(), 2);

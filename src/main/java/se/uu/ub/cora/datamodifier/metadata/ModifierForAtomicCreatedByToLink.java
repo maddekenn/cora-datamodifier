@@ -12,8 +12,10 @@ public class ModifierForAtomicCreatedByToLink extends DataModifierForRecordType 
 	protected void modifyDataGroup(DataGroup dataGroup) {
 		DataGroup recordInfo = dataGroup.getFirstGroupWithNameInData("recordInfo");
 		String createdByValue = extractCreatedByValue(recordInfo);
+
 		removeAtomicCreatedByFromRecordInfo(recordInfo);
-		DataGroup createdByGroup = createCreatedByGroup(createdByValue);
+
+		DataGroup createdByGroup = createCreatedByAsDataGroup(createdByValue);
 		recordInfo.addChild(createdByGroup);
 	}
 
@@ -25,7 +27,7 @@ public class ModifierForAtomicCreatedByToLink extends DataModifierForRecordType 
 		return recordInfo.getFirstAtomicValueWithNameInData(CREATED_BY);
 	}
 
-	private DataGroup createCreatedByGroup(String createdByValue) {
+	private DataGroup createCreatedByAsDataGroup(String createdByValue) {
 		DataGroup createdByGroup = DataGroup.withNameInData(CREATED_BY);
 		createdByGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "user"));
 		createdByGroup

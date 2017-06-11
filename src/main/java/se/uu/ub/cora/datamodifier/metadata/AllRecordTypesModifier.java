@@ -12,10 +12,10 @@ import se.uu.ub.cora.datamodifier.DataModifier;
 import se.uu.ub.cora.datamodifier.RecordStorageProvider;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class TypeAsLinkInRecordInfoModifier {
+public class AllRecordTypesModifier {
 	protected static DataModifier dataModifier;
 
-	private TypeAsLinkInRecordInfoModifier() {
+	private AllRecordTypesModifier() {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException,
