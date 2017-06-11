@@ -7,6 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.bookkeeper.data.DataMissingException;
 import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
 import se.uu.ub.cora.recordstorage.RecordStorageForCreatedByToLinksSpy;
 
@@ -36,13 +37,20 @@ public class ModifierForAtomicCreatedByToLinkTest {
 		dataModifier.modifyByRecordType("metadataGroup");
 		assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 1);
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
-		// DataGroup parentIdGroup =
-		// modifiedDataGroup.getFirstGroupWithNameInData("refParentId");
-		// assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
-		// "metadataGroup");
-		// assertEquals(parentIdGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
-		// "someParentGroup");
-		//
-		// assertEquals(linkCollector.noOfTimesCalled, 2);
+		DataGroup recordInfo = modifiedDataGroup.getFirstGroupWithNameInData("recordInfo");
+		DataGroup createdByGroup = recordInfo.getFirstGroupWithNameInData("createdBy");
+		assertEquals(createdByGroup.getFirstAtomicValueWithNameInData("linkedRecordType"), "user");
+		assertEquals(createdByGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"someUserId");
+
+		assertEquals(linkCollector.noOfTimesCalled, 1);
+	}
+
+	@Test(expectedExceptions = DataMissingException.class)
+	public void testModifyMetadataGroupCheckAtomicValueHasBeenRemoved() {
+		dataModifier.modifyByRecordType("metadataGroup");
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		DataGroup recordInfo = modifiedDataGroup.getFirstGroupWithNameInData("recordInfo");
+		recordInfo.getFirstAtomicValueWithNameInData("createdBy");
 	}
 }

@@ -68,14 +68,6 @@ public class RecordStorageForCreatedByToLinksSpy implements RecordStorage {
 			metadataGroup
 					.addChild(DataAtomic.withNameInDataAndValue("refParentId", "someParentGroup"));
 			recordList.add(metadataGroup);
-
-			DataGroup metadataGroupWithoutParentId = DataCreator
-					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someOtherTestGroup",
-							"metadata", "metadataGroup", "testSystem");
-			metadataGroupWithoutParentId.addAttributeByIdWithValue("type", "group");
-			metadataGroupWithoutParentId
-					.addChild(DataAtomic.withNameInDataAndValue("nameInData", "someOther"));
-			recordList.add(metadataGroupWithoutParentId);
 		}
 		if ("metadataTextVariable".equals(type)) {
 			DataGroup metadataTextVariable = DataCreator
