@@ -63,7 +63,8 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 		}
 		if ("metadataRecordLink".equals(id)) {
 			readRecordTypes.add(id);
-			return DataCreator.createRecordTypeWithMetadataId("metadataRecordLink", "metadataRecordLinkGroup");
+			return DataCreator.createRecordTypeWithMetadataId("metadataRecordLink",
+					"metadataRecordLinkGroup");
 		}
 		return null;
 	}
@@ -240,8 +241,8 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 
 	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
 			String nameInData, String type, String dataDividerId) {
-		return DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(id,
-				nameInData, type, dataDividerId);
+		return DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(id, nameInData,
+				type, dataDividerId);
 	}
 	//
 	// private DataGroup createDataDivider(String dataDividerId) {
@@ -368,7 +369,8 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 	}
 
 	@Override
-	public Collection<DataGroup> getSearchTerms() {
+	public Collection<DataGroup> getCollectTerms() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
