@@ -19,22 +19,6 @@ public class RecordStorageForAtomicLinkedPresentationsToLinksSpy implements Reco
 
 	@Override
 	public DataGroup read(String type, String id) {
-		// if ("metadataCollectionItem".equals(id)) {
-		// readRecordTypes.add(id);
-		// return
-		// DataCreator.createRecordTypeWithMetadataId("metadataCollectionItem",
-		// "metadataCollectionItemGroup");
-		// }
-		// if ("metadataGroup".equals(id)) {
-		// readRecordTypes.add(id);
-		// return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
-		// "metadataGroupGroup");
-		// }
-		// if ("presentationVar".equals(id)) {
-		// readRecordTypes.add(id);
-		// return DataCreator.createRecordTypeWithMetadataId("presentationVar",
-		// "presentationVarGroup");
-		// }
 		if ("presentationRecordLink".equals(id)) {
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("presentationRecordLink",
@@ -67,35 +51,6 @@ public class RecordStorageForAtomicLinkedPresentationsToLinksSpy implements Reco
 	@Override
 	public Collection<DataGroup> readList(String type) {
 		List<DataGroup> recordList = new ArrayList<>();
-		// if ("metadataCollectionItem".equals(type)) {
-		// DataGroup collectionItem = DataCreator
-		// .createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem",
-		// "metadata",
-		// "collectionItem", "testSystem");
-		// collectionItem.addChild(DataAtomic.withNameInDataAndValue("nameInData",
-		// "some"));
-		// collectionItem.addChild(DataAtomic.withNameInDataAndValue("textId",
-		// "someText"));
-		// collectionItem.addChild(DataAtomic.withNameInDataAndValue("defTextId",
-		// "someDefText"));
-		// recordList.add(collectionItem);
-		//
-		// }
-		// if ("metadataGroup".equals(type)) {
-		// DataGroup metadataGroup = DataCreator
-		// .createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someTestGroup",
-		// "metadata", "metadataGroup", "testSystem");
-		// metadataGroup.addChild(DataAtomic.withNameInDataAndValue("nameInData",
-		// "some"));
-		// metadataGroup
-		// .addChild(DataAtomic.withNameInDataAndValue("textId",
-		// "someTestGroupText"));
-		// metadataGroup.addChild(
-		// DataAtomic.withNameInDataAndValue("defTextId",
-		// "someTestGroupDefText"));
-		// recordList.add(metadataGroup);
-		//
-		// }
 		if ("presentationRecordLink".equals(type)) {
 			DataGroup pLinkWithoutLink = DataCreator
 					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
@@ -122,7 +77,7 @@ public class RecordStorageForAtomicLinkedPresentationsToLinksSpy implements Reco
 			DataGroup linkedRecordPresentations = DataGroup
 					.withNameInData("linkedRecordPresentations");
 			DataGroup linkedRecordPresentation = createLinkedPresentationWithTypeAndId(
-					"someRecordType", "someRecordId");
+					"someRecordType", "someRecordId", "0");
 			linkedRecordPresentations.addChild(linkedRecordPresentation);
 			pLinkWithLink.addChild(linkedRecordPresentations);
 			recordList.add(pLinkWithLink);
@@ -135,51 +90,27 @@ public class RecordStorageForAtomicLinkedPresentationsToLinksSpy implements Reco
 			DataGroup linkedRecordPresentations2 = DataGroup
 					.withNameInData("linkedRecordPresentations");
 			DataGroup linkedRecordPresentation2 = createLinkedPresentationWithTypeAndId(
-					"someRecordType", "someRecordId");
+					"someRecordType", "someRecordId", "1");
 			linkedRecordPresentations2.addChild(linkedRecordPresentation2);
 			DataGroup linkedRecordPresentation3 = createLinkedPresentationWithTypeAndId(
-					"someOtherRecordType", "someOtherRecordId");
+					"someOtherRecordType", "someOtherRecordId", "2");
 			linkedRecordPresentations2.addChild(linkedRecordPresentation3);
 			pLinkWithTwoLinks.addChild(linkedRecordPresentations2);
 			recordList.add(pLinkWithTwoLinks);
 
-			// DataGroup pVarWithNoEmptyTextId = DataCreator
-			// .createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-			// "anotherPresentationRefPVar", "presentation", "presentationVar",
-			// "testSystem");
-			// pVarWithNoEmptyTextId.addAttributeByIdWithValue("type", "pVar");
-			// recordList.add(pVarWithNoEmptyTextId);
-			// }
-			// if ("presentationCollectionVar".equals(type)) {
-			// DataGroup pCollVar =
-			// DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-			// "inputTypeCollectionVarPCollVar", "presentation",
-			// "presentationCollectionVar", "testSystem");
-			// pCollVar.addChild(DataAtomic.withNameInDataAndValue("emptyTextId",
-			// "initialEmptyValueText"));
-			// pCollVar.addAttributeByIdWithValue("type", "pCollVar");
-			// recordList.add(pCollVar);
-			//
-			// DataGroup pCollVarWithNoEmptyTextId = DataCreator
-			// .createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-			// "anotherPresentationPCollVar", "presentation",
-			// "presentationCollectionVar",
-			// "testSystem");
-			// pCollVarWithNoEmptyTextId.addAttributeByIdWithValue("type",
-			// "pCollVar");
-			// recordList.add(pCollVarWithNoEmptyTextId);
 		}
 
 		return recordList;
 	}
 
 	private DataGroup createLinkedPresentationWithTypeAndId(String linkedRecordType,
-			String presentationId) {
+			String presentationId, String repeatId) {
 		DataGroup linkedRecordPresentation = DataGroup.withNameInData("linkedRecordPresentation");
 		linkedRecordPresentation
 				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", linkedRecordType));
 		linkedRecordPresentation
 				.addChild(DataAtomic.withNameInDataAndValue("presentationId", presentationId));
+		linkedRecordPresentation.setRepeatId(repeatId);
 		return linkedRecordPresentation;
 	}
 

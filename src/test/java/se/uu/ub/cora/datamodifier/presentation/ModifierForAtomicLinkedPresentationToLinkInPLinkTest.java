@@ -44,7 +44,7 @@ public class ModifierForAtomicLinkedPresentationToLinkInPLinkTest {
 	}
 
 	@Test
-	public void testModifyPLinkWithOneLinkedPresentations() {
+	public void testModifyPLinkWithOneLinkedPresentation() {
 		dataModifier.modifyByRecordType("presentationRecordLink");
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(1);
 		assertTrue(modifiedDataGroup.containsChildWithNameInData("linkedRecordPresentations"));
@@ -58,10 +58,27 @@ public class ModifierForAtomicLinkedPresentationToLinkInPLinkTest {
 
 	private void assertCorrectTypeAndIdInDataGroup(String recordType, String recordId,
 			DataGroup linkedPresentation) {
-		assertEquals(linkedPresentation.getFirstAtomicValueWithNameInData("linkedRecordType"),
+		assertNotNull(linkedPresentation.getRepeatId());
+
+		assertCorrectPresentedRecordType(recordType, linkedPresentation);
+
+		assertCorrectPresentation(recordId, linkedPresentation);
+	}
+
+	private void assertCorrectPresentedRecordType(String recordType, DataGroup linkedPresentation) {
+		DataGroup presentedRecordType = linkedPresentation
+				.getFirstGroupWithNameInData("presentedRecordType");
+		assertEquals(presentedRecordType.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"recordType");
+		assertEquals(presentedRecordType.getFirstAtomicValueWithNameInData("linkedRecordId"),
 				recordType);
-		assertEquals(linkedPresentation.getFirstAtomicValueWithNameInData("linkedRecordId"),
-				recordId);
+	}
+
+	private void assertCorrectPresentation(String recordId, DataGroup linkedPresentation) {
+		DataGroup presentation = linkedPresentation.getFirstGroupWithNameInData("presentation");
+		assertEquals(presentation.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"presentation");
+		assertEquals(presentation.getFirstAtomicValueWithNameInData("linkedRecordId"), recordId);
 	}
 
 	private List<DataGroup> getListOfLinkedPresentations(DataGroup modifiedDataGroup) {
@@ -86,5 +103,122 @@ public class ModifierForAtomicLinkedPresentationToLinkInPLinkTest {
 		assertCorrectTypeAndIdInDataGroup("someOtherRecordType", "someOtherRecordId",
 				linkedPresentation2);
 	}
+
+	// {
+	// "name": "presentation",
+	// "children": [
+	// {
+	// "name": "recordInfo",
+	// "children": [
+	// {
+	// "name": "id",
+	// "value": "somePLink"
+	// },
+	// {
+	// "name": "dataDivider",
+	// "children": [
+	// {
+	// "name": "linkedRecordType",
+	// "value": "system"
+	// },
+	// {
+	// "name": "linkedRecordId",
+	// "value": "testsSystem"
+	// }
+	// ]
+	// }
+	// ]
+	// },
+	// {
+	// "name": "presentationOf",
+	// "children": [
+	// {
+	// "name": "linkedRecordType",
+	// "value": "metadataRecordLink"
+	// },
+	// {
+	// "name": "linkedRecordId",
+	// "value": "someLink"
+	// }
+	// ]
+	// },
+	// {
+	// "name": "mode",
+	// "value": "input"
+	// },
+	// {
+	// "name": "linkedRecordPresentations",
+	// "children": [
+	// {
+	// "name": "linkedRecordPresentation",
+	// "children": [
+	// {
+	// "name": "presentedRecordType",
+	// "children": [
+	// {
+	// "name": "linkedRecordType",
+	// "value": "recordType"
+	// },
+	// {
+	// "name": "linkedRecordId",
+	// "value": "text"
+	// }
+	// ]
+	// },
+	// {
+	// "name": "presentation",
+	// "children": [
+	// {
+	// "name": "linkedRecordType",
+	// "value": "presentation"
+	// },
+	// {
+	// "name": "linkedRecordId",
+	// "value": "somePresentationPGroup"
+	// }
+	// ]
+	// }
+	// ],
+	// "repeatId": "0"
+	// },
+	// {
+	// "name": "linkedRecordPresentation",
+	// "children": [
+	// {
+	// "name": "presentedRecordType",
+	// "children": [
+	// {
+	// "name": "linkedRecordType",
+	// "value": "recordType"
+	// },
+	// {
+	// "name": "linkedRecordId",
+	// "value": "coraText"
+	// }
+	// ]
+	// },
+	// {
+	// "name": "presentation",
+	// "children": [
+	// {
+	// "name": "linkedRecordType",
+	// "value": "presentation"
+	// },
+	// {
+	// "name": "linkedRecordId",
+	// "value": "somePresentationRContainer"
+	// }
+	// ]
+	// }
+	// ],
+	// "repeatId": "1"
+	// }
+	// ]
+	// }
+	// ],
+	// "attributes": {
+	// "type": "pRecordLink"
+	// }
+	// }
 
 }
