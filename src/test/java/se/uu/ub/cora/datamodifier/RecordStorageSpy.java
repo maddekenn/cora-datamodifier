@@ -66,6 +66,11 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 			return DataCreator.createRecordTypeWithMetadataId("metadataRecordLink",
 					"metadataRecordLinkGroup");
 		}
+		if ("metadataGroup".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
+					"metadataGroupGroup");
+		}
 		return null;
 	}
 
@@ -103,12 +108,14 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 		if ("metadataGroup".equals(type)) {
 			DataGroup bookGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"bookGroup", "metadata", "metadataGroup", "cora");
+			DataCreator.addCreatedByToRecordInfoInDataGroup("someUserId", bookGroup);
 			DataGroup bookChildReferences = addChildReferencesForBook();
 			bookGroup.addChild(bookChildReferences);
 			recordList.add(bookGroup);
 
 			DataGroup personGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"personGroup", "metadata", "metadataGroup", "systemone");
+			DataCreator.addCreatedByToRecordInfoInDataGroup("someOtherUserId", personGroup);
 			DataGroup personChildReferences = addChildReferencesForPerson();
 			personGroup.addChild(personChildReferences);
 			recordList.add(personGroup);
