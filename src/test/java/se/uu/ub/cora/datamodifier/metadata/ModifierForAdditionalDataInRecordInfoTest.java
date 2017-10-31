@@ -39,18 +39,24 @@ public class ModifierForAdditionalDataInRecordInfoTest {
 		assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 2);
 		assertEquals(linkCollector.noOfTimesCalled, 2);
 
-		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		assertCorrectRecordInfoWIthIndexAndUserId(0, "someUserId");
+
+		assertCorrectRecordInfoWIthIndexAndUserId(1, "someOtherUserId");
+
+	}
+
+	private void assertCorrectRecordInfoWIthIndexAndUserId(int index, String userId) {
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(index);
 		DataGroup recordInfo = modifiedDataGroup.getFirstGroupWithNameInData("recordInfo");
-		assertCorrectUserIdInUpdatedBy(recordInfo, "someUserId");
+		assertCorrectUserIdInUpdatedBy(recordInfo, userId);
 
 		assertTrue(recordInfo.containsChildWithNameInData("tsCreated"));
+		assertTrue(recordInfo.containsChildWithNameInData("tsUpdated"));
 
-		DataGroup modifiedDataGroup2 = recordStorage.modifiedDataGroupsSentToUpdate.get(1);
-		DataGroup recordInfo2 = modifiedDataGroup2.getFirstGroupWithNameInData("recordInfo");
-		assertCorrectUserIdInUpdatedBy(recordInfo2, "someOtherUserId");
-		assertTrue(recordInfo2.containsChildWithNameInData("tsCreated"));
-
-		assertTsCreatedIsDifferentForTwoDifferentGroups(recordInfo, recordInfo2);
+		String tsCreated = recordInfo.getFirstAtomicValueWithNameInData("tsCreated");
+		String tsUpdated = recordInfo.getFirstAtomicValueWithNameInData("tsUpdated");
+		assertEquals(tsCreated, "2017-10-01 00:00:00");
+		assertFalse(tsCreated.equals(tsUpdated));
 	}
 
 	private void assertCorrectUserIdInUpdatedBy(DataGroup recordInfo, String userId) {
@@ -60,11 +66,5 @@ public class ModifierForAdditionalDataInRecordInfoTest {
 		assertEquals(updatedByGroup.getFirstAtomicValueWithNameInData("linkedRecordId"), userId);
 	}
 
-	private void assertTsCreatedIsDifferentForTwoDifferentGroups(DataGroup recordInfo,
-			DataGroup recordInfo2) {
-		String tsCreated = recordInfo.getFirstAtomicValueWithNameInData("tsCreated");
-		String tsCreated2 = recordInfo2.getFirstAtomicValueWithNameInData("tsCreated");
-		assertFalse(tsCreated == tsCreated2);
-	}
 
 }
