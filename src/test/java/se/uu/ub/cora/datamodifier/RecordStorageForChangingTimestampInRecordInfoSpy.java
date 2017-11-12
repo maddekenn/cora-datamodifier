@@ -40,16 +40,6 @@ public class RecordStorageForChangingTimestampInRecordInfoSpy
 
 	@Override
 	public DataGroup read(String type, String id) {
-		if ("recordType".equals(id)) {
-			readRecordTypes.add(id);
-			return DataCreator.createRecordTypeWithMetadataId("recordType", "recordTypeGroup");
-		}
-		// if ("metadataRecordLink".equals(id)) {
-		// readRecordTypes.add(id);
-		// return
-		// DataCreator.createRecordTypeWithMetadataId("metadataRecordLink",
-		// "metadataRecordLinkGroup");
-		// }
 		if ("metadataGroup".equals(id)) {
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
@@ -93,15 +83,11 @@ public class RecordStorageForChangingTimestampInRecordInfoSpy
 			DataGroup bookGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"bookGroup", "metadata", "metadataGroup", "cora");
 			addCreateAndUpdateInfoToRecordInfoInDataGroup("someUserId", bookGroup);
-			DataGroup bookChildReferences = addChildReferencesForBook();
-			bookGroup.addChild(bookChildReferences);
 			recordList.add(bookGroup);
 
 			DataGroup personGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"personGroup", "metadata", "metadataGroup", "systemone");
 			addCreateAndUpdateInfoToRecordInfoInDataGroup("someOtherUserId", personGroup);
-			// DataGroup personChildReferences = addChildReferencesForPerson();
-			// personGroup.addChild(personChildReferences);
 			recordList.add(personGroup);
 
 		}
@@ -137,32 +123,6 @@ public class RecordStorageForChangingTimestampInRecordInfoSpy
 	private static String getLocalTimeDateAsString(LocalDateTime localDateTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		return localDateTime.format(formatter);
-	}
-
-	private DataGroup addChildReferencesForBook() {
-		DataGroup bookChildReferences = DataGroup.withNameInData("childReferences");
-		DataGroup childReference = createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType("0",
-				"metadataGroup", "recordInfoGroup", "group");
-		bookChildReferences.addChild(childReference);
-		DataGroup childReference1 = createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(
-				"1", "metadataTextVariable", "bookTitleTextVar", "textVariable");
-		bookChildReferences.addChild(childReference1);
-		DataGroup childReference2 = createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(
-				"1", "metadataRecordLink", "bookCoverLink", "recordLink");
-		bookChildReferences.addChild(childReference2);
-		return bookChildReferences;
-	}
-
-	private DataGroup createChildRefWithRepeatIdAndLinkedTypeAndIdAndAttributeType(String repeatId,
-			String linkedRecordType, String linkedRecordId, String attributeType) {
-		DataGroup childReference = DataGroup.withNameInData("childReference");
-		childReference.setRepeatId(repeatId);
-		DataGroup ref = DataGroup.withNameInData("ref");
-		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", linkedRecordType));
-		ref.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", linkedRecordId));
-		ref.addAttributeByIdWithValue("type", attributeType);
-		childReference.addChild(ref);
-		return childReference;
 	}
 
 	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
