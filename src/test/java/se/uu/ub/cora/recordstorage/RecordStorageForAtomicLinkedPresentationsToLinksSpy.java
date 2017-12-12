@@ -28,7 +28,8 @@ public class RecordStorageForAtomicLinkedPresentationsToLinksSpy implements Reco
 	}
 
 	@Override
-	public void create(String s, String s1, DataGroup dataGroup, DataGroup dataGroup1, String s2) {
+	public void create(String s, String s1, DataGroup dataGroup, DataGroup collectedTerms,
+			DataGroup dataGroup1, String s2) {
 
 	}
 
@@ -43,13 +44,13 @@ public class RecordStorageForAtomicLinkedPresentationsToLinksSpy implements Reco
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectdTerms,
+			DataGroup linkList, String dataDivider) {
 		modifiedDataGroupsSentToUpdate.add(record);
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("presentationRecordLink".equals(type)) {
 			DataGroup pLinkWithoutLink = DataCreator
@@ -135,7 +136,7 @@ public class RecordStorageForAtomicLinkedPresentationsToLinksSpy implements Reco
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}

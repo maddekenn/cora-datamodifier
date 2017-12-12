@@ -54,7 +54,9 @@ public class DataModifierForRecordTypeSearchLink extends DataModifierForRecordTy
 		createRecordTypeToSearchInPartOfSearch(currentRecordType, search);
 
 		DataGroup linkList = linkCollector.collectLinks("searchGroup", search, SEARCH_STRING, id);
-		recordStorage.create("search", id, search, linkList, currentDataDivider);
+		DataGroup emptyCollectedData = DataGroup.withNameInData("collectedData");
+		recordStorage.create("search", id, search, emptyCollectedData, linkList,
+				currentDataDivider);
 	}
 
 	private String createRecordInfoWithDataDivider(String currentRecordType,

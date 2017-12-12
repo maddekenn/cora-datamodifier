@@ -42,7 +42,8 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 	}
 
 	@Override
-	public void create(String s, String s1, DataGroup dataGroup, DataGroup dataGroup1, String s2) {
+	public void create(String s, String s1, DataGroup dataGroup, DataGroup collectedTerms,
+			DataGroup dataGroup1, String s2) {
 
 	}
 
@@ -57,22 +58,24 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		modifiedDataGroupsSentToUpdate.add(record);
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("metadataCollectionItem".equals(type)) {
 			DataGroup collectionItem = DataCreator
-					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem",
-							"metadata", "metadataCollectionItem", "testSystem");
-			//type should be atomic here since this is used for the code that tests changing atomic data to link
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someItem", "metadata",
+							"metadataCollectionItem", "testSystem");
+			// type should be atomic here since this is used for the code that
+			// tests changing atomic data to link
 			DataGroup recordInfo = collectionItem.getFirstGroupWithNameInData("recordInfo");
 			recordInfo.removeFirstChildWithNameInData("type");
-			recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", "metadataCollectionItem"));
+			recordInfo
+					.addChild(DataAtomic.withNameInDataAndValue("type", "metadataCollectionItem"));
 
 			collectionItem.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
 
@@ -111,8 +114,8 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 
 		if ("recordType".equals(type)) {
 			DataGroup recordType = DataCreator
-					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("book",
-							"recordType", "recordType", "testSystem");
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("book", "recordType",
+							"recordType", "testSystem");
 			recordType.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
 
 			DataGroup textId = createTextGroupWithNameInDataLinkedRecordTypeAndLInkedRecordId(
@@ -131,9 +134,8 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 
 		}
 		if ("search".equals(type)) {
-			DataGroup search = DataCreator
-					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("bookSearch",
-							"search", "search", "testSystem");
+			DataGroup search = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"bookSearch", "search", "search", "testSystem");
 			search.addChild(DataAtomic.withNameInDataAndValue("searchGroup", "someGroup"));
 
 			DataGroup textId = createTextGroupWithNameInDataLinkedRecordTypeAndLInkedRecordId(
@@ -151,9 +153,8 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 			search.addChild(metadataId);
 			recordList.add(search);
 
-			DataGroup search2 = DataCreator
-					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("placeSearch",
-							"search", "search", "testSystem");
+			DataGroup search2 = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"placeSearch", "search", "search", "testSystem");
 			search2.addChild(DataAtomic.withNameInDataAndValue("searchGroup", "someGroup"));
 
 			DataGroup metadataId2 = DataGroup.withNameInData("metadataId");
@@ -181,7 +182,7 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String s) {
+	public Collection<DataGroup> readAbstractList(String s, DataGroup filter) {
 		return null;
 	}
 

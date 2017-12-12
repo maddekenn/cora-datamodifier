@@ -20,7 +20,8 @@ public class DataModifierForChildReference implements DataModifier {
 
 	@Override
 	public void modifyByRecordType(String recordType) {
-		Collection<DataGroup> recordList = recordStorage.readList(recordType);
+		DataGroup emptyFilter = DataGroup.withNameInData("filter");
+		Collection<DataGroup> recordList = recordStorage.readList(recordType, emptyFilter);
 		for (DataGroup dataGroup : recordList) {
 			modifyDataGroup(dataGroup);
 			modifiedList.add(dataGroup);
@@ -59,8 +60,9 @@ public class DataModifierForChildReference implements DataModifier {
 
 		DataGroup collectedLinks = linkCollector.collectLinks("metadataGroupGroup", modified, type,
 				id);
-
-		recordStorage.update(type, id, modified, collectedLinks, dataDivider);
+		// emptyCollectedData was added after the data already had been modified
+		DataGroup emptyCollectedData = DataGroup.withNameInData("collectedData");
+		recordStorage.update(type, id, modified, emptyCollectedData, collectedLinks, dataDivider);
 	}
 
 	private String extractDataDivider(DataGroup recordInfo) {

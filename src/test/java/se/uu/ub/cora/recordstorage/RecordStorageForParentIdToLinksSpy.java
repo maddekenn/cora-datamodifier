@@ -43,7 +43,8 @@ public class RecordStorageForParentIdToLinksSpy implements RecordStorage {
 	}
 
 	@Override
-	public void create(String s, String s1, DataGroup dataGroup, DataGroup dataGroup1, String s2) {
+	public void create(String s, String s1, DataGroup dataGroup, DataGroup collectedTerms,
+			DataGroup dataGroup1, String s2) {
 
 	}
 
@@ -58,13 +59,13 @@ public class RecordStorageForParentIdToLinksSpy implements RecordStorage {
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		modifiedDataGroupsSentToUpdate.add(record);
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("metadataGroup".equals(type)) {
 			DataGroup metadataGroup = DataCreator
@@ -142,7 +143,7 @@ public class RecordStorageForParentIdToLinksSpy implements RecordStorage {
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}

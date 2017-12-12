@@ -57,7 +57,8 @@ public class AllRecordTypesModifier {
 	}
 
 	private static void modifyAllRecordTypes(RecordStorage recordStorage) {
-		Collection<DataGroup> recordTypes = recordStorage.readList("recordType");
+		DataGroup emptyFilter = DataGroup.withNameInData("filter");
+		Collection<DataGroup> recordTypes = recordStorage.readList("recordType", emptyFilter);
 		for (DataGroup recordType : recordTypes) {
 			if (recordTypeIsNotAbstract(recordType)) {
 				DataGroup recordInfo = recordType.getFirstGroupWithNameInData("recordInfo");

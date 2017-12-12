@@ -18,14 +18,14 @@
  */
 package se.uu.ub.cora.datamodifier.presentation;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataCreator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class RecordStorageForPresentationContainersSpy implements RecordStorage {
 
@@ -39,14 +39,15 @@ public class RecordStorageForPresentationContainersSpy implements RecordStorage 
 	public DataGroup read(String type, String id) {
 		if ("presentationRepeatingContainer".equals(id)) {
 			readRecordTypes.add(id);
-			return DataCreator.createRecordTypeWithMetadataId("presentationRepeatingContainer", "presentationRepeatingContainerGroup");
+			return DataCreator.createRecordTypeWithMetadataId("presentationRepeatingContainer",
+					"presentationRepeatingContainerGroup");
 		}
 		return null;
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		createdData.add(record);
 		createdType.add(type);
 
@@ -65,18 +66,20 @@ public class RecordStorageForPresentationContainersSpy implements RecordStorage 
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectdTerms,
+			DataGroup linkList, String dataDivider) {
 		modifiedDataGroupsSentToUpdate.add(record);
 
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("presentationRepeatingContainer".equals(type)) {
-			DataGroup rContainer = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someRContainer", "presentation", "presentationRepeatingContainer", "testSystem");
+			DataGroup rContainer = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someRContainer",
+							"presentation", "presentationRepeatingContainer", "testSystem");
 			rContainer.addAttributeByIdWithValue("type", "container");
 			rContainer.addAttributeByIdWithValue("repeat", "this");
 
@@ -87,9 +90,8 @@ public class RecordStorageForPresentationContainersSpy implements RecordStorage 
 		return recordList;
 	}
 
-
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}

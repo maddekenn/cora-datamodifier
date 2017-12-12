@@ -22,7 +22,8 @@ public abstract class DataModifierForRecordType implements DataModifier {
 		this.recordType = recordType;
 		modifiedList = new ArrayList<>();
 		try {
-			Collection<DataGroup> recordList = recordStorage.readList(recordType);
+			DataGroup emptyFilter = DataGroup.withNameInData("filter");
+			Collection<DataGroup> recordList = recordStorage.readList(recordType, emptyFilter);
 			for (DataGroup dataGroup : recordList) {
 				modifyDataGroup(dataGroup);
 				modifiedList.add(dataGroup);
@@ -53,7 +54,9 @@ public abstract class DataModifierForRecordType implements DataModifier {
 		String metadataId = getMetadataId();
 		DataGroup collectedLinks = linkCollector.collectLinks(metadataId, modified, type, id);
 
-		recordStorage.update(type, id, modified, collectedLinks, dataDivider);
+		// emptyCollectedData was added after the data already had been modified
+		DataGroup emptyCollectedData = DataGroup.withNameInData("collectedData");
+		recordStorage.update(type, id, modified, emptyCollectedData, collectedLinks, dataDivider);
 	}
 
 	private String extractType(DataGroup recordInfo, DataElement typeChild) {

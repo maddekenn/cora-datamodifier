@@ -51,8 +51,8 @@ public class RecordStorageForMetadataWithAttributeReferencesSpy implements Recor
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		createdData.add(record);
 		createdType.add(type);
 
@@ -71,14 +71,14 @@ public class RecordStorageForMetadataWithAttributeReferencesSpy implements Recor
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectdTerms,
+			DataGroup linkList, String dataDivider) {
 		modifiedDataGroupsSentToUpdate.add(record);
 
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("metadataGroup".equals(type)) {
@@ -87,13 +87,17 @@ public class RecordStorageForMetadataWithAttributeReferencesSpy implements Recor
 			group.addAttributeByIdWithValue("type", "group");
 
 			DataGroup attributeReferences = DataGroup.withNameInData("attributeReferences");
-			createAndAddRefWithLinkedIdAndRepeatId(attributeReferences, "namePartGivenNameTypeCollectionVar", "0");
-			createAndAddRefWithLinkedIdAndRepeatId(attributeReferences, "someOtherTypeCollectionVar", "1");
+			createAndAddRefWithLinkedIdAndRepeatId(attributeReferences,
+					"namePartGivenNameTypeCollectionVar", "0");
+			createAndAddRefWithLinkedIdAndRepeatId(attributeReferences,
+					"someOtherTypeCollectionVar", "1");
 			group.addChild(attributeReferences);
 			recordList.add(group);
 
-			DataGroup withNoAttributeReferences = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-					"withoutAttributeReferencesGroup", "metadata", "metadataGroup", "testSystem");
+			DataGroup withNoAttributeReferences = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+							"withoutAttributeReferencesGroup", "metadata", "metadataGroup",
+							"testSystem");
 			group.addAttributeByIdWithValue("type", "group");
 			createAndAddChildReferences(withNoAttributeReferences);
 			recordList.add(withNoAttributeReferences);
@@ -125,15 +129,15 @@ public class RecordStorageForMetadataWithAttributeReferencesSpy implements Recor
 		refGroup.addChild(ref);
 	}
 
-	private void createAndAddRefWithLinkedIdAndRepeatId(DataGroup attributeReferences, String linkedRecordId, String repeatId) {
-		DataAtomic ref = DataAtomic.withNameInDataAndValue("ref",
-                linkedRecordId);
+	private void createAndAddRefWithLinkedIdAndRepeatId(DataGroup attributeReferences,
+			String linkedRecordId, String repeatId) {
+		DataAtomic ref = DataAtomic.withNameInDataAndValue("ref", linkedRecordId);
 		ref.setRepeatId(repeatId);
 		attributeReferences.addChild(ref);
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}

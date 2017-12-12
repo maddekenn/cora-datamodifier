@@ -43,7 +43,8 @@ public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage {
 	}
 
 	@Override
-	public void create(String s, String s1, DataGroup dataGroup, DataGroup dataGroup1, String s2) {
+	public void create(String s, String s1, DataGroup dataGroup, DataGroup collectedTerms,
+			DataGroup dataGroup1, String s2) {
 
 	}
 
@@ -58,13 +59,13 @@ public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage {
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectdTerms,
+			DataGroup linkList, String dataDivider) {
 		modifiedDataGroupsSentToUpdate.add(record);
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("metadataCollectionItem".equals(type)) {
 			DataGroup collectionItem = DataCreator
@@ -103,20 +104,22 @@ public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage {
 			recordList.add(pVarWithNoEmptyTextId);
 		}
 		if ("presentationCollectionVar".equals(type)) {
-			DataGroup pCollVar = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-					"inputTypeCollectionVarPCollVar", "presentation", "presentationCollectionVar", "testSystem");
-			pCollVar.addChild(DataAtomic.withNameInDataAndValue("emptyTextId", "initialEmptyValueText"));
+			DataGroup pCollVar = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+							"inputTypeCollectionVarPCollVar", "presentation",
+							"presentationCollectionVar", "testSystem");
+			pCollVar.addChild(
+					DataAtomic.withNameInDataAndValue("emptyTextId", "initialEmptyValueText"));
 			pCollVar.addAttributeByIdWithValue("type", "pCollVar");
 			recordList.add(pCollVar);
 
 			DataGroup pCollVarWithNoEmptyTextId = DataCreator
 					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-							"anotherPresentationPCollVar", "presentation", "presentationCollectionVar",
-							"testSystem");
+							"anotherPresentationPCollVar", "presentation",
+							"presentationCollectionVar", "testSystem");
 			pCollVarWithNoEmptyTextId.addAttributeByIdWithValue("type", "pCollVar");
 			recordList.add(pCollVarWithNoEmptyTextId);
 		}
-
 
 		return recordList;
 	}
@@ -142,7 +145,7 @@ public class RecordStorageForAtomicTextsToLinksSpy implements RecordStorage {
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}

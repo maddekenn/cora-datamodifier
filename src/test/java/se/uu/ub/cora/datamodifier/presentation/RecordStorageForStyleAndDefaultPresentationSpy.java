@@ -39,14 +39,15 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 	public DataGroup read(String type, String id) {
 		if ("presentationGroup".equals(id)) {
 			readRecordTypes.add(id);
-			return DataCreator.createRecordTypeWithMetadataId("presentationGroup", "presentationGroupGroup");
+			return DataCreator.createRecordTypeWithMetadataId("presentationGroup",
+					"presentationGroupGroup");
 		}
 		return null;
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		createdData.add(record);
 		createdType.add(type);
 
@@ -65,19 +66,20 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectdTerms,
+			DataGroup linkList, String dataDivider) {
 		modifiedDataGroupsSentToUpdate.add(record);
 
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("presentationGroup".equals(type)) {
-			DataGroup bookPGroup = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-					"bookPGroup", "presentation", "presentationGroup", "cora");
+			DataGroup bookPGroup = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("bookPGroup",
+							"presentation", "presentationGroup", "cora");
 			DataGroup childReferences = DataGroup.withNameInData("childReferences");
 
 			DataGroup firstReference = createChildWithRefGroupWithStyle();
@@ -90,8 +92,9 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 			bookPGroup.addChild(childReferences);
 			recordList.add(bookPGroup);
 
-			DataGroup personPGroup = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-					"personPGroup", "presentation", "presentationGroup", "cora");
+			DataGroup personPGroup = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("personPGroup",
+							"presentation", "presentationGroup", "cora");
 			DataGroup childReferences2 = DataGroup.withNameInData("childReferences");
 
 			DataGroup firstReference2 = createChildRefWithRefGroupWithStyleAndRefMinGroupWithStyle();
@@ -178,7 +181,7 @@ public class RecordStorageForStyleAndDefaultPresentationSpy implements RecordSto
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}

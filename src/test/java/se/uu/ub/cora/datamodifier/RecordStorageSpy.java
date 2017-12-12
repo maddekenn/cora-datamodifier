@@ -75,8 +75,8 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		createdData.add(record);
 		createdType.add(type);
 
@@ -95,14 +95,14 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectdTerms,
+			DataGroup linkList, String dataDivider) {
 		modifiedDataGroupsSentToUpdate.add(record);
 
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 
 		List<DataGroup> recordList = new ArrayList<>();
 		if ("metadataGroup".equals(type)) {
@@ -325,7 +325,7 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
