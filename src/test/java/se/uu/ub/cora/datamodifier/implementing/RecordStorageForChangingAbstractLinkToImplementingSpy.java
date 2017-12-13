@@ -41,15 +41,19 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 
 	@Override
 	public DataGroup read(String type, String id) {
-		if("testBook".equals(id)){
+		if ("testBook".equals(id)) {
 			readRecordTypes.add(id);
-			return DataCreator.createRecordTypeWithMetadataId("testBook",
-					"testBookGroup");
+			return DataCreator.createRecordTypeWithMetadataId("testBook", "testBookGroup");
 		}
 		if ("metadataGroup".equals(id)) {
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
 					"metadataGroupGroup");
+		}
+		if ("locationOrganisation".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("locationOrganisation",
+					"locationOrganisationGroup");
 		}
 		return null;
 	}
@@ -102,16 +106,37 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 
 		}
 
-		if ("metadataGroup".equals(type)) {
-			DataGroup bookGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-					"bookGroup", "metadata", "metadataGroup", "cora");
-			addCreateAndUpdateInfoToRecordInfoInDataGroup("someUserId", bookGroup);
-			recordList.add(bookGroup);
+		// if ("metadataGroup".equals(type)) {
+		// DataGroup bookGroup =
+		// createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+		// "bookGroup", "metadata", "metadataGroup", "cora");
+		// addCreateAndUpdateInfoToRecordInfoInDataGroup("someUserId",
+		// bookGroup);
+		// recordList.add(bookGroup);
+		//
+		// DataGroup personGroup =
+		// createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+		// "personGroup", "metadata", "metadataGroup", "systemone");
+		// addCreateAndUpdateInfoToRecordInfoInDataGroup("someOtherUserId",
+		// personGroup);
+		// recordList.add(personGroup);
+		//
+		// }
+		if ("recordType".equals(type)) {
+			DataGroup organisation = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("organisation",
+							"recordType", "recordType", "testSystem");
+			organisation.addChild(DataAtomic.withNameInDataAndValue("abstract", "true"));
+			recordList.add(organisation);
 
-			DataGroup personGroup = createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-					"personGroup", "metadata", "metadataGroup", "systemone");
-			addCreateAndUpdateInfoToRecordInfoInDataGroup("someOtherUserId", personGroup);
-			recordList.add(personGroup);
+			DataGroup locationOrganisation = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("locationOrganisation",
+							"recordType", "recordType", "testSystem");
+			DataGroup parent = DataGroup.withNameInData("parentId");
+			parent.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
+			parent.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "organisation"));
+			locationOrganisation.addChild(parent);
+			recordList.add(locationOrganisation);
 
 		}
 		return recordList;
