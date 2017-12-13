@@ -41,6 +41,11 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 
 	@Override
 	public DataGroup read(String type, String id) {
+		if("testBook".equals(id)){
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("testBook",
+					"testBookGroup");
+		}
 		if ("metadataGroup".equals(id)) {
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
