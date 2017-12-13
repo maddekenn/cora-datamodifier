@@ -14,23 +14,38 @@ import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 
 public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecordType {
 
+	private static final String LINKED_RECORD_ID = "linkedRecordId";
+	private static final String PARENT_ID = "parentId";
 	private static final String LINKED_RECORD_TYPE = "linkedRecordType";
 	private Collection<DataGroup> recordTypes;
 
 	@Override
 	public void modifyByRecordType(String recordType) {
 		recordTypes = recordStorage.readList("recordType", DataGroup.withNameInData("filter"));
-		Map<String, List<String>> parentRecordTypesWithChildren = new HashMap<>();
-		putParentRecordTypesInMap(parentRecordTypesWithChildren);
-		for (DataGroup readRecordType : recordTypes) {
-			if (readRecordType.containsChildWithNameInData("parentId")) {
-				DataGroup parent = readRecordType.getFirstGroupWithNameInData("parentId");
-				String parentId = parent.getFirstAtomicValueWithNameInData("linkedRecordId");
-				String id = extractidFromRecordInfoInDataGroup(readRecordType);
-				parentRecordTypesWithChildren.get(parentId).add(id);
-			}
-		}
+		Map<String, List<String>> parentRecordTypesWithChildHolder = getParentRecordTypes();
+		addChildRecordTypesToParents(parentRecordTypesWithChildHolder);
 		super.modifyByRecordType(recordType);
+	}
+
+	private void addChildRecordTypesToParents(
+			Map<String, List<String>> parentRecordTypesWithChildHolder) {
+		for (DataGroup readRecordType : recordTypes) {
+			possiblyAddRecordTypeAsChildToParent(parentRecordTypesWithChildHolder, readRecordType);
+		}
+	}
+
+	private void possiblyAddRecordTypeAsChildToParent(
+			Map<String, List<String>> parentRecordTypesWithChildHolder, DataGroup readRecordType) {
+		if (recordTypeHasParent(readRecordType)) {
+			DataGroup parent = readRecordType.getFirstGroupWithNameInData(PARENT_ID);
+			String parentId = parent.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
+			String id = extractidFromRecordInfoInDataGroup(readRecordType);
+			parentRecordTypesWithChildHolder.get(parentId).add(id);
+		}
+	}
+
+	private boolean recordTypeHasParent(DataGroup readRecordType) {
+		return readRecordType.containsChildWithNameInData(PARENT_ID);
 	}
 
 	private String extractidFromRecordInfoInDataGroup(DataGroup dataGroup) {
@@ -38,17 +53,20 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 		return recordInfo.getFirstAtomicValueWithNameInData("id");
 	}
 
-	private void putParentRecordTypesInMap(
-			Map<String, List<String>> parentRecordTypesWithChildren) {
+	private Map<String, List<String>> getParentRecordTypes() {
+		Map<String, List<String>> parentRecordTypesWithChildren = new HashMap<>();
 		for (DataGroup readRecordType : recordTypes) {
-			if (readRecordType.containsChildWithNameInData("abstract") && "true"
-					.equals(readRecordType.getFirstAtomicValueWithNameInData("abstract"))) {
-				// DataGroup recordInfo =
-				// readRecordType.getFirstGroupWithNameInData("recordInfo");
+			if (recordTypeIsAbstract(readRecordType)) {
 				String id = extractidFromRecordInfoInDataGroup(readRecordType);
 				parentRecordTypesWithChildren.put(id, new ArrayList<>());
 			}
 		}
+		return parentRecordTypesWithChildren;
+	}
+
+	private boolean recordTypeIsAbstract(DataGroup readRecordType) {
+		return readRecordType.containsChildWithNameInData("abstract")
+				&& "true".equals(readRecordType.getFirstAtomicValueWithNameInData("abstract"));
 	}
 
 	@Override
@@ -65,7 +83,7 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 
 	private void modifyLink(DataGroup child) {
 		String linkedRecordType = child.getFirstAtomicValueWithNameInData(LINKED_RECORD_TYPE);
-		String linkedRecordId = child.getFirstAtomicValueWithNameInData("linkedRecordId");
+		String linkedRecordId = child.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
 
 		List<String> implementingRecordTypes = getImplementingRecordTypes(linkedRecordType,
 				recordTypes);
@@ -93,9 +111,9 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 			Collection<DataGroup> recordTypes) {
 		List<String> implementingRecordTypes = new ArrayList<>();
 		for (DataGroup recordType : recordTypes) {
-			if (recordType.containsChildWithNameInData("parentId")) {
-				DataGroup parentGroup = recordType.getFirstGroupWithNameInData("parentId");
-				String parentId = parentGroup.getFirstAtomicValueWithNameInData("linkedRecordId");
+			if (recordTypeHasParent(recordType)) {
+				DataGroup parentGroup = recordType.getFirstGroupWithNameInData(PARENT_ID);
+				String parentId = parentGroup.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
 				if (parentId.equals(linkedRecordType)) {
 					DataGroup recordInfo = recordType.getFirstGroupWithNameInData("recordInfo");
 
