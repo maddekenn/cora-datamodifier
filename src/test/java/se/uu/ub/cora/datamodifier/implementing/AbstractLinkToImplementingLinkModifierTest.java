@@ -35,4 +35,15 @@ public class AbstractLinkToImplementingLinkModifierTest {
 
 	}
 
+	@Test
+	public void testMetadataGroupWithOneImplementingtLinkFirstLevel() {
+		dataModifier.modifyByRecordType("testBook");
+
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		DataGroup author = modifiedDataGroup.getFirstGroupWithNameInData("author");
+		String linkedRecordType = author.getFirstAtomicValueWithNameInData("linkedRecordType");
+		assertEquals(linkedRecordType, "person");
+
+	}
+
 }

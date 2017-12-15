@@ -55,6 +55,11 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 			return DataCreator.createRecordTypeWithMetadataId("locationOrganisation",
 					"locationOrganisationGroup");
 		}
+		if ("locationOrganisation".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("locationOrganisation",
+					"locationOrganisationGroup");
+		}
 		return null;
 	}
 
@@ -95,13 +100,18 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 							"testBook", "testBook", "testSystem");
 
 			DataGroup abstractChildLink = DataGroup.withNameInData("location");
-			// TODO:gör organisation abstract i storage, gör implementerande typ
-			// locationOrganisation
 			abstractChildLink.addChild(
 					DataAtomic.withNameInDataAndValue("linkedRecordType", "organisation"));
 			abstractChildLink
 					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "org:001"));
 			dataGroup.addChild(abstractChildLink);
+
+			DataGroup implementingChildLink = DataGroup.withNameInData("author");
+			implementingChildLink
+					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "person"));
+			implementingChildLink
+					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "person:001"));
+			dataGroup.addChild(implementingChildLink);
 			recordList.add(dataGroup);
 
 		}
@@ -137,6 +147,11 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 			parent.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "organisation"));
 			locationOrganisation.addChild(parent);
 			recordList.add(locationOrganisation);
+
+			DataGroup person = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+					"person", "recordType", "recordType", "testSystem");
+			organisation.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
+			recordList.add(person);
 
 		}
 		return recordList;
