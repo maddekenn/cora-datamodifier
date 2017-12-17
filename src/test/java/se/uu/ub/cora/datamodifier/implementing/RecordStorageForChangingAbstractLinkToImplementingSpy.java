@@ -28,6 +28,7 @@ import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.datamodifier.DataCreator;
+import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class RecordStorageForChangingAbstractLinkToImplementingSpy
@@ -45,6 +46,10 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("testBook", "testBookGroup");
 		}
+		if ("testArticle".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("testArticle", "testArticleGroup");
+		}
 		if ("metadataGroup".equals(id)) {
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
@@ -55,12 +60,16 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 			return DataCreator.createRecordTypeWithMetadataId("locationOrganisation",
 					"locationOrganisationGroup");
 		}
-		if ("locationOrganisation".equals(id)) {
+		if ("locationOrganisation".equals(type) && "org:001".equals(id)) {
 			readRecordTypes.add(id);
-			return DataCreator.createRecordTypeWithMetadataId("locationOrganisation",
-					"locationOrganisationGroup");
+			return DataGroup.withNameInData("organisation");
 		}
-		return null;
+		if ("testBookLinkWithoutChildren".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("testBookLinkWithoutChildren",
+					"testtestBookLinkWithoutChildrenGroup");
+		}
+		throw new RecordNotFoundException("no record found with type: " + type + " and id: " + id);
 	}
 
 	@Override
@@ -116,22 +125,29 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 
 		}
 
-		// if ("metadataGroup".equals(type)) {
-		// DataGroup bookGroup =
-		// createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-		// "bookGroup", "metadata", "metadataGroup", "cora");
-		// addCreateAndUpdateInfoToRecordInfoInDataGroup("someUserId",
-		// bookGroup);
-		// recordList.add(bookGroup);
-		//
-		// DataGroup personGroup =
-		// createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-		// "personGroup", "metadata", "metadataGroup", "systemone");
-		// addCreateAndUpdateInfoToRecordInfoInDataGroup("someOtherUserId",
-		// personGroup);
-		// recordList.add(personGroup);
-		//
-		// }
+		if ("testArticle".equals(type)) {
+			DataGroup dataGroup = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("testArticleGroup",
+							"testArticle", "testArticle", "testSystem");
+
+			DataGroup childDataGroup = DataGroup.withNameInData("middleGroup");
+			DataGroup abstractChildLink = DataGroup.withNameInData("location");
+			abstractChildLink.addChild(
+					DataAtomic.withNameInDataAndValue("linkedRecordType", "organisation"));
+			abstractChildLink
+					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "org:001"));
+			childDataGroup.addChild(abstractChildLink);
+
+			DataGroup implementingChildLink = DataGroup.withNameInData("author");
+			implementingChildLink
+					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "person"));
+			implementingChildLink
+					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "person:001"));
+			childDataGroup.addChild(implementingChildLink);
+			dataGroup.addChild(childDataGroup);
+			recordList.add(dataGroup);
+
+		}
 		if ("recordType".equals(type)) {
 			DataGroup organisation = DataCreator
 					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("organisation",
@@ -148,12 +164,46 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 			locationOrganisation.addChild(parent);
 			recordList.add(locationOrganisation);
 
+			DataGroup permissionOrganisation = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+							"permissionOrganisation", "recordType", "recordType", "testSystem");
+			DataGroup permissionOrgParent = DataGroup.withNameInData("parentId");
+			permissionOrgParent
+					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
+			permissionOrgParent
+					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "organisation"));
+			permissionOrganisation.addChild(parent);
+			recordList.add(permissionOrganisation);
+
 			DataGroup person = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"person", "recordType", "recordType", "testSystem");
 			organisation.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
 			recordList.add(person);
 
+			DataGroup organisationNoImplementingChild = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+							"organisationNoImplementingChild", "recordType", "recordType",
+							"testSystem");
+			organisation.addChild(DataAtomic.withNameInDataAndValue("abstract", "true"));
+			recordList.add(organisation);
+
 		}
+
+		if ("testBookLinkWithoutChildren".equals(type)) {
+			DataGroup dataGroup = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+							"testtestBookLinkWithoutChildrenGroup", "testBookLinkWithoutChildren",
+							"testBookLinkWithoutChildren", "testSystem");
+
+			DataGroup abstractChildLink = DataGroup.withNameInData("location");
+			abstractChildLink.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType",
+					"organisationNoImplementingChild"));
+			abstractChildLink
+					.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "org:001"));
+			dataGroup.addChild(abstractChildLink);
+			recordList.add(dataGroup);
+		}
+
 		return recordList;
 	}
 
@@ -186,12 +236,6 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 	private static String getLocalTimeDateAsString(LocalDateTime localDateTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		return localDateTime.format(formatter);
-	}
-
-	private DataGroup createMetadataGroupWithIdAndNameInDataAndTypeAndDataDivider(String id,
-			String nameInData, String type, String dataDividerId) {
-		return DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(id, nameInData,
-				type, dataDividerId);
 	}
 
 	@Override

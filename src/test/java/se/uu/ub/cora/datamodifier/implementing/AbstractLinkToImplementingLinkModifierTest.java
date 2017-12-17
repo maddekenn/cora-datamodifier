@@ -46,4 +46,28 @@ public class AbstractLinkToImplementingLinkModifierTest {
 
 	}
 
+	@Test
+	public void testMetadataGroupWithOneAbstractLinkOneLevelDown() {
+		dataModifier.modifyByRecordType("testArticle");
+
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		DataGroup childDataGroup = modifiedDataGroup.getFirstGroupWithNameInData("middleGroup");
+		DataGroup location = childDataGroup.getFirstGroupWithNameInData("location");
+		String linkedRecordType = location.getFirstAtomicValueWithNameInData("linkedRecordType");
+		assertEquals(linkedRecordType, "locationOrganisation");
+
+	}
+
+	@Test
+	public void testMetadataGroupWithOneAbstractLinkFirstLevelImplementingTypeNotFound() {
+		dataModifier.modifyByRecordType("testBookLinkWithoutChildren");
+		// TODO: organisationNoImplementingChild hamnar inte som förälder -
+		// varför?
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		DataGroup location = modifiedDataGroup.getFirstGroupWithNameInData("location");
+		String linkedRecordType = location.getFirstAtomicValueWithNameInData("linkedRecordType");
+		assertEquals(linkedRecordType, "organisationNoImplementingChild");
+
+	}
+
 }

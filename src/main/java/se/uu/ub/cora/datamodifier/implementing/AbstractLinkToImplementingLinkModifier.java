@@ -81,13 +81,22 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 	@Override
 	protected void modifyDataGroup(DataGroup dataGroup) {
 		for (DataElement dataElement : dataGroup.getChildren())
-			if (dataElement instanceof DataGroup) {
-				DataGroup child = (DataGroup) dataElement;
-				if (childIsLink(child)) {
-					possiblyModifyLink(child);
-				}
-			}
-		// TODO: iterate if child is group
+			findAndModifyLinksInDataGroupChild(dataElement);
+	}
+
+	private void findAndModifyLinksInDataGroupChild(DataElement dataElement) {
+		if (dataElement instanceof DataGroup) {
+			DataGroup child = (DataGroup) dataElement;
+			findAndModifyLink(child);
+		}
+	}
+
+	private void findAndModifyLink(DataGroup child) {
+		if (childIsLink(child)) {
+			possiblyModifyLink(child);
+		} else {
+			modifyDataGroup(child);
+		}
 	}
 
 	private void possiblyModifyLink(DataGroup child) {
@@ -103,7 +112,7 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 		String foundImplementingRecordType = null;
 		for (String implementingRecordType : implementingRecordTypes) {
 			foundImplementingRecordType = tryToReadRecordByImplementingRecordTypeAndId(
-					implementingRecordType, linkedRecordId);
+					implementingRecordType, linkedRecordId, foundImplementingRecordType);
 		}
 		possiblyModifyChild(child, foundImplementingRecordType);
 	}
@@ -113,14 +122,15 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 	}
 
 	private String tryToReadRecordByImplementingRecordTypeAndId(String implementingRecordType,
-			String linkedRecordId) {
+			String linkedRecordId, String foundImplementingRecordType) {
+		String foundImplementingType = foundImplementingRecordType;
 		try {
 			recordStorage.read(implementingRecordType, linkedRecordId);
-			return implementingRecordType;
+			foundImplementingType = implementingRecordType;
 		} catch (RecordNotFoundException e) {
 			// do nothing
 		}
-		return null;
+		return foundImplementingType;
 	}
 
 	private void possiblyModifyChild(DataGroup child, String foundImplementingRecordType) {
