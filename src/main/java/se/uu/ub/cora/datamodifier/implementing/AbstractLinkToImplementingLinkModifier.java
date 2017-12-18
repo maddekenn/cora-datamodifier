@@ -44,7 +44,7 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 	private void addRecordTypeAsChildToParent(
 			Map<String, List<String>> parentRecordTypesWithChildHolder, DataGroup readRecordType) {
 		String parentId = extractParentId(readRecordType);
-		String id = extractidFromRecordInfoInDataGroup(readRecordType);
+		String id = extractIdFromRecordInfoInDataGroup(readRecordType);
 		parentRecordTypesWithChildHolder.get(parentId).add(id);
 	}
 
@@ -57,7 +57,7 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 		return readRecordType.containsChildWithNameInData(PARENT_ID);
 	}
 
-	private String extractidFromRecordInfoInDataGroup(DataGroup dataGroup) {
+	private String extractIdFromRecordInfoInDataGroup(DataGroup dataGroup) {
 		DataGroup recordInfo = dataGroup.getFirstGroupWithNameInData("recordInfo");
 		return recordInfo.getFirstAtomicValueWithNameInData("id");
 	}
@@ -66,7 +66,7 @@ public class AbstractLinkToImplementingLinkModifier extends DataModifierForRecor
 		Map<String, List<String>> parentRecordTypesWithChildren = new HashMap<>();
 		for (DataGroup readRecordType : recordTypes) {
 			if (recordTypeIsAbstract(readRecordType)) {
-				String id = extractidFromRecordInfoInDataGroup(readRecordType);
+				String id = extractIdFromRecordInfoInDataGroup(readRecordType);
 				parentRecordTypesWithChildren.put(id, new ArrayList<>());
 			}
 		}

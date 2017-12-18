@@ -67,7 +67,7 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 		if ("testBookLinkWithoutChildren".equals(id)) {
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("testBookLinkWithoutChildren",
-					"testtestBookLinkWithoutChildrenGroup");
+					"testBookLinkWithoutChildrenGroup");
 		}
 		throw new RecordNotFoundException("no record found with type: " + type + " and id: " + id);
 	}
@@ -177,24 +177,24 @@ public class RecordStorageForChangingAbstractLinkToImplementingSpy
 
 			DataGroup person = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 					"person", "recordType", "recordType", "testSystem");
-			organisation.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
+			person.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
 			recordList.add(person);
 
 			DataGroup organisationNoImplementingChild = DataCreator
 					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
 							"organisationNoImplementingChild", "recordType", "recordType",
 							"testSystem");
-			organisation.addChild(DataAtomic.withNameInDataAndValue("abstract", "true"));
-			recordList.add(organisation);
+			organisationNoImplementingChild.addChild(DataAtomic.withNameInDataAndValue("abstract", "true"));
+			recordList.add(organisationNoImplementingChild);
 
 		}
 
 		if ("testBookLinkWithoutChildren".equals(type)) {
 			DataGroup dataGroup = DataCreator
 					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
-							"testtestBookLinkWithoutChildrenGroup", "testBookLinkWithoutChildren",
+							"testBookLinkWithoutChildrenGroup", "testBookLinkWithoutChildren",
 							"testBookLinkWithoutChildren", "testSystem");
-
+			dataGroup.addChild(DataAtomic.withNameInDataAndValue("abstract", "true"));
 			DataGroup abstractChildLink = DataGroup.withNameInData("location");
 			abstractChildLink.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType",
 					"organisationNoImplementingChild"));

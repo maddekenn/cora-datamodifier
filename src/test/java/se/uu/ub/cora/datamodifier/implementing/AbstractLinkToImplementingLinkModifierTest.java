@@ -36,7 +36,7 @@ public class AbstractLinkToImplementingLinkModifierTest {
 	}
 
 	@Test
-	public void testMetadataGroupWithOneImplementingtLinkFirstLevel() {
+	public void testMetadataGroupWithOneImplementingLinkFirstLevel() {
 		dataModifier.modifyByRecordType("testBook");
 
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
@@ -61,8 +61,6 @@ public class AbstractLinkToImplementingLinkModifierTest {
 	@Test
 	public void testMetadataGroupWithOneAbstractLinkFirstLevelImplementingTypeNotFound() {
 		dataModifier.modifyByRecordType("testBookLinkWithoutChildren");
-		// TODO: organisationNoImplementingChild hamnar inte som förälder -
-		// varför?
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
 		DataGroup location = modifiedDataGroup.getFirstGroupWithNameInData("location");
 		String linkedRecordType = location.getFirstAtomicValueWithNameInData("linkedRecordType");
