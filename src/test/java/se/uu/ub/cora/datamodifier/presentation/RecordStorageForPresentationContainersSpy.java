@@ -42,6 +42,11 @@ public class RecordStorageForPresentationContainersSpy implements RecordStorage 
 			return DataCreator.createRecordTypeWithMetadataId("presentationRepeatingContainer",
 					"presentationRepeatingContainerGroup");
 		}
+		if ("presentationSurroundingContainer".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("presentationSurroundingContainer",
+					"presentationSurroundingContainerGroup");
+		}
 		return null;
 	}
 
@@ -85,9 +90,41 @@ public class RecordStorageForPresentationContainersSpy implements RecordStorage 
 
 			rContainer.addChild(DataAtomic.withNameInDataAndValue("presentationOf", "someLink"));
 			recordList.add(rContainer);
+		} else if ("presentationSurroundingContainer".equals(type)) {
+			DataGroup sContainer = createSurroundingContainer("someSContainer");
+			addOnePresentationOfToContainer(sContainer);
+			recordList.add(sContainer);
+
+			DataGroup sContainer2 = createSurroundingContainer("someSContainer");
+			addTwoPresentationsOfToContainer(sContainer2);
+			recordList.add(sContainer2);
 		}
 
 		return recordList;
+	}
+
+	private void addOnePresentationOfToContainer(DataGroup sContainer) {
+		DataGroup presentationsOf = DataGroup.withNameInData("presentationsOf");
+		presentationsOf.addChild(
+				DataAtomic.withNameInDataAndValueAndRepeatId("presentationOf", "firstGroup", "0"));
+		sContainer.addChild(presentationsOf);
+	}
+
+	private void addTwoPresentationsOfToContainer(DataGroup sContainer) {
+		DataGroup presentationsOf = DataGroup.withNameInData("presentationsOf");
+		presentationsOf.addChild(
+				DataAtomic.withNameInDataAndValueAndRepeatId("presentationOf", "firstGroup", "0"));
+		presentationsOf.addChild(
+				DataAtomic.withNameInDataAndValueAndRepeatId("presentationOf", "secondGroup", "1"));
+		sContainer.addChild(presentationsOf);
+	}
+
+	private DataGroup createSurroundingContainer(String id) {
+		DataGroup sContainer = DataCreator.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider(
+				id, "presentation", "presentationSurroundingContainer", "testSystem");
+		sContainer.addAttributeByIdWithValue("type", "container");
+		sContainer.addAttributeByIdWithValue("repeat", "children");
+		return sContainer;
 	}
 
 	@Override
