@@ -36,12 +36,7 @@ public class ModifierForAtomicPresentationOfToLinkInSurroundingContainerTest {
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
 		DataGroup presentationsOf = modifiedDataGroup
 				.getFirstGroupWithNameInData("presentationsOf");
-		DataGroup presentationOf = presentationsOf.getFirstGroupWithNameInData("presentationOf");
-		assertEquals(presentationOf.getFirstAtomicValueWithNameInData("linkedRecordType"),
-				"metadata");
-		assertEquals(presentationOf.getFirstAtomicValueWithNameInData("linkedRecordId"),
-				"firstGroup");
-		assertEquals(presentationOf.getRepeatId(), "0");
+		assertCorrectFirstGroup(presentationsOf);
 		assertEquals(presentationsOf.getChildren().size(), 1);
 	}
 
@@ -51,13 +46,13 @@ public class ModifierForAtomicPresentationOfToLinkInSurroundingContainerTest {
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(1);
 		DataGroup presentationsOf = modifiedDataGroup
 				.getFirstGroupWithNameInData("presentationsOf");
-		DataGroup presentationOf = presentationsOf.getFirstGroupWithNameInData("presentationOf");
-		assertEquals(presentationOf.getFirstAtomicValueWithNameInData("linkedRecordType"),
-				"metadata");
-		assertEquals(presentationOf.getFirstAtomicValueWithNameInData("linkedRecordId"),
-				"firstGroup");
-		assertEquals(presentationOf.getRepeatId(), "0");
+		assertCorrectFirstGroup(presentationsOf);
 
+		assertCorrectSecondGroup(presentationsOf);
+		assertEquals(presentationsOf.getChildren().size(), 2);
+	}
+
+	private void assertCorrectSecondGroup(DataGroup presentationsOf) {
 		DataGroup presentationOf2 = presentationsOf.getAllGroupsWithNameInData("presentationOf")
 				.get(1);
 		assertEquals(presentationOf2.getFirstAtomicValueWithNameInData("linkedRecordType"),
@@ -65,6 +60,14 @@ public class ModifierForAtomicPresentationOfToLinkInSurroundingContainerTest {
 		assertEquals(presentationOf2.getFirstAtomicValueWithNameInData("linkedRecordId"),
 				"secondGroup");
 		assertEquals(presentationOf2.getRepeatId(), "1");
-		assertEquals(presentationsOf.getChildren().size(), 2);
+	}
+
+	private void assertCorrectFirstGroup(DataGroup presentationsOf) {
+		DataGroup presentationOf = presentationsOf.getFirstGroupWithNameInData("presentationOf");
+		assertEquals(presentationOf.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"metadata");
+		assertEquals(presentationOf.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"firstGroup");
+		assertEquals(presentationOf.getRepeatId(), "0");
 	}
 }
