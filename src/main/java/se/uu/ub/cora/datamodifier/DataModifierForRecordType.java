@@ -14,7 +14,7 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 public abstract class DataModifierForRecordType implements DataModifier {
 	protected String recordType;
 	protected RecordStorage recordStorage;
-	private List<DataGroup> modifiedList = new ArrayList<>();
+	protected List<DataGroup> modifiedList = new ArrayList<>();
 	protected DataRecordLinkCollector linkCollector;
 
 	@Override
