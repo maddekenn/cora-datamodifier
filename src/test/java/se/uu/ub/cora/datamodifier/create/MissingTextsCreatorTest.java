@@ -1,7 +1,6 @@
 package se.uu.ub.cora.datamodifier.create;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
@@ -40,17 +39,8 @@ public class MissingTextsCreatorTest {
 		assertCorrectCreatedText(createdDefText, "textSystemOne", "someNonExistingDefText",
 				"testSystem");
 
-		assertEquals(recordStorage.createdTextIds.get(0), "someNonExistingText");
-		assertEquals(recordStorage.createdTextRecordTypes.get(0), "coraText");
-		assertEquals(linkCollector.noOfTimesCalled, 2);
-
-		// TODO: kolla parametrar skickade till linkcollector
-
-		assertEquals(recordStorage.createdTextIds.get(1), "someNonExistingDefText");
-		assertEquals(recordStorage.createdTextRecordTypes.get(1), "textSystemOne");
-
-		assertEquals(recordStorage.createdTexts.size(), 2);
-		assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 0);
+		assertCorrectValuesSentToStorageForMissingTextAndDefText();
+		assertCorrectValuesSentToLinkCollectorForMissingTextAndDefText(createdText, createdDefText);
 	}
 
 	private void assertCorrectCreatedText(DataGroup createdText, String textRecordType,
@@ -112,6 +102,30 @@ public class MissingTextsCreatorTest {
 		return textParts.get(0);
 	}
 
+	private void assertCorrectValuesSentToStorageForMissingTextAndDefText() {
+		assertEquals(recordStorage.createdTextIds.get(0), "someNonExistingText");
+		assertEquals(recordStorage.createdTextRecordTypes.get(0), "coraText");
+		assertEquals(recordStorage.createdTextIds.get(1), "someNonExistingDefText");
+		assertEquals(recordStorage.createdTextRecordTypes.get(1), "textSystemOne");
+		assertEquals(recordStorage.createdTexts.size(), 2);
+		assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 0);
+	}
+
+	private void assertCorrectValuesSentToLinkCollectorForMissingTextAndDefText(
+			DataGroup createdText, DataGroup createdDefText) {
+		assertEquals(linkCollector.metadataIds.get(0), "coraTextGroup");
+		assertEquals(linkCollector.fromRecordTypes.get(0), "coraText");
+		assertEquals(linkCollector.fromRecordIds.get(0), "someNonExistingText");
+		assertEquals(linkCollector.dataGroups.get(0), createdText);
+
+		assertEquals(linkCollector.metadataIds.get(1), "textSystemOneGroup");
+		assertEquals(linkCollector.fromRecordTypes.get(1), "textSystemOne");
+		assertEquals(linkCollector.fromRecordIds.get(1), "someNonExistingDefText");
+		assertEquals(linkCollector.dataGroups.get(1), createdDefText);
+		assertEquals(linkCollector.noOfTimesCalled, 2);
+
+	}
+
 	@Test
 	public void testGroupMissingTextAbstractTypeDefTextExist() {
 		textsCreator.modifyByRecordType("metadataTextVariable");
@@ -119,21 +133,59 @@ public class MissingTextsCreatorTest {
 		DataGroup createdText = recordStorage.createdTexts.get(0);
 		assertCorrectCreatedText(createdText, "coraText", "someNonExistingAbstractText",
 				"someOtherSystem");
-		assertNotNull(createdText);
+
+		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		assertCorrectLinkChildWithNameInDataTypeAndId(modifiedDataGroup, "textId", "coraText",
+				"someNonExistingAbstractText");
+		assertCorrectValuesSentToStorageForMissingAbstractText();
+		assertCorrectValuesSentToLinkCollectorForMissingAbstractText(createdText);
+	}
+
+	private void assertCorrectValuesSentToStorageForMissingAbstractText() {
 		assertEquals(recordStorage.createdTextIds.get(0), "someNonExistingAbstractText");
 		assertEquals(recordStorage.createdTextRecordTypes.get(0), "coraText");
 		assertEquals(recordStorage.createdTexts.size(), 1);
 
+		assertEquals(recordStorage.createdTextIds.get(0), "someNonExistingAbstractText");
+		assertEquals(recordStorage.createdTextRecordTypes.get(0), "coraText");
 		assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 1);
-		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
-		assertCorrectLinkChildWithNameInDataTypeAndId(modifiedDataGroup, "textId", "coraText",
-				"someNonExistingAbstractText");
+	}
+
+	private void assertCorrectValuesSentToLinkCollectorForMissingAbstractText(
+			DataGroup createdText) {
+		assertEquals(linkCollector.metadataIds.get(0), "coraTextGroup");
+		assertEquals(linkCollector.fromRecordTypes.get(0), "coraText");
+		assertEquals(linkCollector.fromRecordIds.get(0), "someNonExistingAbstractText");
+		assertEquals(linkCollector.metadataIds.get(1), "metadataTextVariableGroup");
+		assertEquals(linkCollector.fromRecordTypes.get(1), "metadataTextVariable");
+		assertEquals(linkCollector.fromRecordIds.get(1), "someTestTextVar");
+		assertEquals(linkCollector.noOfTimesCalled, 2);
+
+		assertEquals(linkCollector.dataGroups.get(0), createdText);
 	}
 
 	@Test
 	public void testRecordTypeWithNoRecords() {
 		textsCreator.modifyByRecordType("recordTypeWithNoData");
-
 		assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 0);
 	}
+
+	@Test
+	public void testGroupWithNoTextOrDefText() {
+		textsCreator.modifyByRecordType("recordTypeWithoutTexts");
+		assertEquals(recordStorage.createdTexts.size(), 0);
+		// DataGroup createdText = recordStorage.createdTexts.get(0);
+		// assertCorrectCreatedText(createdText, "coraText",
+		// "someNonExistingAbstractText",
+		// "someOtherSystem");
+		//
+		// DataGroup modifiedDataGroup =
+		// recordStorage.modifiedDataGroupsSentToUpdate.get(0);
+		// assertCorrectLinkChildWithNameInDataTypeAndId(modifiedDataGroup, "textId",
+		// "coraText",
+		// "someNonExistingAbstractText");
+		// assertCorrectValuesSentToStorageForMissingAbstractText();
+		// assertCorrectValuesSentToLinkCollectorForMissingAbstractText(createdText);
+	}
+
 }

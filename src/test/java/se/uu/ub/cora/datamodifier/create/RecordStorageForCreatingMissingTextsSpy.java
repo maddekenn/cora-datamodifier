@@ -31,6 +31,11 @@ public class RecordStorageForCreatingMissingTextsSpy implements RecordStorage, M
 			return DataCreator.createRecordTypeWithMetadataId("metadataTextVariable",
 					"metadataTextVariableGroup");
 		}
+		if ("recordTypeWithoutTexts".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("recordTypeWithoutTexts",
+					"recordTypeWithoutTextsGroup");
+		}
 		if ("recordType".equals(type)) {
 			readRecordTypes.add(id);
 			DataGroup recordTypeGroup = DataCreator.createRecordTypeWithMetadataId("recordType",
@@ -122,6 +127,14 @@ public class RecordStorageForCreatingMissingTextsSpy implements RecordStorage, M
 			metadataTextVariable.addChild(defText);
 			recordList.add(metadataTextVariable);
 
+		}
+		if ("recordTypeWithoutTexts".equals(type)) {
+			DataGroup recordTypeWithoutTexts = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someUnimportantId",
+							"recordTypeWithoutTexts", "recordTypeWithoutTexts", "someOtherSystem");
+			recordTypeWithoutTexts.addChild(
+					DataAtomic.withNameInDataAndValue("nameInData", "someUnimportantName"));
+			recordList.add(recordTypeWithoutTexts);
 		}
 		if ("recordTypeWithNoData".equals(type)) {
 			throw new RecordNotFoundException("No records exist eith recordType " + type);

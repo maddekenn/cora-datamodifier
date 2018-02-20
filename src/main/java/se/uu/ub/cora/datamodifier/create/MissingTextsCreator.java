@@ -16,7 +16,7 @@ public class MissingTextsCreator extends DataModifierForRecordType {
 	private static final String RECORD_INFO = "recordInfo";
 	private static final String LINKED_RECORD_ID = "linkedRecordId";
 	private boolean dataGroupWasModified = false;
-	private DataGroup dataGroup;
+	private DataGroup currentDataGroup;
 
 	@Override
 	public void modifyByRecordType(String recordType) {
@@ -44,13 +44,17 @@ public class MissingTextsCreator extends DataModifierForRecordType {
 
 	@Override
 	protected void modifyDataGroup(DataGroup dataGroup) {
-		this.dataGroup = dataGroup;
-		possiblyCreateTextUsingTextNameInData("textId");
-		possiblyCreateTextUsingTextNameInData("defTextId");
+		this.currentDataGroup = dataGroup;
+		if (dataGroup.containsChildWithNameInData("textId")) {
+			possiblyCreateTextUsingTextNameInData("textId");
+		}
+		if (dataGroup.containsChildWithNameInData("defTextId")) {
+			possiblyCreateTextUsingTextNameInData("defTextId");
+		}
 	}
 
 	private void possiblyCreateTextUsingTextNameInData(String textNameInData) {
-		DataGroup textIdGroup = dataGroup.getFirstGroupWithNameInData(textNameInData);
+		DataGroup textIdGroup = currentDataGroup.getFirstGroupWithNameInData(textNameInData);
 		String textId = textIdGroup.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
 		String textRecordType = textIdGroup.getFirstAtomicValueWithNameInData(LINKED_RECORD_TYPE);
 		String recordTypeToCreate = textRecordType;
@@ -79,9 +83,8 @@ public class MissingTextsCreator extends DataModifierForRecordType {
 				dataDivider);
 
 		createTextParts(textId, text);
-		// TODO:ska inte vara hårdkodade parametrar, kolla dessa i test
-		DataGroup linkList = linkCollector.collectLinks("coraTextGroup", text, "coraText",
-				"someId");
+		DataGroup linkList = linkCollector.collectLinks(recordTypeToCreate + "Group", text,
+				recordTypeToCreate, textId);
 		DataGroup emptyCollectedData = DataGroup.withNameInData("collectedData");
 
 		recordStorage.create(recordTypeToCreate, textId, text, emptyCollectedData, linkList,
@@ -103,7 +106,7 @@ public class MissingTextsCreator extends DataModifierForRecordType {
 	}
 
 	private String extractDataDividerFromDataGroup() {
-		DataGroup dataGroupRecordInfo = dataGroup.getFirstGroupWithNameInData(RECORD_INFO);
+		DataGroup dataGroupRecordInfo = currentDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
 		DataGroup dataDividerGroup = dataGroupRecordInfo.getFirstGroupWithNameInData("dataDivider");
 
 		return dataDividerGroup.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);

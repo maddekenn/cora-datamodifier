@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,6 +19,9 @@
 
 package se.uu.ub.cora.datamodifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 
@@ -27,6 +30,10 @@ public class DataRecordLinkCollectorSpy implements DataRecordLinkCollector {
 	public boolean collectLinksWasCalled = false;
 	public String metadataId = null;
 	public int noOfTimesCalled = 0;
+	public List<String> metadataIds = new ArrayList<>();
+	public List<String> fromRecordTypes = new ArrayList<>();
+	public List<String> fromRecordIds = new ArrayList<>();
+	public List<DataGroup> dataGroups = new ArrayList<>();
 
 	public DataGroup collectedDataLinks = DataGroup.withNameInData("collectedDataLinks");
 
@@ -36,6 +43,10 @@ public class DataRecordLinkCollectorSpy implements DataRecordLinkCollector {
 		this.metadataId = metadataId;
 		collectLinksWasCalled = true;
 		noOfTimesCalled++;
+		metadataIds.add(metadataId);
+		fromRecordTypes.add(fromRecordType);
+		fromRecordIds.add(fromRecordId);
+		dataGroups.add(dataGroup);
 		return collectedDataLinks;
 	}
 
