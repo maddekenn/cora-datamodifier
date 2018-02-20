@@ -14,26 +14,35 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 public class RecordStorageForCreatingMissingTextsSpy implements RecordStorage, MetadataStorage {
 	public List<DataGroup> modifiedDataGroupsSentToUpdate = new ArrayList<>();
 	public List<String> readRecordTypes = new ArrayList<>();
+	public List<String> createdTextIds = new ArrayList<>();
+	public List<String> createdTextRecordTypes = new ArrayList<>();
+	public List<DataGroup> createdTexts = new ArrayList<>();
 
 	@Override
 	public DataGroup read(String type, String id) {
-		// if ("metadataGroup".equals(id)) {
-		// readRecordTypes.add(id);
-		// return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
-		// "metadataGroupGroup");
-		// }
-		// if ("coraText".equals(type)) {
-		// readRecordTypes.add(id);
-		// return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
-		// "metadataGroupGroup");
-		// }
+		 if ("metadataGroup".equals(id)) {
+		 	readRecordTypes.add(id);
+		 	return DataCreator.createRecordTypeWithMetadataId("metadataGroup", 	"metadataGroupGroup");
+		 }
+		if ("metadataTextVariable".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId("metadataTextVariable",
+					"metadataTextVariableGroup");
+		}
+//		 if ("coraText".equals(type)) {
+//		 readRecordTypes.add(id);
+//		 return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
+//		 "metadataGroupGroup");
+//		 }
 		throw new RecordNotFoundException("no record found with type: " + type + " and id: " + id);
 	}
 
 	@Override
 	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
 			DataGroup linkList, String dataDivider) {
-		// TODO Auto-generated method stub
+		createdTextIds.add(id);
+		createdTextRecordTypes.add(type);
+		createdTexts.add(record);
 
 	}
 
@@ -52,8 +61,7 @@ public class RecordStorageForCreatingMissingTextsSpy implements RecordStorage, M
 	@Override
 	public void update(String type, String id, DataGroup record, DataGroup collectedTerms,
 			DataGroup linkList, String dataDivider) {
-		// TODO Auto-generated method stub
-
+		modifiedDataGroupsSentToUpdate.add(record);
 	}
 
 	@Override
@@ -66,16 +74,34 @@ public class RecordStorageForCreatingMissingTextsSpy implements RecordStorage, M
 			metadataGroup.addChild(DataAtomic.withNameInDataAndValue("nameInData", "some"));
 
 			DataGroup text = DataGroup.withNameInData("textId");
-			text.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "text"));
-			text.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "someTestGroupText"));
+			text.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "coraText"));
+			text.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "someNonExistingText"));
 			metadataGroup.addChild(text);
 
 			DataGroup defText = DataGroup.withNameInData("defTextId");
-			defText.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "coraText"));
+			defText.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "textSystemOne"));
 			defText.addChild(
-					DataAtomic.withNameInDataAndValue("linkedRecordId", "someTestGroupDefText"));
+					DataAtomic.withNameInDataAndValue("linkedRecordId", "someNonExistingDefText"));
 			metadataGroup.addChild(defText);
 			recordList.add(metadataGroup);
+		}
+		if ("metadataTextVariable".equals(type)) {
+			DataGroup metadataTextVariable = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someTestTextVar",
+							"metadata", "metadataTextVariable", "someOtherSystem");
+			metadataTextVariable.addChild(DataAtomic.withNameInDataAndValue("nameInData", "someTextVar"));
+
+			DataGroup text = DataGroup.withNameInData("textId");
+			text.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "text"));
+			text.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "someNonExistingAbstractText"));
+			metadataTextVariable.addChild(text);
+
+			DataGroup defText = DataGroup.withNameInData("defTextId");
+			defText.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "textSystemOne"));
+			defText.addChild(
+					DataAtomic.withNameInDataAndValue("linkedRecordId", "someExistingDefText"));
+			metadataTextVariable.addChild(defText);
+			recordList.add(metadataTextVariable);
 
 		}
 
