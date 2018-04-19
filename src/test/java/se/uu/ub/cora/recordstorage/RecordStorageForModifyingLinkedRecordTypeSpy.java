@@ -38,6 +38,12 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 			readRecordTypes.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("search", "searchGroup");
 		}
+		if ("recordTypeForChangingUpdateStructure".equals(id)) {
+			readRecordTypes.add(id);
+			return DataCreator.createRecordTypeWithMetadataId(
+					"recordTypeForChangingUpdateStructure",
+					"recordTypeForChangingUpdateStructureGroup");
+		}
 		return null;
 	}
 
@@ -168,6 +174,23 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 		}
 		if ("place".equals(type)) {
 			throw new RecordNotFoundException("No records exists with recordType place");
+		}
+		if ("recordTypeForChangingUpdateStructure".equals(type)) {
+			DataGroup dataGroup = DataCreator
+					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someId",
+							"updateStructure", "changingUpdateStructure\"", "testSystem");
+			dataGroup.addChild(DataAtomic.withNameInDataAndValue("nameInData", "mode"));
+			DataGroup recordInfo = dataGroup.getFirstGroupWithNameInData("recordInfo");
+			recordInfo.addChild(
+					DataAtomic.withNameInDataAndValue("tsUpdated", "2018-04-03 11:36:38.789"));
+
+			DataGroup updatedBy = DataGroup.withNameInData("updatedBy");
+			updatedBy.addChild(
+					DataAtomic.withNameInDataAndValue("linkedRecordType", "systemOneUser"));
+			updatedBy.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "someUser"));
+			recordInfo.addChild(updatedBy);
+			recordList.add(dataGroup);
+
 		}
 
 		return recordList;
