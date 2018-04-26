@@ -17,6 +17,9 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 
 	public List<DataGroup> createdData = new ArrayList<>();
 	public List<String> createdType = new ArrayList<>();
+	public List<String> tsUpdates = new ArrayList<>();
+	public List<String> updatedBys = new ArrayList<>();
+	public List<String> updatedByUserTypes = new ArrayList<>();
 
 	@Override
 	public DataGroup read(String type, String id) {
@@ -180,17 +183,24 @@ public class RecordStorageForModifyingLinkedRecordTypeSpy implements RecordStora
 					.createDataGroupWithIdAndNameInDataAndTypeAndDataDivider("someId",
 							"updateStructure", "changingUpdateStructure\"", "testSystem");
 			dataGroup.addChild(DataAtomic.withNameInDataAndValue("nameInData", "mode"));
+
 			DataGroup recordInfo = dataGroup.getFirstGroupWithNameInData("recordInfo");
+			String tsUpdatedString = "2018-04-03 11:36:38.789";
+			String updatedByString = "someUser";
+			String userType = "systemOneUser";
+
+			tsUpdates.add(tsUpdatedString);
+			updatedBys.add(updatedByString);
+			updatedByUserTypes.add(userType);
 			recordInfo.addChild(
-					DataAtomic.withNameInDataAndValue("tsUpdated", "2018-04-03 11:36:38.789"));
+					DataAtomic.withNameInDataAndValue("tsUpdated", tsUpdatedString));
 
 			DataGroup updatedBy = DataGroup.withNameInData("updatedBy");
 			updatedBy.addChild(
-					DataAtomic.withNameInDataAndValue("linkedRecordType", "systemOneUser"));
-			updatedBy.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "someUser"));
+					DataAtomic.withNameInDataAndValue("linkedRecordType", userType));
+			updatedBy.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", updatedByString));
 			recordInfo.addChild(updatedBy);
 			recordList.add(dataGroup);
-
 		}
 
 		return recordList;

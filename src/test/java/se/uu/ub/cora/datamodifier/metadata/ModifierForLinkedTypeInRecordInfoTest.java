@@ -48,8 +48,6 @@ public class ModifierForLinkedTypeInRecordInfoTest {
 
 	}
 
-	// TODO: test fwith recordtype with no reords (RecordNotFoundException)
-
 	@Test
 	public void testModifingRecordTypeWithNoRecords() {
 		dataModifier.modifyByRecordType("place");

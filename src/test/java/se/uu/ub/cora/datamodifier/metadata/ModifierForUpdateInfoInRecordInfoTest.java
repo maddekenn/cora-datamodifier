@@ -1,14 +1,18 @@
 package se.uu.ub.cora.datamodifier.metadata;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.bookkeeper.data.DataAtomic;
+import se.uu.ub.cora.bookkeeper.data.DataElement;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.datamodifier.DataRecordLinkCollectorSpy;
 import se.uu.ub.cora.recordstorage.RecordStorageForModifyingLinkedRecordTypeSpy;
+import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 
 public class ModifierForUpdateInfoInRecordInfoTest {
 	private RecordStorageForModifyingLinkedRecordTypeSpy recordStorage;
@@ -43,17 +47,20 @@ public class ModifierForUpdateInfoInRecordInfoTest {
 		DataGroup modifiedDataGroup = recordStorage.modifiedDataGroupsSentToUpdate.get(0);
 
 		DataGroup recordInfo = modifiedDataGroup.getFirstGroupWithNameInData("recordInfo");
-		DataGroup type = recordInfo.getFirstGroupWithNameInData("updated");
-		assertEquals(type.getFirstAtomicValueWithNameInData("tsUpdated"), "recordType");
-		assertEquals(type.getFirstAtomicValueWithNameInData("linkedRecordId"), linkedType);
+		assertFalse(recordInfo.containsChildWithNameInData("tsUpdated"));
+		assertFalse(recordInfo.containsChildWithNameInData("updatedBy"));
+
+		DataGroup updated = recordInfo.getFirstGroupWithNameInData("updated");
+		DataGroup updatedBy = updated.getFirstGroupWithNameInData("updatedBy");
+		assertEquals(updatedBy.getFirstAtomicValueWithNameInData("linkedRecordId"), recordStorage.updatedBys.get(0));
+		assertEquals(updatedBy.getFirstAtomicValueWithNameInData("linkedRecordType"), recordStorage.updatedByUserTypes.get(0));
+		assertEquals(updated.getFirstAtomicValueWithNameInData("tsUpdated"), recordStorage.tsUpdates.get(0));
+		assertEquals(updated.getRepeatId(), "0");
 
 	}
 
-	// // TODO: test fwith recordtype with no reords (RecordNotFoundException)
-	//
-	// @Test
-	// public void testModifingRecordTypeWithNoRecords() {
-	// dataModifier.modifyByRecordType("place");
-	// assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 0);
-	// }
+	 public void testModifyingRecordTypeWithNoRecords() {
+	 	dataModifier.modifyByRecordType("place");
+		assertEquals(recordStorage.modifiedDataGroupsSentToUpdate.size(), 0);
+	 }
 }
