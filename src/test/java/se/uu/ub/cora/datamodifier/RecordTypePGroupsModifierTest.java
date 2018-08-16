@@ -24,8 +24,9 @@ import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import se.uu.ub.cora.bookkeeper.data.DataGroup;
 
-public class RecordTypePGroupsChangerTest {
+public class RecordTypePGroupsModifierTest {
 
 	private RecordStorageSpy recordStorage;
 	private DataRecordLinkCollectorSpy linkCollector;
@@ -55,5 +56,9 @@ public class RecordTypePGroupsChangerTest {
 		assertEquals(recordStorage.readRecordTypeIds.get(1), "myRecordTypePGroup");
 		assertEquals(recordStorage.readRecordTypeTypes.get(1), "presentationGroup");
 
+		DataGroup createdPGroup = recordStorage.createdData.get(0);
+		DataGroup recordInfo = createdPGroup.getFirstGroupWithNameInData("recordInfo");
+		String id = recordInfo.getFirstAtomicValueWithNameInData("id");
+		assertEquals("myRecordTypePGroup", id);
 	}
 }
