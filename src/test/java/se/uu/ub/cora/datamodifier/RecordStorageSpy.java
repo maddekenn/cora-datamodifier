@@ -30,7 +30,8 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 
 	public List<DataGroup> modifiedDataGroupsSentToUpdate = new ArrayList<>();
-	public List<String> readRecordTypes = new ArrayList<>();
+	public List<String> readRecordTypeIds = new ArrayList<>();
+	public List<String> readRecordTypeTypes = new ArrayList<>();
 
 	public List<DataGroup> createdData = new ArrayList<>();
 	public List<String> createdType = new ArrayList<>();
@@ -38,38 +39,48 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage {
 	@Override
 	public DataGroup read(String type, String id) {
 		if ("presentationGroup".equals(id)) {
-			readRecordTypes.add(id);
+			readRecordTypeIds.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("presentationGroup",
 					"presentationGroupGroup");
 		}
 		if ("presentationSurroundingContainer".equals(id)) {
-			readRecordTypes.add(id);
+			readRecordTypeIds.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("presentationSurroundingContainer",
 					"presentationSurroundingContainerGroup");
 		}
 		if ("presentationRepeatingContainer".equals(id)) {
-			readRecordTypes.add(id);
+			readRecordTypeIds.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("presentationRepeatingContainer",
 					"presentationRepeatingContainerGroup");
 		}
 		if ("presentationResourceLink".equals(id)) {
-			readRecordTypes.add(id);
+			readRecordTypeIds.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("presentationResourceLink",
 					"presentationResourceLinkGroup");
 		}
 		if ("recordType".equals(id)) {
-			readRecordTypes.add(id);
+			readRecordTypeIds.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("recordType", "recordTypeGroup");
 		}
 		if ("metadataRecordLink".equals(id)) {
-			readRecordTypes.add(id);
+			readRecordTypeIds.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("metadataRecordLink",
 					"metadataRecordLinkGroup");
 		}
 		if ("metadataGroup".equals(id)) {
-			readRecordTypes.add(id);
+			readRecordTypeIds.add(id);
 			return DataCreator.createRecordTypeWithMetadataId("metadataGroup",
 					"metadataGroupGroup");
+		}
+		if ("recordType".equals(type)) {
+			readRecordTypeIds.add(id);
+			readRecordTypeTypes.add(type);
+			return DataCreator.createRecordTypeWithMetadataId(id, id + "Group");
+		}
+		if ("presentationGroup".equals(type)) {
+			readRecordTypeIds.add(id);
+			readRecordTypeTypes.add(type);
+			return DataCreator.createRecordTypeWithMetadataId(id, id + "Group");
 		}
 		return null;
 	}

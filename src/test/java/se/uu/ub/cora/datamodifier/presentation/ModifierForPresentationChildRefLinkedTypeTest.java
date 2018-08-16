@@ -78,7 +78,7 @@ public class ModifierForPresentationChildRefLinkedTypeTest {
 		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
 
 		assertEquals(linkCollector.metadataId, "presentationGroupGroup");
-		assertEquals(recordStorageSpy.readRecordTypes.get(0), "presentationGroup");
+		assertEquals(recordStorageSpy.readRecordTypeIds.get(0), "presentationGroup");
 
 		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 1);
 
@@ -99,7 +99,7 @@ public class ModifierForPresentationChildRefLinkedTypeTest {
 		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
 
 		assertEquals(linkCollector.metadataId, "presentationSurroundingContainerGroup");
-		assertEquals(recordStorageSpy.readRecordTypes.get(0), "presentationSurroundingContainer");
+		assertEquals(recordStorageSpy.readRecordTypeIds.get(0), "presentationSurroundingContainer");
 
 		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 0);
 
@@ -120,7 +120,7 @@ public class ModifierForPresentationChildRefLinkedTypeTest {
 		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
 
 		assertEquals(linkCollector.metadataId, "presentationRepeatingContainerGroup");
-		assertEquals(recordStorageSpy.readRecordTypes.get(0), "presentationRepeatingContainer");
+		assertEquals(recordStorageSpy.readRecordTypeIds.get(0), "presentationRepeatingContainer");
 
 		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 0);
 
@@ -141,7 +141,7 @@ public class ModifierForPresentationChildRefLinkedTypeTest {
 		RecordStorageSpy recordStorageSpy = ((RecordStorageSpy) recordStorage);
 
 		assertEquals(linkCollector.metadataId, "presentationResourceLinkGroup");
-		assertEquals(recordStorageSpy.readRecordTypes.get(0), "presentationResourceLink");
+		assertEquals(recordStorageSpy.readRecordTypeIds.get(0), "presentationResourceLink");
 
 		List<DataGroup> children = extractChildrenFromModifiedByIndex(recordStorageSpy, 0);
 
